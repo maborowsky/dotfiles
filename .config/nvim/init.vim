@@ -3,7 +3,6 @@
 "
 " .vimrc
 "
-"
 " TODO:
 "       - make insert mode <C-k> like <C-j>
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -238,10 +237,6 @@ set mouse=a
 
 " highlight search matches
 set hlsearch
-
-" Explore style
-" let g:netrw_liststyle=3
-" command! -nargs=* -bar -bang -count=0 -complete=dir E Explore <args>
 
 " Open file mappings
 map <F2> :e $MYVIMRC<CR>
