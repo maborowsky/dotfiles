@@ -1,0 +1,15 @@
+*
+!.gitignore
+!.config/terminite/
+!.vimrc
+!_vimrc
+
+!.Xresources
+!.xinitrc
+!.zshrc
+!.i3/
+
+!.config/
+!.config/nvim/
+!.config/nvim/**.vim
+!.config/nvim/init.vim
