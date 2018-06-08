@@ -104,9 +104,9 @@ let NERDTreeDirArrowCollapsible="▼"
 
 
 " CtrlP
-nnoremap <Leader>p :CtrlP<CR>
-nnoremap <Leader>o :CtrlPBuffer<CR>
-nnoremap <Leader>i :CtrlPMRU<CR>
+nmap <Leader>p :CtrlP<CR>
+nmap <Leader>o :CtrlPBuffer<CR>
+nmap <Leader>i :CtrlPMRU<CR>
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_custom_ignore = {
@@ -190,6 +190,7 @@ set showcmd
 set background=dark
 
 " Neo solarized (truecolor)
+set termguicolors
 colorscheme NeoSolarized
 let g:neosolarized_contrast = "normal"
 let g:neosolarized_visibility = "normal"
