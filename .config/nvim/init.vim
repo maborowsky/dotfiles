@@ -84,14 +84,6 @@ let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 
-
-" Syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 1
-
 " Deoplete
 let g:deoplete#enable_at_startup = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
@@ -101,7 +93,6 @@ map <C-e> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
-
 
 " CtrlP
 nmap <Leader>p :CtrlP<CR>
@@ -114,13 +105,6 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
 " map <c-p> :FZF <CR>
-
-" Rainbow parentheses
-"let g:rainbow_active = 1
-" augroup rainbow_lisp
-"   autocmd!
-"   autocmd FileType lisp,clojure,scheme RainbowParentheses
-" augroup END
 
 " Easy Align (for some reason "ga" wasn't working as a bind)
 xmap ga <Plug>(EasyAlign)| " Visual Mode
