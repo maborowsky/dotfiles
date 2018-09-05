@@ -16,14 +16,15 @@ else
     call plug#begin('~/.vim/plugged')   " Linux/Mac
 endif
 
-" Themes
+" Colors/Themes
 Plug 'whatyouhide/vim-gotham'
-"Plug 'altercation/vim-colors-solarized'
 Plug 'iCyMind/NeoSolarized'
 Plug 'junegunn/seoul256.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'jnurmine/Zenburn'
 Plug 'morhetz/gruvbox'
+Plug 'nightsense/snow'
+Plug 'nightsense/stellarized'
 Plug 'vim-airline/vim-airline-themes'
 
 " Languages
@@ -34,6 +35,7 @@ Plug 'pangloss/vim-javascript'
 " Javascript/HTML/CSS
 Plug 'ternjs/tern_for_vim', { 'for': ['html', 'javascript'] } " Requires 'npm  install' in '~/.vim/plugged/tern_for_vim'
 Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
+Plug 'sidorares/node-vim-debugger', { 'for': ['javascript'] }
 
 " Lisp
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -45,8 +47,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 " Fuzzy Find
-" Plug '/usr/local/opt/fzf'
-" Plug 'junegunn/fzf'
 Plug 'ctrlpvim/ctrlp.vim'
 
 " Autocomplete
@@ -59,6 +59,7 @@ Plug 'mhinz/vim-startify'
 
 " Movement
 Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/vim-slash'
 Plug 'wellle/targets.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-repeat'
@@ -71,7 +72,7 @@ Plug 'w0rp/ale'
 " Misc
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-sleuth'
-
+Plug 'kassio/neoterm'
 
 call plug#end()
 
@@ -95,16 +96,15 @@ let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
 
 " CtrlP
-nmap <Leader>p :CtrlP<CR>
-nmap <Leader>o :CtrlPBuffer<CR>
-nmap <Leader>i :CtrlPMRU<CR>
+nnoremap <Leader>p :CtrlP<CR>
+nnoremap <Leader>o :CtrlPBuffer<CR>
+nnoremap <Leader>i :CtrlPMRU<CR>
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp$',
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage$',
   \ 'file': '\.so$\|\.dat$|\.DS_Store$'
   \ }
-" map <c-p> :FZF <CR>
 
 " Easy Align (for some reason "ga" wasn't working as a bind)
 xmap ga <Plug>(EasyAlign)| " Visual Mode
@@ -130,9 +130,6 @@ if !has("win32")
     \ ]
 endif
 
-" Ternjs
-map <F3> :TernDef<CR>
-
 " Gitgutter
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_async = 1
@@ -144,6 +141,15 @@ let g:javascript_plugin_jsdoc = 1
 nmap ]l :lnext<CR>
 nmap [l :lprevious<CR>
 let g:ale_sign_column_always = 1
+
+" Neoterm
+" 3<leader>tl will clear neoterm-3.
+" nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
+let g:neoterm_default_mod = 'vertical'
+let g:neoterm_size=90
+let g:neoterm_fixedsize=1
+let g:neoterm_eof = "\r"
+nnoremap <leader>t :T 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -168,31 +174,36 @@ set number
 
 set showcmd
 
-"set foldmethod=marker
+set foldmethod=syntax
+set nofoldenable
 
 " -- Colorscheme --------------------------------
 set background=dark
 
 " Neo solarized (truecolor)
 set termguicolors
-colorscheme NeoSolarized
-let g:neosolarized_contrast = "normal"
-let g:neosolarized_visibility = "normal"
-let g:neosolarized_vertSplitBgTrans = 1
-hi NERDTreeClosable guifg=gui_red ctermfg=9
-hi NERDTreeOpenable guifg=gui_orange ctermfg=9
-hi NERDTreeExecFile guifg=gui_red ctermfg=1
+" colorscheme NeoSolarized
+" let g:neosolarized_contrast = "normal"
+" let g:neosolarized_visibility = "normal"
+" let g:neosolarized_vertSplitBgTrans = 1
+" hi NERDTreeClosable guifg=gui_red ctermfg=9
+" hi NERDTreeOpenable guifg=gui_orange ctermfg=9
+" hi NERDTreeExecFile guifg=gui_red ctermfg=1
 
 " -- Seoul 256 --
-" colorscheme seoul256
 " let g:seoul256_background = 235 " default: 237, range: 233-239
 " let g:airline_theme='zenburn'
+" colorscheme seoul256
+colorscheme snow
+let g:airline_theme='snow_dark'
 " -----------------------------------------------
 
 
 " tab completion
 set wildmenu
 set wildmode=longest:full,full
+
+set splitright
 
 set ignorecase
 set smartcase
@@ -223,9 +234,18 @@ set mouse=a
 " highlight search matches
 set hlsearch
 
-" Open file mappings
-map <F2> :e $MYVIMRC<CR>
 map <F1> :Startify<CR>
+map <F2> :e $MYVIMRC<CR>
+map <F3> :TernDef<CR>
+
+map <F5> :T !!<CR>
+map <F6> :Topen<CR>
+
+autocmd FileType javascript nmap <F9> :T npm start<CR>
+autocmd FileType javascript nmap <F10> :T npm test  %<CR>
+autocmd FileType python nmap <F9> :T python3  %<CR>
+" autocmd FileType python nmap <F10> :T python3 -i  %<CR>
+autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
 
 " Easy movement mappings
 noremap H ^
@@ -236,9 +256,10 @@ noremap K {
 " terminal normal mode
 :tnoremap <Esc> <C-\><C-n>
 
-" Language builds
-autocmd FileType javascript map <F9> :Term npm start<CR>
-autocmd FileType javascript map <F10> :Term npm test<CR>
+" Live substition (default in Neovim, can be installed with traces.vim)
+if exists('&inccommand')
+  set inccommand=split
+endif
 
 " Buffers like tabs -------------------------------------------------------
 " This allows buffers to be hidden if you've modified a buffer.
