@@ -17,23 +17,20 @@ else
 endif
 
 " Colors/Themes
-Plug 'whatyouhide/vim-gotham'
 Plug 'iCyMind/NeoSolarized'
 Plug 'junegunn/seoul256.vim'
-Plug 'nanotech/jellybeans.vim'
 Plug 'jnurmine/Zenburn'
 Plug 'morhetz/gruvbox'
 Plug 'nightsense/snow'
-Plug 'nightsense/stellarized'
 Plug 'vim-airline/vim-airline-themes'
 
 " Languages
-"Plug 'sheerun/vim-polyglot'
-Plug 'guns/vim-clojure-static'
+" Plug 'sheerun/vim-polyglot'
+" Plug 'guns/vim-clojure-static'
 Plug 'pangloss/vim-javascript'
 
 " Javascript/HTML/CSS
-Plug 'ternjs/tern_for_vim', { 'for': ['html', 'javascript'] } " Requires 'npm  install' in '~/.vim/plugged/tern_for_vim'
+Plug 'ternjs/tern_for_vim', { 'for': ['html', 'javascript'], 'do': 'npm install' } " Requires 'npm  install' in '~/.vim/plugged/tern_for_vim'
 Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
 Plug 'sidorares/node-vim-debugger', { 'for': ['javascript'] }
 
@@ -51,11 +48,13 @@ Plug 'ctrlpvim/ctrlp.vim'
 
 " Autocomplete
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'deoplete-plugins/deoplete-jedi'
 
 " Interface
 Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
+Plug 'TaDaa/vimade'
 
 " Movement
 Plug 'junegunn/vim-easy-align'
@@ -87,7 +86,12 @@ let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 
 " Deoplete
 let g:deoplete#enable_at_startup = 1
+let g:deoplete#auto_complete_start_length = 1
+let g:deoplete#enable_smart_case = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" Deoplete jedi
+" let g:deoplete#sources#jedi#show_docstring = 0
+set completeopt-=preview
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
@@ -113,7 +117,8 @@ nmap ga <Plug>(EasyAlign)| " motion/text object
 " startify
 let g:startify_use_env = 1
 let g:startify_fortune_use_unicode = 1
-let g:startify_change_to_vcs_root = 1
+let g:startify_change_to_vcs_root = 0
+let g:startify_change_to_dir = 0
 let g:startify_list_order = [
     \ ['   Bookmarks:'],
     \ 'bookmarks',
@@ -133,6 +138,7 @@ endif
 " Gitgutter
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_async = 1
+set updatetime=100
 
 " vim-javascript
 let g:javascript_plugin_jsdoc = 1
@@ -141,6 +147,13 @@ let g:javascript_plugin_jsdoc = 1
 nmap ]l :lnext<CR>
 nmap [l :lprevious<CR>
 let g:ale_sign_column_always = 1
+let g:ale_virtualenv_dir_names = ['venv']
+let g:ale_linters = { 'python': ['pycodestyle'] }
+let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
+
+
+" Vimade
+" let g:VimadeFadeLevel = 0.9 " NOT WORKING, FIX
 
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
@@ -149,11 +162,11 @@ let g:neoterm_default_mod = 'vertical'
 let g:neoterm_size=90
 let g:neoterm_fixedsize=1
 let g:neoterm_eof = "\r"
-nnoremap <leader>t :T 
+nnoremap <leader>t :T
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"Python in neovim
+" Python in neovim
 let g:python2_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
@@ -179,9 +192,9 @@ set nofoldenable
 
 " -- Colorscheme --------------------------------
 set background=dark
-
-" Neo solarized (truecolor)
 set termguicolors
+
+" -- Neo solarized --
 " colorscheme NeoSolarized
 " let g:neosolarized_contrast = "normal"
 " let g:neosolarized_visibility = "normal"
@@ -194,6 +207,8 @@ set termguicolors
 " let g:seoul256_background = 235 " default: 237, range: 233-239
 " let g:airline_theme='zenburn'
 " colorscheme seoul256
+
+" -- Snow --
 colorscheme snow
 let g:airline_theme='snow_dark'
 " -----------------------------------------------

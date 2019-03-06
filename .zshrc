@@ -1,1 +1,1 @@
-/Users/maborowsky/.zprezto/runcoms/zshrc
+/Users/mboro0114/.zprezto/runcoms/zshrc
