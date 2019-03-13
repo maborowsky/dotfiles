@@ -5,6 +5,8 @@
 "
 " TODO:
 "       - make insert mode <C-k> like <C-j>
+"       - z + j = move screen down, cursor stays the same
+"           - (currently ctrl-y and ctrl-e)
 """""""""""""""""""""""""""""""""""""""""""""""""
 
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -154,6 +156,8 @@ let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122
 
 " Vimade
 " let g:VimadeFadeLevel = 0.9 " NOT WORKING, FIX
+let g:vimade = {}
+let g:vimade.fadelevel = 0.7
 
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
@@ -227,9 +231,17 @@ filetype indent on
 filetype plugin on
 
 " 4 "space" indents
+" set tabstop=4
+" set softtabstop=0 noexpandtab
+" set shiftwidth=4
+" APPARENTLY THIS IS A THING NOW, TESTING
+filetype plugin indent on
+" show existing tab with 4 spaces width
 set tabstop=4
-set softtabstop=0 noexpandtab
+" when indenting with '>', use 4 spaces width
 set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
 
 " remap jk to escape in insert mode
 inoremap jk <Esc>
