@@ -280,6 +280,10 @@ noremap L $
 noremap J }
 noremap K {
 
+" Move screen
+nnoremap zk {zz
+nnoremap zj }zz
+
 " terminal normal mode
 :tnoremap <Esc> <C-\><C-n>
 
