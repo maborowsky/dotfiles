@@ -97,6 +97,7 @@ set completeopt-=preview
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
+map <C-f> :NERDTreeFind<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
@@ -266,7 +267,7 @@ map <F2> :e $MYVIMRC<CR>
 map <F3> :TernDef<CR>
 
 map <F5> :T !!<CR>
-map <F6> :Topen<CR>
+map <F6> :Ttoggle<CR>
 
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
