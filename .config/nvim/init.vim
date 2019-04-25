@@ -9,6 +9,9 @@
 "           - (currently ctrl-y and ctrl-e)
 """""""""""""""""""""""""""""""""""""""""""""""""
 
+" Space as leader
+let mapleader = "\<Space>"
+
 """""""""""""""""""""""""""""""""""""""""""""""""
 " EXTENSIONS                                    "
 """""""""""""""""""""""""""""""""""""""""""""""""
@@ -22,7 +25,6 @@ endif
 Plug 'iCyMind/NeoSolarized'
 Plug 'junegunn/seoul256.vim'
 Plug 'jnurmine/Zenburn'
-Plug 'morhetz/gruvbox'
 Plug 'nightsense/snow'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -39,7 +41,7 @@ Plug 'sidorares/node-vim-debugger', { 'for': ['javascript'] }
 " Lisp
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme', 'racket'] }
-Plug 'tpope/vim-fireplace'
+" Plug 'tpope/vim-fireplace'
 
 " Git
 Plug 'tpope/vim-fugitive'
@@ -50,7 +52,17 @@ Plug 'ctrlpvim/ctrlp.vim'
 
 " Autocomplete
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+
+" Python
+Plug 'deoplete-plugins/deoplete-jedi', {'for': 'python'}
+Plug 'davidhalter/jedi-vim', {'for': 'python'}
+
+
+" Debugging
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'idanarye/vim-vebugger'
 
 " Interface
 Plug 'vim-airline/vim-airline'
@@ -90,10 +102,39 @@ let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 1
 let g:deoplete#enable_smart_case = 1
+let g:deoplete#enable_smart_case = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
 " Deoplete jedi
 " let g:deoplete#sources#jedi#show_docstring = 0
 set completeopt-=preview
+
+" vim-jedi
+let g:jedi#completions_enabled = 0
+let g:jedi#goto_definitions_command = ""
+let g:jedi#documentation_command = "<leader>k"
+let g:jedi#usages_command = "<leader>u"
+
+" Neosnippet
+let g:neosnippet#enable_completed_snippet = 1
+imap <C-s>     <Plug>(neosnippet_expand_or_jump)
+smap <C-s>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-s>     <Plug>(neosnippet_expand_target)
+" SuperTab like snippets' behavior.
+imap <expr><TAB>
+\ pumvisible() ? "\<C-n>" :
+\ neosnippet#expandable_or_jumpable() ?
+\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" PUDB
+" " set the virtual env python used to launch the debugger
+" let g:pudb_python='~/workspace/venv/bin/python'
+" " set the entry point (script) to use for pudb
+" let g:pudb_entry_point='run.py'
+" " Unicode symbols work fine (nvim, iterm, tmux, nyovim tested)
+" let g:pudb_breakpoint_symbol='🔵'
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
@@ -152,21 +193,22 @@ nmap [l :lprevious<CR>
 let g:ale_sign_column_always = 1
 let g:ale_virtualenv_dir_names = ['venv']
 let g:ale_linters = { 'python': ['pycodestyle'] }
-let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
+" let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
+let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics'
 
 
 " Vimade
-" let g:VimadeFadeLevel = 0.9 " NOT WORKING, FIX
 let g:vimade = {}
-let g:vimade.fadelevel = 0.7
+let g:vimade.fadelevel = 0.83
 
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
 " nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
 let g:neoterm_default_mod = 'vertical'
-let g:neoterm_size=90
+let g:neoterm_size=100
 let g:neoterm_fixedsize=1
 let g:neoterm_eof = "\r"
+let g:neoterm_autoscroll=1
 nnoremap <leader>t :T
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -175,8 +217,6 @@ nnoremap <leader>t :T
 let g:python2_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
-" Space as leader
-let mapleader = "\<Space>"
 nnoremap <Leader>w :wa<CR>| " Save all buffers
 
 " Remove toolbar in gVim
@@ -228,14 +268,10 @@ set splitright
 set ignorecase
 set smartcase
 
-filetype indent on
-filetype plugin on
-
 " 4 "space" indents
 " set tabstop=4
 " set softtabstop=0 noexpandtab
 " set shiftwidth=4
-" APPARENTLY THIS IS A THING NOW, TESTING
 filetype plugin indent on
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -251,7 +287,6 @@ inoremap <S-Space> <Esc>
 " Save from insert mode
 inoremap :w <Esc>:w
 inoremap :W <Esc>:w
-inoremap :x <Esc>:x
 
 " show Status line
 set laststatus=2
@@ -261,6 +296,8 @@ set mouse=a
 
 " highlight search matches
 set hlsearch
+
+set autoread
 
 map <F1> :Startify<CR>
 map <F2> :e $MYVIMRC<CR>
@@ -292,6 +329,12 @@ nnoremap zj }zz
 if exists('&inccommand')
   set inccommand=split
 endif
+
+
+" Highlight ES6 template strings
+hi link javaScriptTemplateDelim String
+hi link javaScriptTemplateVar Text
+hi link javaScriptTemplateString String
 
 " Buffers like tabs -------------------------------------------------------
 " This allows buffers to be hidden if you've modified a buffer.
@@ -326,3 +369,4 @@ nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-Q> :q
 "--------------------------------------------------------------------------
+
