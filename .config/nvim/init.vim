@@ -29,8 +29,6 @@ Plug 'nightsense/snow'
 Plug 'vim-airline/vim-airline-themes'
 
 " Languages
-" Plug 'sheerun/vim-polyglot'
-" Plug 'guns/vim-clojure-static'
 Plug 'pangloss/vim-javascript'
 
 " Javascript/HTML/CSS
@@ -91,9 +89,9 @@ call plug#end()
 
 
 " Airline
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
+" if !exists('g:airline_symbols')
+"     let g:airline_symbols = {}
+" endif
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
@@ -101,7 +99,6 @@ let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 " Deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#auto_complete_start_length = 1
-let g:deoplete#enable_smart_case = 1
 let g:deoplete#enable_smart_case = 1
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
@@ -124,17 +121,13 @@ xmap <C-s>     <Plug>(neosnippet_expand_target)
 imap <expr><TAB>
 \ pumvisible() ? "\<C-n>" :
 \ neosnippet#expandable_or_jumpable() ?
-\    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+\   "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+\ 
 smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
 \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
 
-" PUDB
-" " set the virtual env python used to launch the debugger
-" let g:pudb_python='~/workspace/venv/bin/python'
-" " set the entry point (script) to use for pudb
-" let g:pudb_entry_point='run.py'
-" " Unicode symbols work fine (nvim, iterm, tmux, nyovim tested)
-" let g:pudb_breakpoint_symbol='🔵'
+" Vebugger
+let g:vebugger_leader='<Leader>d'
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
@@ -150,11 +143,11 @@ nnoremap <Leader>i :CtrlPMRU<CR>
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage$',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$'
+  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage\|__pycache__$',
+  \ 'file': '\.so$\|\.dat$|\.DS_Store$\|.pyc$'
   \ }
 
-" Easy Align (for some reason "ga" wasn't working as a bind)
+" Easy Align
 xmap ga <Plug>(EasyAlign)| " Visual Mode
 nmap ga <Plug>(EasyAlign)| " motion/text object
 
@@ -182,7 +175,7 @@ endif
 " Gitgutter
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_async = 1
-set updatetime=100
+set updatetime=200
 
 " vim-javascript
 let g:javascript_plugin_jsdoc = 1
@@ -207,7 +200,7 @@ let g:vimade.fadelevel = 0.83
 let g:neoterm_default_mod = 'vertical'
 let g:neoterm_size=100
 let g:neoterm_fixedsize=1
-let g:neoterm_eof = "\r"
+" let g:neoterm_eof = "\r"
 let g:neoterm_autoscroll=1
 nnoremap <leader>t :T
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -228,7 +221,9 @@ filetype plugin indent on
 
 set backspace=indent,eol,start
 
-set number
+" turn hybrid line numbers on
+:set number relativenumber
+:set nu rnu
 
 set showcmd
 
@@ -258,7 +253,6 @@ colorscheme snow
 let g:airline_theme='snow_dark'
 " -----------------------------------------------
 
-
 " tab completion
 set wildmenu
 set wildmode=longest:full,full
@@ -267,6 +261,8 @@ set splitright
 
 set ignorecase
 set smartcase
+
+set previewheight=20
 
 " 4 "space" indents
 " set tabstop=4
@@ -308,13 +304,12 @@ map <F6> :Ttoggle<CR>
 
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
-autocmd FileType python nmap <F9> :T python3  %<CR>
-" autocmd FileType python nmap <F10> :T python3 -i  %<CR>
+autocmd FileType python nmap <F9> :T ./run.py<CR>
 autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
 
 " Easy movement mappings
-noremap H ^
-noremap L $
+"noremap H ^
+"noremap L $
 noremap J }
 noremap K {
 
@@ -329,7 +324,6 @@ nnoremap zj }zz
 if exists('&inccommand')
   set inccommand=split
 endif
-
 
 " Highlight ES6 template strings
 hi link javaScriptTemplateDelim String
