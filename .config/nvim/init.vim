@@ -57,7 +57,6 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'deoplete-plugins/deoplete-jedi', {'for': 'python'}
 Plug 'davidhalter/jedi-vim', {'for': 'python'}
 
-
 " Debugging
 Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'idanarye/vim-vebugger'
@@ -84,6 +83,13 @@ Plug 'w0rp/ale'
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-sleuth'
 Plug 'kassio/neoterm'
+Plug 'junegunn/vim-peekaboo'
+
+if has('win32') || has('win64')
+  Plug 'tbodt/deoplete-tabnine', { 'do': 'powershell.exe .\install.ps1' }
+else
+  Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
+endif
 
 call plug#end()
 
@@ -140,6 +146,7 @@ let NERDTreeDirArrowCollapsible="▼"
 nnoremap <Leader>p :CtrlP<CR>
 nnoremap <Leader>o :CtrlPBuffer<CR>
 nnoremap <Leader>i :CtrlPMRU<CR>
+let g:ctrlp_reuse_window  = 'startify'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_custom_ignore = {
@@ -185,7 +192,7 @@ nmap ]l :lnext<CR>
 nmap [l :lprevious<CR>
 let g:ale_sign_column_always = 1
 let g:ale_virtualenv_dir_names = ['venv']
-let g:ale_linters = { 'python': ['pycodestyle'] }
+let g:ale_linters = { 'python': ['pycodestyle', 'pylint'] }
 " let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
 let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics'
 
@@ -197,11 +204,12 @@ let g:vimade.fadelevel = 0.83
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
 " nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
-let g:neoterm_default_mod = 'vertical'
+" let g:neoterm_default_mod = 'vertical'
 let g:neoterm_size=100
-let g:neoterm_fixedsize=1
+let g:neoterm_fixedsize=0
 " let g:neoterm_eof = "\r"
 let g:neoterm_autoscroll=1
+let g:neoterm_keep_term_open=0
 nnoremap <leader>t :T
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -209,6 +217,9 @@ nnoremap <leader>t :T
 " Python in neovim
 let g:python2_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
+
+" Git settings
+:set diffopt+=indent-heuristic
 
 nnoremap <Leader>w :wa<CR>| " Save all buffers
 
@@ -265,7 +276,6 @@ set smartcase
 set previewheight=20
 
 " 4 "space" indents
-" set tabstop=4
 " set softtabstop=0 noexpandtab
 " set shiftwidth=4
 filetype plugin indent on
@@ -300,7 +310,8 @@ map <F2> :e $MYVIMRC<CR>
 map <F3> :TernDef<CR>
 
 map <F5> :T !!<CR>
-map <F6> :Ttoggle<CR>
+map <F6> :vert Ttoggle<CR>
+map <F7> :silent 2Ttoggle <C-w>=<CR>
 
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
@@ -362,5 +373,10 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 nnoremap <C-Q> :q
+
+" Resizing
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+nnoremap <silent> <Leader>= <C-w>=
 "--------------------------------------------------------------------------
 
