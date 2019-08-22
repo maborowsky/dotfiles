@@ -37,7 +37,7 @@ Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
 Plug 'sidorares/node-vim-debugger', { 'for': ['javascript'] }
 
 " Lisp
-Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme', 'racket'] }
 Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme', 'racket'] }
 " Plug 'tpope/vim-fireplace'
 
@@ -84,6 +84,7 @@ Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-sleuth'
 Plug 'kassio/neoterm'
 Plug 'junegunn/vim-peekaboo'
+Plug 'tmhedberg/SimpylFold'
 
 if has('win32') || has('win64')
   Plug 'tbodt/deoplete-tabnine', { 'do': 'powershell.exe .\install.ps1' }
@@ -113,8 +114,8 @@ inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 set completeopt-=preview
 
 " vim-jedi
-let g:jedi#completions_enabled = 0
-let g:jedi#goto_definitions_command = ""
+let g:jedi#completions_enabled = 0  " Use deoplete instead of jedi
+let g:jedi#goto_definitions_command = "F3"
 let g:jedi#documentation_command = "<leader>k"
 let g:jedi#usages_command = "<leader>u"
 
@@ -143,9 +144,6 @@ let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
 
 " CtrlP
-nnoremap <Leader>p :CtrlP<CR>
-nnoremap <Leader>o :CtrlPBuffer<CR>
-nnoremap <Leader>i :CtrlPMRU<CR>
 let g:ctrlp_reuse_window  = 'startify'
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_working_path_mode = 'r'
@@ -204,12 +202,11 @@ let g:vimade.fadelevel = 0.83
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
 " nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
-" let g:neoterm_default_mod = 'vertical'
-let g:neoterm_size=100
-let g:neoterm_fixedsize=0
+" let g:neoterm_size=100
+" let g:neoterm_fixedsize=0
 " let g:neoterm_eof = "\r"
 let g:neoterm_autoscroll=1
-let g:neoterm_keep_term_open=0
+let g:neoterm_keep_term_open=1
 nnoremap <leader>t :T
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -221,7 +218,8 @@ let g:python3_host_prog = '/usr/local/bin/python3'
 " Git settings
 :set diffopt+=indent-heuristic
 
-nnoremap <Leader>w :wa<CR>| " Save all buffers
+" Save all buffers
+nnoremap <Leader>w :wa<CR>
 
 " Remove toolbar in gVim
 set guioptions-=T
@@ -238,8 +236,8 @@ set backspace=indent,eol,start
 
 set showcmd
 
-set foldmethod=syntax
-set nofoldenable
+set foldmethod=indent
+set foldlevelstart=99
 
 " -- Colorscheme --------------------------------
 set background=dark
@@ -305,13 +303,17 @@ set hlsearch
 
 set autoread
 
+" qq to record, Q to replay
+nnoremap Q @q
+
 map <F1> :Startify<CR>
 map <F2> :e $MYVIMRC<CR>
-map <F3> :TernDef<CR>
+autocmd FileType javascript map <F3> :TernDef<CR>
+autocmd FileType python map <F3> :call jedi#goto_definitions()<CR>
 
 map <F5> :T !!<CR>
 map <F6> :vert Ttoggle<CR>
-map <F7> :silent 2Ttoggle <C-w>=<CR>
+map <F7> :2Topen <C-w>=<CR>
 
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
@@ -324,9 +326,9 @@ autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
 noremap J }
 noremap K {
 
-" Move screen
-nnoremap zk {zz
-nnoremap zj }zz
+" replace currently selected text with default register
+" without yanking it
+vnoremap <leader>p "_dP
 
 " terminal normal mode
 :tnoremap <Esc> <C-\><C-n>
@@ -352,6 +354,8 @@ nmap <leader>T :enew<cr>
 " Move to the next or previous buffer
 nmap <leader>n :bnext<CR>
 nmap <leader>b :bprevious<CR>
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
