@@ -99,7 +99,7 @@ set showtabline=2
 let g:lightline = {
   \     'colorscheme': 'snow_dark',
   \     'active': {
-  \       'left': [ [ 'mode', 'paste' ],
+  \       'left': [ [ 'mode' ],
   \                 [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
   \         },
   \     'component_function': {
@@ -110,6 +110,7 @@ let g:lightline = {
   \     'tabline': {'left': [['buffers']], 'right': [['close']]},
   \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
   \     'component_type': {'buffers': 'tabsel'},
+  \     'bufferline': {'show_number': 2},
   \ }
 
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
@@ -146,7 +147,7 @@ let NERDTreeDirArrowCollapsible="▼"
 "   \ 'file': '\.so$\|\.dat$|\.DS_Store$\|.pyc$'
 "   \ }
 " FZF
-nnoremap <silent> <C-p> :fzf<CR>
+nnoremap <silent> <C-p> :FZF<CR>
 
 " Easy Align
 xmap ga <Plug>(EasyAlign)| " Visual Mode
