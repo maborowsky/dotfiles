@@ -13,3 +13,4 @@ source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

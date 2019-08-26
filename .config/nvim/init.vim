@@ -26,7 +26,6 @@ Plug 'iCyMind/NeoSolarized'
 Plug 'junegunn/seoul256.vim'
 Plug 'jnurmine/Zenburn'
 Plug 'nightsense/snow'
-Plug 'vim-airline/vim-airline-themes'
 
 " Languages
 Plug 'pangloss/vim-javascript'
@@ -46,7 +45,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 " Fuzzy Find
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 " Language Server
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
@@ -56,7 +57,8 @@ Plug 'Shougo/vimproc.vim', {'do' : 'make'}
 Plug 'idanarye/vim-vebugger'
 
 " Interface
-Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
+Plug 'mengelbrecht/lightline-bufferline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
@@ -83,9 +85,47 @@ call plug#end()
 " if !exists('g:airline_symbols')
 "     let g:airline_symbols = {}
 " endif
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
+" let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
+
+" Lightline
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
+
+" lightline/coc
+set showtabline=2
+let g:lightline = {
+  \     'colorscheme': 'snow_dark',
+  \     'active': {
+  \       'left': [ [ 'mode', 'paste' ],
+  \                 [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
+  \         },
+  \     'component_function': {
+  \       'cocstatus': 'coc#status',
+  \       'currentfunction': 'CocCurrentFunction',
+  \       'gitbranch': 'fugitive#head'
+  \      },
+  \     'tabline': {'left': [['buffers']], 'right': [['close']]},
+  \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
+  \     'component_type': {'buffers': 'tabsel'},
+  \ }
+
+nmap <Leader>1 <Plug>lightline#bufferline#go(1)
+nmap <Leader>2 <Plug>lightline#bufferline#go(2)
+nmap <Leader>3 <Plug>lightline#bufferline#go(3)
+nmap <Leader>4 <Plug>lightline#bufferline#go(4)
+nmap <Leader>5 <Plug>lightline#bufferline#go(5)
+nmap <Leader>6 <Plug>lightline#bufferline#go(6)
+nmap <Leader>7 <Plug>lightline#bufferline#go(7)
+nmap <Leader>8 <Plug>lightline#bufferline#go(8)
+nmap <Leader>9 <Plug>lightline#bufferline#go(9)
+nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+" lightline-bufferline
+" let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
+" let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
+" let g:lightline.component_type   = {'buffers': 'tabsel'}
 
 " Vebugger
 let g:vebugger_leader='<Leader>d'
@@ -97,14 +137,16 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
 
-" CtrlP
-let g:ctrlp_reuse_window  = 'startify'
-let g:ctrlp_show_hidden = 1
-let g:ctrlp_working_path_mode = 'r'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage\|__pycache__$',
-  \ 'file': '\.so$\|\.dat$|\.DS_Store$\|.pyc$'
-  \ }
+" " CtrlP
+" let g:ctrlp_reuse_window  = 'startify'
+" let g:ctrlp_show_hidden = 1
+" let g:ctrlp_working_path_mode = 'r'
+" let g:ctrlp_custom_ignore = {
+"   \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage\|__pycache__$',
+"   \ 'file': '\.so$\|\.dat$|\.DS_Store$\|.pyc$'
+"   \ }
+" FZF
+nnoremap <silent> <C-p> :fzf<CR>
 
 " Easy Align
 xmap ga <Plug>(EasyAlign)| " Visual Mode
@@ -160,7 +202,11 @@ let g:vimade.fadelevel = 0.83
 " let g:neoterm_eof = "\r"
 let g:neoterm_autoscroll=1
 let g:neoterm_keep_term_open=1
-nnoremap <leader>t :T
+
+" vim-test
+let test#strategy = 'neoterm'
+let g:lightline#bufferline#filename_modifier = ':t'
+nmap <leader>t :TestFile<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -212,7 +258,7 @@ set termguicolors
 
 " -- Snow --
 colorscheme snow
-let g:airline_theme='snow_dark'
+" let g:airline_theme='snow_dark'
 " -----------------------------------------------
 
 " tab completion
@@ -247,6 +293,9 @@ inoremap :W <Esc>:w
 
 " show Status line
 set laststatus=2
+
+" Don't show mode
+set noshowmode
 
 " Mouse support
 set mouse=a
@@ -302,7 +351,6 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 " Coc setup ---------------------------------------------------------------
 set nobackup
 set nowritebackup
-set cmdheight=2
 set updatetime=300
 set signcolumn=yes
 
@@ -335,7 +383,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> <leader>k :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -345,10 +393,8 @@ function! s:show_documentation()
   endif
 endfunction
 
-
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
-
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -413,9 +459,6 @@ nnoremap <silent> <space>j  :<C-u>CocNext<CR>
 " This allows buffers to be hidden if you've modified a buffer.
 " This is almost a must if you wish to use buffers in this way.
 set hidden
-
-" To open a new empty buffer
-nmap <leader>T :enew<cr>
 
 " Move to the next or previous buffer
 nmap <leader>n :bnext<CR>
