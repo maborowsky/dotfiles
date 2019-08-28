@@ -27,13 +27,8 @@ Plug 'junegunn/seoul256.vim'
 Plug 'jnurmine/Zenburn'
 Plug 'nightsense/snow'
 
-" Languages
-Plug 'pangloss/vim-javascript'
-
 " Javascript/HTML/CSS
-Plug 'ternjs/tern_for_vim', { 'for': ['html', 'javascript'], 'do': 'npm install' } " Requires 'npm  install' in '~/.vim/plugged/tern_for_vim'
 Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
-Plug 'sidorares/node-vim-debugger', { 'for': ['javascript'] }
 
 " Lisp
 Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme', 'racket'] }
@@ -45,23 +40,21 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
 " Fuzzy Find
-" Plug 'ctrlpvim/ctrlp.vim'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Requires FZF to be installed via homebrew!
+Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Language Server
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 
-" Debugging
-Plug 'Shougo/vimproc.vim', {'do' : 'make'}
-Plug 'idanarye/vim-vebugger'
-
 " Interface
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
+" Lightline vs Airline
+Plug 'vim-airline/vim-airline'
+" Plug 'itchyny/lightline.vim'
+" Plug 'mengelbrecht/lightline-bufferline'
 
 " Movement
 Plug 'junegunn/vim-slash'
@@ -80,15 +73,16 @@ Plug 'janko/vim-test'
 
 call plug#end()
 
-
 " Airline
-" if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-" endif
-" let g:airline_powerline_fonts = 1
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
-
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#coc#enabled = 1
 " Lightline
 function! CocCurrentFunction()
     return get(b:, 'coc_current_function', '')
@@ -110,8 +104,9 @@ let g:lightline = {
   \     'tabline': {'left': [['buffers']], 'right': [['close']]},
   \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
   \     'component_type': {'buffers': 'tabsel'},
-  \     'bufferline': {'show_number': 2},
   \ }
+
+let g:lightline#bufferline#show_number  = 2
 
 nmap <Leader>1 <Plug>lightline#bufferline#go(1)
 nmap <Leader>2 <Plug>lightline#bufferline#go(2)
@@ -123,13 +118,20 @@ nmap <Leader>7 <Plug>lightline#bufferline#go(7)
 nmap <Leader>8 <Plug>lightline#bufferline#go(8)
 nmap <Leader>9 <Plug>lightline#bufferline#go(9)
 nmap <Leader>0 <Plug>lightline#bufferline#go(10)
+nmap g1 <Plug>lightline#bufferline#go(1)
+nmap g2 <Plug>lightline#bufferline#go(2)
+nmap g3 <Plug>lightline#bufferline#go(3)
+nmap g4 <Plug>lightline#bufferline#go(4)
+nmap g5 <Plug>lightline#bufferline#go(5)
+nmap g6 <Plug>lightline#bufferline#go(6)
+nmap g7 <Plug>lightline#bufferline#go(7)
+nmap g8 <Plug>lightline#bufferline#go(8)
+nmap g9 <Plug>lightline#bufferline#go(9)
+nmap g0 <Plug>lightline#bufferline#go(10)
 " lightline-bufferline
 " let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
 " let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
 " let g:lightline.component_type   = {'buffers': 'tabsel'}
-
-" Vebugger
-let g:vebugger_leader='<Leader>d'
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
@@ -138,20 +140,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
 
-" " CtrlP
-" let g:ctrlp_reuse_window  = 'startify'
-" let g:ctrlp_show_hidden = 1
-" let g:ctrlp_working_path_mode = 'r'
-" let g:ctrlp_custom_ignore = {
-"   \ 'dir':  '\.git$\|\.yardoc\|node_modules\|log\|tmp\|build\|coverage\|__pycache__$',
-"   \ 'file': '\.so$\|\.dat$|\.DS_Store$\|.pyc$'
-"   \ }
 " FZF
-nnoremap <silent> <C-p> :FZF<CR>
-
-" Easy Align
-xmap ga <Plug>(EasyAlign)| " Visual Mode
-nmap ga <Plug>(EasyAlign)| " motion/text object
+nnoremap <silent> <C-p> :GFiles<CR>
+" close w/ escape
+autocmd! FileType fzf tnoremap <buffer> <esc> <c-c> " Close
+" prevent <C-j> and <C-k> from moving windows while fzf is up
+autocmd FileType fzf tnoremap <buffer> <C-j> <Down>
+autocmd FileType fzf tnoremap <buffer> <C-k> <Up>
 
 " startify
 let g:startify_use_env = 1
@@ -177,18 +172,16 @@ endif
 " Gitgutter
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_async = 1
-
-" vim-javascript
-let g:javascript_plugin_jsdoc = 1
+let g:gitgutter_realtime = 1
+let g:gitgutter_eager = 1
+let g:gitgutter_sign_removed = '–'
+let g:gitgutter_diff_args = '--ignore-space-at-eol'
+nmap <silent> ]h :GitGutterNextHunk<CR>
+nmap <silent> [h :GitGutterPrevHunk<CR>
 
 " Ale
-nmap ]l :lnext<CR>
-nmap [l :lprevious<CR>
-let g:ale_sign_column_always = 1
-let g:ale_virtualenv_dir_names = ['venv']
-let g:ale_linters = { 'python': ['pycodestyle', 'pylint'] }
-" let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
-let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics'
+" " let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics pyadmin/'
+" let g:ale_python_pycodestyle_options = '--max-line-length=120 --ignore=E121,E122,E123,E124,E126,E127,E128,E131,E201,E203,E221,E225,E226,E231,E241,E265,E302,E303,E305,E402,E501,W391,W503 --statistics'
 
 
 " Vimade
@@ -216,7 +209,7 @@ let g:python2_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
 
 " Git settings
-:set diffopt+=indent-heuristic
+set diffopt+=indent-heuristic
 
 " Save all buffers
 nnoremap <Leader>w :wa<CR>
@@ -236,7 +229,7 @@ set backspace=indent,eol,start
 
 set showcmd
 
-set foldmethod=indent
+set foldmethod=manual
 set foldlevelstart=99
 
 " -- Colorscheme --------------------------------
@@ -259,7 +252,7 @@ set termguicolors
 
 " -- Snow --
 colorscheme snow
-" let g:airline_theme='snow_dark'
+let g:airline_theme='snow_dark'
 " -----------------------------------------------
 
 " tab completion
@@ -311,11 +304,9 @@ nnoremap Q @q
 
 map <F1> :Startify<CR>
 map <F2> :e $MYVIMRC<CR>
-autocmd FileType javascript map <F3> :TernDef<CR>
 
 map <F5> :T !!<CR>
 map <F6> :vert Ttoggle<CR>
-map <F7> :2Topen <C-w>=<CR>
 
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
@@ -330,7 +321,7 @@ noremap K {
 
 " replace currently selected text with default register
 " without yanking it
-vnoremap <leader>p "_dP
+vnoremap <leader>p "_dp
 
 " terminal normal mode
 :tnoremap <Esc> <C-\><C-n>
@@ -355,30 +346,34 @@ set nowritebackup
 set updatetime=300
 set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Snippets
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+let g:coc_snippet_next = '<tab>'
 
-" Use `[c` and `]c` to navigate diagnostics
+
+" Use `[l` and `]l` to navigate diagnostics
 " NOTE: currently commented out because of conflict with git
-" nmap <silent> [c <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]c <Plug>(coc-diagnostic-next)
+nmap <silent> [l <Plug>(coc-diagnostic-prev)
+nmap <silent> ]l <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> ge <Plug>(coc-declaration)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -395,7 +390,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -423,9 +418,9 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 
 
 " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
+" nmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <TAB> <Plug>(coc-range-select)
+" xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
 
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -436,20 +431,20 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 " use `:OR` for organize import of current buffer
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
 
-
 " Using CocList
 " Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+
 " Do default action for previous item.
 " nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
@@ -466,6 +461,10 @@ nmap <leader>n :bnext<CR>
 nmap <leader>b :bprevious<CR>
 nnoremap ]b :bnext<cr>
 nnoremap [b :bprev<cr>
+nnoremap gb :bprev<cr>
+nnoremap gn :bnext<cr>
+nnoremap gj :bprev<cr>
+nnoremap gk :bnext<cr>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
@@ -494,3 +493,5 @@ nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 nnoremap <silent> <Leader>= <C-w>=
 "--------------------------------------------------------------------------
 
+" Debugging ---------------------------------------------------------------
+" -------------------------------------------------------------------------
