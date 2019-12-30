@@ -22,10 +22,11 @@ else
 endif
 
 " Colors/Themes
-Plug 'iCyMind/NeoSolarized'
-Plug 'junegunn/seoul256.vim'
-Plug 'jnurmine/Zenburn'
+" Plug 'iCyMind/NeoSolarized'
+" Plug 'junegunn/seoul256.vim'
+" Plug 'jnurmine/Zenburn'
 Plug 'nightsense/snow'
+Plug 'tyrannicaltoucan/vim-deep-space'
 
 " Javascript/HTML/CSS
 Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
@@ -48,13 +49,11 @@ Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 
 " Interface
+Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
-" Lightline vs Airline
-Plug 'vim-airline/vim-airline'
-" Plug 'itchyny/lightline.vim'
-" Plug 'mengelbrecht/lightline-bufferline'
+Plug 'RRethy/vim-illuminate'
 
 " Movement
 Plug 'junegunn/vim-slash'
@@ -68,7 +67,6 @@ Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-sleuth'
 Plug 'kassio/neoterm'
 Plug 'junegunn/vim-peekaboo'
-Plug 'tmhedberg/SimpylFold'
 Plug 'janko/vim-test'
 
 call plug#end()
@@ -78,75 +76,53 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#coc#enabled = 1
+
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#coc#enabled = 1
-" Lightline
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
-endfunction
-
-" lightline/coc
-set showtabline=2
-let g:lightline = {
-  \     'colorscheme': 'snow_dark',
-  \     'active': {
-  \       'left': [ [ 'mode' ],
-  \                 [ 'gitbranch', 'cocstatus', 'currentfunction', 'readonly', 'filename', 'modified' ] ]
-  \         },
-  \     'component_function': {
-  \       'cocstatus': 'coc#status',
-  \       'currentfunction': 'CocCurrentFunction',
-  \       'gitbranch': 'fugitive#head'
-  \      },
-  \     'tabline': {'left': [['buffers']], 'right': [['close']]},
-  \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
-  \     'component_type': {'buffers': 'tabsel'},
-  \ }
-
-let g:lightline#bufferline#show_number  = 2
-
-nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-nmap <Leader>9 <Plug>lightline#bufferline#go(9)
-nmap <Leader>0 <Plug>lightline#bufferline#go(10)
-nmap g1 <Plug>lightline#bufferline#go(1)
-nmap g2 <Plug>lightline#bufferline#go(2)
-nmap g3 <Plug>lightline#bufferline#go(3)
-nmap g4 <Plug>lightline#bufferline#go(4)
-nmap g5 <Plug>lightline#bufferline#go(5)
-nmap g6 <Plug>lightline#bufferline#go(6)
-nmap g7 <Plug>lightline#bufferline#go(7)
-nmap g8 <Plug>lightline#bufferline#go(8)
-nmap g9 <Plug>lightline#bufferline#go(9)
-nmap g0 <Plug>lightline#bufferline#go(10)
-" lightline-bufferline
-" let g:lightline.tabline          = {'left': [['buffers']], 'right': [['close']]}
-" let g:lightline.component_expand = {'buffers': 'lightline#bufferline#buffers'}
-" let g:lightline.component_type   = {'buffers': 'tabsel'}
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+" let g:airline#extensions#tabline#ignore_bufadd_pat = '!|defx|gundo|nerd_tree|startify|tagbar|term://|undotree|vimfiler'
+let g:airline#extensions#tabline#ignore_bufadd_pat = 'defx|gundo|nerd_tree|startify|tagbar|undotree|vimfiler'
+" nmap <leader>- <Plug>AirlineSelectPrevTab
+" nmap <leader>+ <Plug>AirlineSelectNextTab
+nmap <leader>1 <Plug>AirlineSelectTab1
+nmap <leader>2 <Plug>AirlineSelectTab2
+nmap <leader>3 <Plug>AirlineSelectTab3
+nmap <leader>4 <Plug>AirlineSelectTab4
+nmap <leader>5 <Plug>AirlineSelectTab5
+nmap <leader>6 <Plug>AirlineSelectTab6
+nmap <leader>7 <Plug>AirlineSelectTab7
+nmap <leader>8 <Plug>AirlineSelectTab8
+nmap <leader>9 <Plug>AirlineSelectTab9
+nmap g1 <Plug>AirlineSelectTab1
+nmap g2 <Plug>AirlineSelectTab2
+nmap g3 <Plug>AirlineSelectTab3
+nmap g4 <Plug>AirlineSelectTab4
+nmap g5 <Plug>AirlineSelectTab5
+nmap g6 <Plug>AirlineSelectTab6
+nmap g7 <Plug>AirlineSelectTab7
+nmap g8 <Plug>AirlineSelectTab8
+nmap g9 <Plug>AirlineSelectTab9
 
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
-map <C-f> :NERDTreeFind<CR>
+" map <C-f> :NERDTreeFind<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
 
 " FZF
 nnoremap <silent> <C-p> :GFiles<CR>
+nnoremap <silent> <C-i> :FZF<CR>
+nnoremap <leader>rg :Rg 
 " close w/ escape
 autocmd! FileType fzf tnoremap <buffer> <esc> <c-c> " Close
 " prevent <C-j> and <C-k> from moving windows while fzf is up
 autocmd FileType fzf tnoremap <buffer> <C-j> <Down>
 autocmd FileType fzf tnoremap <buffer> <C-k> <Up>
+"TODO: do the above for insert mode in terminal so you can use <C-j/k> for 
 
 " startify
 let g:startify_use_env = 1
@@ -188,6 +164,11 @@ nmap <silent> [h :GitGutterPrevHunk<CR>
 let g:vimade = {}
 let g:vimade.fadelevel = 0.83
 
+" Errors without these two lines
+let g:vimade.normalid = ''
+let g:vimade.normalncid = ''
+
+
 " Neoterm
 " 3<leader>tl will clear neoterm-3.
 " nnoremap <leader>tl :<c-u>exec v:count.'Tclear'<cr>
@@ -197,9 +178,15 @@ let g:vimade.fadelevel = 0.83
 let g:neoterm_autoscroll=1
 let g:neoterm_keep_term_open=1
 
+" Use gx{text-object} in normal mode
+nmap <leader>rs <Plug>(neoterm-repl-send)
+nmap <leader>rrs <Plug>(neoterm-repl-send-line)
+" Send selected contents in visual mode.
+xmap <leader>rs <Plug>(neoterm-repl-send)
+ 
+
 " vim-test
 let test#strategy = 'neoterm'
-let g:lightline#bufferline#filename_modifier = ':t'
 nmap <leader>t :TestFile<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -251,8 +238,12 @@ set termguicolors
 " colorscheme seoul256
 
 " -- Snow --
-colorscheme snow
-let g:airline_theme='snow_dark'
+" colorscheme snow
+" let g:airline_theme='snow_dark'
+
+" -- Deep Space --
+colorscheme deep-space
+let g:airline_theme='deep_space'
 " -----------------------------------------------
 
 " tab completion
@@ -279,7 +270,6 @@ set expandtab
 
 " remap jk to escape in insert mode
 inoremap jk <Esc>
-inoremap <S-Space> <Esc>
 
 " Save from insert mode
 inoremap :w <Esc>:w
@@ -311,7 +301,7 @@ map <F6> :vert Ttoggle<CR>
 autocmd FileType javascript nmap <F9> :T npm start<CR>
 autocmd FileType javascript nmap <F10> :T npm test  %<CR>
 autocmd FileType python nmap <F9> :T ./run.py<CR>
-autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
+" autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
 
 " Easy movement mappings
 "noremap H ^
@@ -352,11 +342,19 @@ set signcolumn=yes
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Snippets
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? coc#_select_confirm() :
+"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
   let col = col('.') - 1
@@ -365,20 +363,20 @@ endfunction
 
 let g:coc_snippet_next = '<tab>'
 
-
 " Use `[l` and `]l` to navigate diagnostics
 " NOTE: currently commented out because of conflict with git
 nmap <silent> [l <Plug>(coc-diagnostic-prev)
 nmap <silent> ]l <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> ge <Plug>(coc-declaration)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" NOTE: These conflict with vim-slash, so they're prefixed with `autocmd VimEnter * `
+autocmd VimEnter * nmap <silent> gd <Plug>(coc-definition)
+autocmd VimEnter * nmap <silent> ge <Plug>(coc-declaration)
+autocmd VimEnter * nmap <silent> gy <Plug>(coc-type-definition)
+autocmd VimEnter * nmap <silent> gi <Plug>(coc-implementation)
+autocmd VimEnter * nmap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window
+" Use k to show documentation in preview window
 nnoremap <silent> <leader>k :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
@@ -390,7 +388,7 @@ function! s:show_documentation()
 endfunction
 
 " Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -433,17 +431,17 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 
 " Using CocList
 " Show all diagnostics
-" nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
 " Manage extensions
-" nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
 " Show commands
-" nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
 " Find symbol of current document
-" nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
 " Search workspace symbols
-" nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-" nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
 
 " Do default action for previous item.
 " nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
@@ -485,7 +483,7 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-nnoremap <C-Q> :q
+nnoremap <C-Q> :q<cr>
 
 " Resizing
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -495,3 +493,4 @@ nnoremap <silent> <Leader>= <C-w>=
 
 " Debugging ---------------------------------------------------------------
 " -------------------------------------------------------------------------
+
