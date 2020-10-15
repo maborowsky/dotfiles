@@ -30,3 +30,10 @@ alias dk='source <($GIVEWITH_LOCALHOST/read_local_envs.sh); docker-compose -f $D
 alias dkup='dk up -d'
 alias dkl='dk logs -f'
 alias dkr='dk restart'
+
+# Display images (only works in Kitty terminal)
+alias icat='kitty icat --align=left'
+alias isvg='rsvg-convert | icat'
+
+
+

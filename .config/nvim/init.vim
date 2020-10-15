@@ -106,12 +106,17 @@ nmap g7 <Plug>AirlineSelectTab7
 nmap g8 <Plug>AirlineSelectTab8
 nmap g9 <Plug>AirlineSelectTab9
 
+" Fugitive
+command! Gpushu Gpush -u origin HEAD
+
 " NERDTree
 map <C-e> :NERDTreeToggle<CR>
 " map <C-f> :NERDTreeFind<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let NERDTreeDirArrowExpandable="▶"
 let NERDTreeDirArrowCollapsible="▼"
+let NERDTreeQuitOnOpen = 1
+let NERDTreeAutoDeleteBuffer = 1
 
 " FZF
 nnoremap <silent> <C-p> :GFiles<CR>
@@ -141,7 +146,9 @@ let g:startify_list_order = [
 let g:startify_bookmarks = [ {'v': '$MYVIMRC'} ]
 if !has("win32")
     let g:startify_bookmarks += [
-                \ {'z': '~/.zshrc' }
+                \ {'z': '~/.zshrc' },
+                \ {'p': '~/.zpreztorc' },
+                \ {'k': '~/.config/kitty/kitty.conf' }
     \ ]
 endif
 
@@ -328,6 +335,9 @@ hi link javaScriptTemplateString String
 
 " Comment highlighting in json docs
 autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" Autosave
+let g:auto_save_events = ["InsertLeave", "TextChanged"]
 
 
 " Coc setup ---------------------------------------------------------------
