@@ -28,6 +28,7 @@ endif
 Plug 'arcticicestudio/nord-vim'
 Plug 'nightsense/snow'
 Plug 'tyrannicaltoucan/vim-deep-space'
+Plug 'ryuta69/elly.vim'
 
 " Javascript/HTML/CSS
 Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
@@ -61,6 +62,8 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
 " Plug 'RRethy/vim-illuminate'
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
 
 " Movement
 Plug 'junegunn/vim-slash'
@@ -135,7 +138,7 @@ let NERDTreeAutoDeleteBuffer = 1
 nnoremap <silent> <C-p> :GFiles<CR>
 nnoremap <silent> <C-i> :Files --reverse<CR>
 nnoremap <silent> <leader>i :Buffers<CR>
-nnoremap <silent> <leader>rg :Rg 
+nnoremap <leader>rg :Rg 
 let g:fzf_preview_window = 'right:40%'
 
 " close w/ escape
@@ -146,7 +149,7 @@ autocmd FileType fzf tnoremap <buffer> <C-j> <Down>
 autocmd FileType fzf tnoremap <buffer> <C-k> <Up>
 "TODO: do the above for insert mode in terminal so you can use <C-j/k> for 
 
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!build/**' --glob '!.node_modules/**' --glob '!.idea'"
+let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!migrations/**' --glob '!build/**' --glob '!.node_modules/**' --glob '!.idea'"
 let $FZF_DEFAULT_OPTS=' --color=dark --margin=1,4 --reverse'
 " let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1 --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
 let g:fzf_layout = {'up':'40%', 'window': { 'width': 0.7, 'height': 0.7,'yoffset':0.5,'xoffset': 0.5, 'border': 'sharp' }}
@@ -347,7 +350,8 @@ set shiftwidth=4
 set expandtab
 
 " remap jk to escape in insert mode
-inoremap jk <Esc>
+inoremap <silent> jk <Esc>
+nnoremap <silent><esc> :noh<return><esc>
 
 " Save from insert mode
 inoremap :w <Esc>:w
@@ -528,14 +532,16 @@ command! FixWhitespace :%s/\s\+$//e
 set hidden
 
 " Move to the next or previous buffer
-nmap <leader>n :bnext<CR>
 nmap <leader>b :bprevious<CR>
-nnoremap ]b :bnext<cr>
-nnoremap [b :bprev<cr>
+nmap <leader>n :bnext<CR>
+nmap <leader>j :bnext<CR>
+nmap <leader>k :bprev<CR>
+" nnoremap ]b :bnext<cr>
+" nnoremap [b :bprev<cr>
 nnoremap gb :bprev<cr>
 nnoremap gn :bnext<cr>
-nnoremap gj :bprev<cr>
-nnoremap gk :bnext<cr>
+nnoremap gj :bnext<cr>
+nnoremap gk :bprev<cr>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
@@ -573,7 +579,6 @@ nnoremap <silent> <Leader>= <C-w>=
 " Shell
 set shell=/bin/zsh
 
-
 " Lightline
 " Get default from :h lightline
 
@@ -600,108 +605,104 @@ nmap g0 <Plug>lightline#bufferline#go(10)
 
 set showtabline=2
 
-let g:lightline#bufferline#show_number  = 2
-let g:lightline = {
-  \     'colorscheme': 'nord',
-  \     'component_function': {
-  \       'gitbranch': 'fugitive#head'
-  \      },
-  \     'tabline': {'left': [['buffers']], 'right': [['close']]},
-  \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
-  \     'component_type': {'buffers': 'tabsel'},
-  \ }
-"   \     'active': {
-"   \       'left': [ [ 'mode' ],
-"   \                 [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-"   \         },
+" let g:lightline#bufferline#show_number  = 2
+" let g:lightline = {
+"   \     'colorscheme': 'nord',
+"   \     'component_function': {
+"   \       'gitbranch': 'fugitive#head'
+"   \      },
+"   \     'tabline': {'left': [['buffers']], 'right': [['close']]},
+"   \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
+"   \     'component_type': {'buffers': 'tabsel'},
+"   \ }
+" "   \     'active': {
+" "   \       'left': [ [ 'mode' ],
+" "   \                 [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+" "   \         },
 
 
-let g:lightline = {
-    \ 'colorscheme': 'nord',
-    \ }
+" " let g:lightline = {
+" "     \ 'colorscheme': 'nord',
+" "     \ }
 
-let g:lightline.active = {
-    \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-    \           [ 'gitbranch', 'readonly', 'filename', 'modified' ],
-    \         ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ]
-    \ }
+" " let g:lightline.active = {
+" "     \ 'left': [ [ 'mode', 'paste', 'sep1' ],
+" "     \           [ 'gitbranch', 'readonly', 'filename', 'modified' ],
+" "     \         ],
+" "     \ 'right': [ [ 'lineinfo' ],
+" "     \            [ 'percent' ],
+" "     \            [ 'filetype' ] ]
+" "     \ }
 
-let g:lightline.inactive = {
-    \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-    \           [ 'readonly', 'filename', 'modified' ] ],
-    \ 'right': [ [ 'lineinfo' ],
-    \            [ 'percent' ],
-    \            [ 'filetype' ] ]
-    \ }
+" " let g:lightline.inactive = {
+" "     \ 'left': [ [ 'mode', 'paste', 'sep1' ],
+" "     \           [ 'readonly', 'filename', 'modified' ] ],
+" "     \ 'right': [ [ 'lineinfo' ],
+" "     \            [ 'percent' ],
+" "     \            [ 'filetype' ] ]
+" "     \ }
 
-" let g:lightline.tab = {
-"     \ 'active': [ 'tabnum', 'filename', 'modified' ],
-"     \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
+" " let g:lightline.tab = {
+" "     \ 'active': [ 'tabnum', 'filename', 'modified' ],
+" "     \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
 
 
-let g:lightline.component = {
-    \ 'mode': '%{lightline#mode()}',
-    \ 'absolutepath': '%F',
-    \ 'relativepath': '%f',
-    \ 'filename': '%t',
-    \ 'modified': '%M',
-    \ 'bufnum': '%n',
-    \ 'paste': '%{&paste?"PASTE":""}',
-    \ 'readonly': '%R',
-    \ 'charvalue': '%b',
-    \ 'charvaluehex': '%B',
-    \ 'fileencoding': '%{&fenc!=#""?&fenc:&enc}',
-    \ 'fileformat': '%{&ff}',
-    \ 'filetype': '%{&ft!=#""?&ft:"no ft"}',
-    \ 'percent': '%3p%%',
-    \ 'percentwin': '%P',
-    \ 'spell': '%{&spell?&spelllang:""}',
-    \ 'lineinfo': '%3l:%-2v',
-    \ 'line': '%l',
-    \ 'column': '%c',
-    \ 'close': '%999X X ',
-    \ 'winnr': '%{winnr()}',
-    \ 'sep1': '-'
-    \}
+" let g:lightline.component = {
+"     \ 'mode': '%{lightline#mode()}',
+"     \ 'absolutepath': '%F',
+"     \ 'relativepath': '%f',
+"     \ 'filename': '%t',
+"     \ 'modified': '%M',
+"     \ 'bufnum': '%n',
+"     \ 'paste': '%{&paste?"PASTE":""}',
+"     \ 'readonly': '%R',
+"     \ 'charvalue': '%b',
+"     \ 'charvaluehex': '%B',
+"     \ 'fileencoding': '%{&fenc!=#""?&fenc:&enc}',
+"     \ 'fileformat': '%{&ff}',
+"     \ 'filetype': '%{&ft!=#""?&ft:"no ft"}',
+"     \ 'percent': '%3p%%',
+"     \ 'percentwin': '%P',
+"     \ 'spell': '%{&spell?&spelllang:""}',
+"     \ 'lineinfo': '%3l:%-2v',
+"     \ 'line': '%l',
+"     \ 'column': '%c',
+"     \ 'close': '%999X X ',
+"     \ 'winnr': '%{winnr()}',
+"     \ 'sep1': '-'
+"     \}
 
-"   Only working in kitty term :(
-    " \ 'sep1': ''
+" "   Only working in kitty term :(
+"     " \ 'sep1': ''
 
-let g:lightline.mode_map = {
-    \ 'n' : 'N',
-    \ 'i' : 'I',
-    \ 'R' : 'R',
-    \ 'v' : 'V',
-    \ 'V' : 'L',
-    \ "\<C-v>": 'B',
-    \ 'c' : 'C',
-    \ 's' : 'S',
-    \ 'S' : 'S-LINE',
-    \ "\<C-s>": 'S-BLOCK',
-    \ 't': 'T',
-    \ }
-" 
-" 
-let g:lightline.separator = {
-    \   'left': '', 'right': ''
-    \}
-let g:lightline.subseparator = {
-    \   'left': '<', 'right': '>'
-    \}
-
-" let g:lightline.tabline_separator = g:lightline.separator
-" let g:lightline.tabline_subseparator = g:lightline.subseparator
+" let g:lightline.mode_map = {
+"     \ 'n' : 'N',
+"     \ 'i' : 'I',
+"     \ 'R' : 'R',
+"     \ 'v' : 'V',
+"     \ 'V' : 'L',
+"     \ "\<C-v>": 'B',
+"     \ 'c' : 'C',
+"     \ 's' : 'S',
+"     \ 'S' : 'S-LINE',
+"     \ "\<C-s>": 'S-BLOCK',
+"     \ 't': 'T',
+"     \ }
+" " 
+" " 
+" let g:lightline.separator = { 'left': '', 'right': '' }
+" let g:lightline.subseparator = { 'left': '', 'right': '' }
+" let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
+" let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
 
 " let g:lightline.enable = {
-"     \ 'statusline': 1,
-"     \ 'tabline': 1
+"     \ 'statusline': 0,
+"     \ 'tabline': 0,
 "     \ }
 
 " -----------------------------------------------------------------
-" source ~/.config/nvim/statusline.vim
+" call lightline#disable()
+source ~/.config/nvim/statusline.vim
 
 
 " LSP
@@ -714,7 +715,7 @@ EOF
 nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
 nnoremap <silent> gh     <cmd>lua vim.lsp.buf.hover()<CR>
 nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+" nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
 nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
 nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
@@ -726,3 +727,4 @@ if has('macunix')
   vmap <C-x> :!pbcopy<CR>
   vmap <C-c> :w !pbcopy<CR><CR>
 endif
+
