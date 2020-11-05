@@ -48,20 +48,17 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 
 " Language Server
-" Plug 'neoclide/coc.nvim', {'tag': '*', 'branch': 'release'}
 Plug 'neovim/nvim-lspconfig' " Defaults for built in lsp (neovim > 0.5)
 Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'nvim-treesitter/nvim-treesitter-refactor'
 
 
 " Interface
-" Plug 'vim-airline/vim-airline'
-Plug 'itchyny/lightline.vim'
-Plug 'mengelbrecht/lightline-bufferline'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
 " Plug 'RRethy/vim-illuminate'
+" nvim-web-devicons needed for barbar
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 
@@ -81,42 +78,6 @@ Plug 'janko/vim-test'
 Plug '907th/vim-auto-save'
 
 call plug#end()
-
-" Airline
-" if !exists('g:airline_symbols')
-"     let g:airline_symbols = {}
-" endif
-" let g:airline_powerline_fonts = 1
-" let g:airline#extensions#coc#enabled = 1
-
-" let g:airline#extensions#tabline#enabled = 1
-" let g:airline#extensions#tabline#fnamemod = ':t' " Show just the filename
-" let g:airline#extensions#tabline#left_sep = ' '
-" let g:airline#extensions#tabline#left_alt_sep = '|'
-" let g:airline#extensions#tabline#buffer_idx_mode = 1
-" " let g:airline#extensions#tabline#ignore_bufadd_pat = '!|defx|gundo|nerd_tree|startify|tagbar|term://|undotree|vimfiler'
-" let g:airline#extensions#tabline#ignore_bufadd_pat = 'defx|gundo|nerd_tree|startify|tagbar|undotree|vimfiler'
-" " nmap <leader>- <Plug>AirlineSelectPrevTab
-" " nmap <leader>+ <Plug>AirlineSelectNextTab
-" nmap <leader>1 <Plug>AirlineSelectTab1
-" nmap <leader>2 <Plug>AirlineSelectTab2
-" nmap <leader>3 <Plug>AirlineSelectTab3
-" nmap <leader>4 <Plug>AirlineSelectTab4
-" nmap <leader>5 <Plug>AirlineSelectTab5
-" nmap <leader>6 <Plug>AirlineSelectTab6
-" nmap <leader>7 <Plug>AirlineSelectTab7
-" nmap <leader>8 <Plug>AirlineSelectTab8
-" nmap <leader>9 <Plug>AirlineSelectTab9
-" nmap g1 <Plug>AirlineSelectTab1
-" nmap g2 <Plug>AirlineSelectTab2
-" nmap g3 <Plug>AirlineSelectTab3
-" nmap g4 <Plug>AirlineSelectTab4
-" nmap g5 <Plug>AirlineSelectTab5
-" nmap g6 <Plug>AirlineSelectTab6
-" nmap g7 <Plug>AirlineSelectTab7
-" nmap g8 <Plug>AirlineSelectTab8
-" nmap g9 <Plug>AirlineSelectTab9
-
 
 " Fugitive
 command! Gpushu Gpush -u origin HEAD
@@ -297,7 +258,10 @@ set nofoldenable
 
 " -- Colorscheme --------------------------------
 set background=dark
-set termguicolors
+
+" set Vim-specific sequences for RGB colors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 
 " -- Neo solarized --
 " colorscheme NeoSolarized
@@ -324,7 +288,6 @@ set termguicolors
 " -- Nord --
 colorscheme nord
 let g:airline_theme='nord'
-" NOTE: lightline!
 " -----------------------------------------------
 
 " tab completion
@@ -407,145 +370,27 @@ endif
 " remove trailing whitespaces
 command! FixWhitespace :%s/\s\+$//e
 
-" Coc setup ---------------------------------------------------------------
-" set nobackup
-" set nowritebackup
-" set updatetime=300
-" set signcolumn=yes
-
-
-" " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" " Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" " Snippets
-" " inoremap <silent><expr> <TAB>
-" "       \ pumvisible() ? coc#_select_confirm() :
-" "       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-" "       \ <SID>check_back_space() ? "\<TAB>" :
-" "       \ coc#refresh()
-
-" " Use tab for trigger completion with characters ahead and navigate.
-" " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" let g:coc_snippet_next = '<tab>'
-
-" " Use `[l` and `]l` to navigate diagnostics
-" " NOTE: currently commented out because of conflict with git
-" nmap <silent> [l <Plug>(coc-diagnostic-prev)
-" nmap <silent> ]l <Plug>(coc-diagnostic-next)
-
-" " Remap keys for gotos
-" " NOTE: These conflict with vim-slash, so they're prefixed with `autocmd VimEnter * `
-" autocmd VimEnter * nmap <silent> gd <Plug>(coc-definition)
-" autocmd VimEnter * nmap <silent> ge <Plug>(coc-declaration)
-" autocmd VimEnter * nmap <silent> gy <Plug>(coc-type-definition)
-" autocmd VimEnter * nmap <silent> gi <Plug>(coc-implementation)
-" autocmd VimEnter * nmap <silent> gr <Plug>(coc-references)
-
-" " Use k to show documentation in preview window
-" nnoremap <silent> <leader>k :call <SID>show_documentation()<CR>
-
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   else
-"     call CocAction('doHover')
-"   endif
-" endfunction
-
-" " Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-" " Remap for rename current word
-" nmap <leader>rn <Plug>(coc-rename)
-
-" " Remap for format selected region
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-
-" augroup mygroup
-"   autocmd!
-"   " Setup formatexpr specified filetype(s).
-"   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-"   " Update signature help on jump placeholder
-"   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" augroup end
-
-" " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-" xmap <leader>a  <Plug>(coc-codeaction-selected)
-" nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" " Remap for do codeAction of current line
-" nmap <leader>ac  <Plug>(coc-codeaction)
-" " Fix autofix problem of current line
-" " nmap <leader>qf  <Plug>(coc-fix-current)
-
-
-" " Use <tab> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-" " nmap <silent> <TAB> <Plug>(coc-range-select)
-" " xmap <silent> <TAB> <Plug>(coc-range-select)
-" " xmap <silent> <S-TAB> <Plug>(coc-range-select-backword)
-
-" " Use `:Format` to format current buffer
-" command! -nargs=0 Format :call CocAction('format')
-
-" " Use `:Fold` to fold current buffer
-" command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" " use `:OR` for organize import of current buffer
-" command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" " Using CocList
-" " Show all diagnostics
-" nnoremap <silent> <leader>ca  :<C-u>CocList diagnostics<cr>
-" " Manage extensions
-" nnoremap <silent> <leader>ce  :<C-u>CocList extensions<cr>
-" " Show commands
-" nnoremap <silent> <leader>cc  :<C-u>CocList commands<cr>
-" " Find symbol of current document
-" nnoremap <silent> <leader>co  :<C-u>CocList outline<cr>
-" " Search workspace symbols
-" nnoremap <silent> <leader>cs  :<C-u>CocList -I symbols<cr>
-" " Do default action for next item.
-" nnoremap <silent> <leader>cj  :<C-u>CocNext<CR>
-
-" " Do default action for previous item.
-" " nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
-" " Resume latest coc list
-" " nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
-" -------------------------------------------------------------------------
-
 " Buffers like tabs -------------------------------------------------------
 " This allows buffers to be hidden if you've modified a buffer.
 " This is almost a must if you wish to use buffers in this way.
 set hidden
+" Now done in barbar
 
 " Move to the next or previous buffer
-nmap <leader>b :bprevious<CR>
-nmap <leader>n :bnext<CR>
-nmap <leader>j :bnext<CR>
-nmap <leader>k :bprev<CR>
-" nnoremap ]b :bnext<cr>
-" nnoremap [b :bprev<cr>
-nnoremap gb :bprev<cr>
-nnoremap gn :bnext<cr>
-nnoremap gj :bnext<cr>
-nnoremap gk :bprev<cr>
+" nmap <leader>b :bprevious<CR>
+" nmap <leader>n :bnext<CR>
+" nmap <leader>j :bnext<CR>
+" nmap <leader>k :bprev<CR>
+" " nnoremap ]b :bnext<cr>
+" " nnoremap [b :bprev<cr>
+" nnoremap gb :bprev<cr>
+" nnoremap gn :bnext<cr>
+" nnoremap gj :bnext<cr>
+" nnoremap gk :bprev<cr>
 
 " Close the current buffer and move to the previous one
 " This replicates the idea of closing a tab
-nmap <leader>q :bp <BAR> bd #<CR>
+" nmap <leader>q :bp <BAR> bd #<CR>
 
 " Show all open buffers and their status
 nmap <leader>l :ls<CR>
@@ -574,134 +419,46 @@ nnoremap <silent> <Leader>= <C-w>=
 " -------------------------------------------------------------------------
 
 
-
-
 " Shell
 set shell=/bin/zsh
 
-" Lightline
-" Get default from :h lightline
+" barbar
+nmap <Leader>1 :BufferGoto 1<CR>
+nmap <Leader>2 :BufferGoto 2<CR>
+nmap <Leader>3 :BufferGoto 3<CR>
+nmap <Leader>4 :BufferGoto 4<CR>
+nmap <Leader>5 :BufferGoto 5<CR>
+nmap <Leader>6 :BufferGoto 6<CR>
+nmap <Leader>7 :BufferGoto 7<CR>
+nmap <Leader>8 :BufferGoto 8<CR>
+nmap <Leader>9 :BufferGoto 9<CR>
+nmap <Leader>0 :BufferLast<CR>
+nmap g1 :BufferGoto 1<CR>
+nmap g2 :BufferGoto 2<CR>
+nmap g3 :BufferGoto 3<CR>
+nmap g4 :BufferGoto 4<CR>
+nmap g5 :BufferGoto 5<CR>
+nmap g6 :BufferGoto 6<CR>
+nmap g7 :BufferGoto 7<CR>
+nmap g8 :BufferGoto 8<CR>
+nmap g9 :BufferGoto 9<CR>
+nmap g0 :BufferLast<CR>
 
-nmap <Leader>1 <Plug>lightline#bufferline#go(1)
-nmap <Leader>2 <Plug>lightline#bufferline#go(2)
-nmap <Leader>3 <Plug>lightline#bufferline#go(3)
-nmap <Leader>4 <Plug>lightline#bufferline#go(4)
-nmap <Leader>5 <Plug>lightline#bufferline#go(5)
-nmap <Leader>6 <Plug>lightline#bufferline#go(6)
-nmap <Leader>7 <Plug>lightline#bufferline#go(7)
-nmap <Leader>8 <Plug>lightline#bufferline#go(8)
-nmap <Leader>9 <Plug>lightline#bufferline#go(9)
-nmap <Leader>0 <Plug>lightline#bufferline#go(10)
-nmap g1 <Plug>lightline#bufferline#go(1)
-nmap g2 <Plug>lightline#bufferline#go(2)
-nmap g3 <Plug>lightline#bufferline#go(3)
-nmap g4 <Plug>lightline#bufferline#go(4)
-nmap g5 <Plug>lightline#bufferline#go(5)
-nmap g6 <Plug>lightline#bufferline#go(6)
-nmap g7 <Plug>lightline#bufferline#go(7)
-nmap g8 <Plug>lightline#bufferline#go(8)
-nmap g9 <Plug>lightline#bufferline#go(9)
-nmap g0 <Plug>lightline#bufferline#go(10)
+nnoremap <silent>    <leader>c :BufferClose<CR>
+nnoremap <silent>    <leader>q :BufferClose<CR>
+
+
+nmap <leader>b :BufferPrevious<CR>
+nmap <leader>n :BufferNext<CR>
+nmap <leader>k :BufferPrevious<CR>
+nmap <leader>j :BufferNext<CR>
+nnoremap gb :BufferPrevious<CR>
+nnoremap gn :BufferNext<CR>
+nnoremap gk :BufferPrevious<CR>
+nnoremap gj :BufferNext<CR>
 
 set showtabline=2
 
-" let g:lightline#bufferline#show_number  = 2
-" let g:lightline = {
-"   \     'colorscheme': 'nord',
-"   \     'component_function': {
-"   \       'gitbranch': 'fugitive#head'
-"   \      },
-"   \     'tabline': {'left': [['buffers']], 'right': [['close']]},
-"   \     'component_expand': {'buffers': 'lightline#bufferline#buffers'},
-"   \     'component_type': {'buffers': 'tabsel'},
-"   \ }
-" "   \     'active': {
-" "   \       'left': [ [ 'mode' ],
-" "   \                 [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
-" "   \         },
-
-
-" " let g:lightline = {
-" "     \ 'colorscheme': 'nord',
-" "     \ }
-
-" " let g:lightline.active = {
-" "     \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-" "     \           [ 'gitbranch', 'readonly', 'filename', 'modified' ],
-" "     \         ],
-" "     \ 'right': [ [ 'lineinfo' ],
-" "     \            [ 'percent' ],
-" "     \            [ 'filetype' ] ]
-" "     \ }
-
-" " let g:lightline.inactive = {
-" "     \ 'left': [ [ 'mode', 'paste', 'sep1' ],
-" "     \           [ 'readonly', 'filename', 'modified' ] ],
-" "     \ 'right': [ [ 'lineinfo' ],
-" "     \            [ 'percent' ],
-" "     \            [ 'filetype' ] ]
-" "     \ }
-
-" " let g:lightline.tab = {
-" "     \ 'active': [ 'tabnum', 'filename', 'modified' ],
-" "     \ 'inactive': [ 'tabnum', 'filename', 'modified' ] }
-
-
-" let g:lightline.component = {
-"     \ 'mode': '%{lightline#mode()}',
-"     \ 'absolutepath': '%F',
-"     \ 'relativepath': '%f',
-"     \ 'filename': '%t',
-"     \ 'modified': '%M',
-"     \ 'bufnum': '%n',
-"     \ 'paste': '%{&paste?"PASTE":""}',
-"     \ 'readonly': '%R',
-"     \ 'charvalue': '%b',
-"     \ 'charvaluehex': '%B',
-"     \ 'fileencoding': '%{&fenc!=#""?&fenc:&enc}',
-"     \ 'fileformat': '%{&ff}',
-"     \ 'filetype': '%{&ft!=#""?&ft:"no ft"}',
-"     \ 'percent': '%3p%%',
-"     \ 'percentwin': '%P',
-"     \ 'spell': '%{&spell?&spelllang:""}',
-"     \ 'lineinfo': '%3l:%-2v',
-"     \ 'line': '%l',
-"     \ 'column': '%c',
-"     \ 'close': '%999X X ',
-"     \ 'winnr': '%{winnr()}',
-"     \ 'sep1': '-'
-"     \}
-
-" "   Only working in kitty term :(
-"     " \ 'sep1': ''
-
-" let g:lightline.mode_map = {
-"     \ 'n' : 'N',
-"     \ 'i' : 'I',
-"     \ 'R' : 'R',
-"     \ 'v' : 'V',
-"     \ 'V' : 'L',
-"     \ "\<C-v>": 'B',
-"     \ 'c' : 'C',
-"     \ 's' : 'S',
-"     \ 'S' : 'S-LINE',
-"     \ "\<C-s>": 'S-BLOCK',
-"     \ 't': 'T',
-"     \ }
-" " 
-" " 
-" let g:lightline.separator = { 'left': '', 'right': '' }
-" let g:lightline.subseparator = { 'left': '', 'right': '' }
-" let g:lightline.tabline_separator = { 'left': "\ue0bc", 'right': "\ue0ba" }
-" let g:lightline.tabline_subseparator = { 'left': "\ue0bb", 'right': "\ue0bb" }
-
-" let g:lightline.enable = {
-"     \ 'statusline': 0,
-"     \ 'tabline': 0,
-"     \ }
-
-" -----------------------------------------------------------------
-" call lightline#disable()
 source ~/.config/nvim/statusline.vim
 
 

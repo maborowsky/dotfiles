@@ -12,6 +12,11 @@
 !.config/
 !.config/nvim/
 !.config/nvim/**.vim
-!.config/nvim/coc-settings.json
 !.config/kitty/
-!.config/kitty/*
+!.config/kitty/**
+!.config/yabai/
+!.config/yabai/**
+!.config/skhd/
+!.config/skhd/**
+!.config/karabiner/
+!.config/karabiner/**
