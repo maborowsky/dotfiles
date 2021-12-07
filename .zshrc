@@ -1,7 +1,4 @@
-# source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
 
 
 # Default to neovim
@@ -12,6 +9,11 @@ export DEVROOT=/Users/michael/workspace
 export GIVEWITH_LOCALHOST=~/workspace/givewith-localhost
 export DOCKER_COMPOSE_PATH=~/workspace/givewith-localhost/docker-compose.yml
 
+alias tab='kitty @ set-tab-title'
+
+alias cdw='cd $DEVROOT'
+alias cdn='cd ~/Documents/notes'
+
 alias vim='nvim'
 alias vi='nvim'
 
@@ -21,10 +23,12 @@ alias gatus='git status'
 alias gog='git log --oneline'
 alias giff='git diff | vim -'
 
-alias dk='source <($GIVEWITH_LOCALHOST/read_local_envs.sh); docker-compose -f $DOCKER_COMPOSE_PATH'
+alias dk='docker-compose -f $DOCKER_COMPOSE_PATH'
 alias dkup='dk up -d'
-alias dkl='dk logs -f'
+alias dkupb='dk up -d --bulid'
+alias dkl='dk logs -f -tail="100"'
 alias dkr='dk restart'
+
 
 # Display images (only works in Kitty terminal)
 alias icat='kitty icat --align=left'

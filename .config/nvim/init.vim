@@ -22,48 +22,68 @@ else
 endif
 
 " Colors/Themes
-" Plug 'iCyMind/NeoSolarized'
 " Plug 'junegunn/seoul256.vim'
 " Plug 'jnurmine/Zenburn'
-Plug 'arcticicestudio/nord-vim'
-Plug 'nightsense/snow'
+" Plug 'arcticicestudio/nord-vim'
+Plug 'shaunsingh/nord.nvim'
+" Plug 'nightsense/snow'
 Plug 'tyrannicaltoucan/vim-deep-space'
 Plug 'ryuta69/elly.vim'
-
-" Javascript/HTML/CSS
-Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript'] }
+Plug 'folke/tokyonight.nvim'
 
 " Lisp
-Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme', 'racket'] }
-Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme', 'racket'] }
+" Plug 'junegunn/rainbow_parentheses.vim', { 'for': ['clojure', 'scheme', 'racket'] }
+" Plug 'kovisoft/paredit', { 'for': ['clojure', 'scheme', 'racket'] }
 " Plug 'tpope/vim-fireplace'
 
 " Git
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 
+" Dependencies
+Plug 'nvim-lua/plenary.nvim'  " telescope
+Plug 'kyazdani42/nvim-web-devicons'  " barbar, nvim-tree, and others
+
 " Searching
-" Requires FZF to be installed via homebrew!
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'AckslD/nvim-neoclip.lua'
+" Plug 'lazytanuki-nvim-mapper'
 
 " Language Server
 Plug 'neovim/nvim-lspconfig' " Defaults for built in lsp (neovim > 0.5)
-Plug 'nvim-treesitter/nvim-treesitter'
-Plug 'nvim-treesitter/nvim-treesitter-refactor'
+Plug 'nvim-treesitter/nvim-treesitter', {'branch': '0.5-compat', 'do': ':TSUpdate'}  " We recommend updating the parsers on update
+" Plug 'nvim-treesitter/nvim-treesitter-refactor'
+Plug 'folke/lsp-trouble.nvim'
+
+" Completion
+" Plug 'hrsh7th/nvim-cmp'
+" Plug 'hrsh7th/vim-vsnip'
+" Plug 'hrsh7th/vim-vsnip-integ'
+" Plug 'hrsh7th/cmp-buffer'
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
+" Plug 'ms-jpq/coq.thirdparty', {'branch': '3p'}
+
+
+
+" Debugger
+Plug 'mfussenegger/nvim-dap'
+Plug 'rcarriga/nvim-dap-ui'
+Plug 'theHamsta/nvim-dap-virtual-text'
 
 
 " Interface
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'kyazdani42/nvim-tree.lua'
 Plug 'mhinz/vim-startify'
 Plug 'TaDaa/vimade'
 " Plug 'RRethy/vim-illuminate'
-" nvim-web-devicons needed for barbar
-Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
+Plug 'datwaft/bubbly.nvim'
+Plug 'projekt0n/circles.nvim'
 
 " Movement
-Plug 'junegunn/vim-slash'
+" Plug 'junegunn/vim-slash'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
@@ -73,64 +93,46 @@ Plug 'tpope/vim-commentary'
 Plug 'kshenoy/vim-signature'
 Plug 'tpope/vim-sleuth'
 Plug 'kassio/neoterm'
-Plug 'junegunn/vim-peekaboo'
+" Plug 'junegunn/vim-peekaboo'
 Plug 'janko/vim-test'
 Plug '907th/vim-auto-save'
-
 call plug#end()
+
 
 " Fugitive
 command! Gpushu Gpush -u origin HEAD
 
 
-" NERDTree
-map <C-e> :NERDTreeToggle<CR>
-" map <C-f> :NERDTreeFind<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-let NERDTreeDirArrowExpandable="▶"
-let NERDTreeDirArrowCollapsible="▼"
-let NERDTreeQuitOnOpen = 1
-let NERDTreeAutoDeleteBuffer = 1
+" nvim-tree
+let g:nvim_tree_auto_close = 1
+let g:nvim_tree_quit_on_open = 1
+let g:nvim_tree_follow = 1 "0 by default, this option allows the cursor to be updated when entering a buffer
+let g:nvim_tree_git_hl = 1 "0 by default, will enable file highlight for git attributes (can be used without the icons).
+let g:nvim_tree_highlight_opened_files = 1 "0 by default, will enable folder and file icon highlight for opened files/directories.
+let g:nvim_tree_add_trailing = 1 "0 by default, append a trailing slash to folder names
+" let g:nvim_tree_lsp_diagnostics = 1 "0 by default, will show lsp diagnostics in the signcolumn. See :help nvim_tree_lsp_diagnostics
+let g:nvim_tree_window_picker_exclude = {
+    \   'filetype': [
+    \     'packer',
+    \     'qf'
+    \   ],
+    \   'buftype': [
+    \     'terminal'
+    \   ]
+    \ }
 
+" let g:nvim_tree_show_icons = {
+"     \ 'git': 1,
+"     \ 'folders': 0,
+"     \ 'files': 0,
+"     \ 'folder_arrows': 0,
+"     \ }
 
-" FZF
-" nnoremap <silent> <C-p> :call fzf#vim#gitfiles('', {'options': '--prompt ""'})<CR>
-" nnoremap <silent> <C-i> :call fzf#vim#files('.', {'options': '--prompt ""'})<CR>
-nnoremap <silent> <C-p> :GFiles<CR>
-nnoremap <silent> <C-i> :Files --reverse<CR>
-nnoremap <silent> <leader>i :Buffers<CR>
-nnoremap <leader>rg :Rg 
-let g:fzf_preview_window = 'right:40%'
-
-" close w/ escape
-autocmd! FileType fzf tnoremap <buffer> <esc> <c-c> " Close
-
-" prevent <C-j> and <C-k> from moving windows while fzf is up
-autocmd FileType fzf tnoremap <buffer> <C-j> <Down>
-autocmd FileType fzf tnoremap <buffer> <C-k> <Up>
-"TODO: do the above for insert mode in terminal so you can use <C-j/k> for 
-
-let $FZF_DEFAULT_COMMAND = "rg --files --hidden --glob '!.git/**' --glob '!migrations/**' --glob '!build/**' --glob '!.node_modules/**' --glob '!.idea'"
-let $FZF_DEFAULT_OPTS=' --color=dark --margin=1,4 --reverse'
-" let $FZF_DEFAULT_OPTS=' --color=dark --color=fg:15,bg:-1,hl:1,fg+:#ffffff,bg+:0,hl+:1 --color=info:0,prompt:0,pointer:12,marker:4,spinner:11,header:-1 --layout=reverse  --margin=1,4'
-let g:fzf_layout = {'up':'40%', 'window': { 'width': 0.7, 'height': 0.7,'yoffset':0.5,'xoffset': 0.5, 'border': 'sharp' }}
-
-" Customize fzf colors to match your color scheme
-" - fzf#wrap translates this to a set of `--color` options
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'border':  ['fg', 'Ignore'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
+" nnoremap <C-n> :NvimTreeToggle<CR>
+nnoremap <C-e> :NvimTreeToggle<CR>
+" nnoremap <leader>r :NvimTreeRefresh<CR>
+" nnoremap <leader>n :NvimTreeFindFile<CR>
+nnoremap <C-f> :NvimTreeFindFile<CR>
 
 
 " startify
@@ -171,6 +173,9 @@ nmap <silent> [h :GitGutterPrevHunk<CR>
 " Vimade
 let g:vimade = {}
 let g:vimade.fadelevel = 0.83
+let g:vimade.enablesigns = 1
+autocmd FileType NvimTree VimadeBufDisable
+
 
 " Errors without these two lines
 let g:vimade.normalid = ''
@@ -187,10 +192,11 @@ let g:neoterm_autoscroll=1
 let g:neoterm_keep_term_open=1
 
 " Use gx{text-object} in normal mode
-nmap <leader>rs <Plug>(neoterm-repl-send)
-nmap <leader>rrs <Plug>(neoterm-repl-send-line)
+nmap <leader>rss <Plug>(neoterm-repl-send)
+nmap <leader>rsp vip<Plug>(neoterm-repl-send)
+nmap <leader>rsl <Plug>(neoterm-repl-send-line)
 " Send selected contents in visual mode.
-xmap <leader>rs <Plug>(neoterm-repl-send)
+xmap <leader>rss <Plug>(neoterm-repl-send)
  
 
 " vim-test
@@ -201,24 +207,6 @@ nmap <leader>t :TestFile<CR>
 " Autosave
 let g:auto_save = 1
 let g:auto_save_events = ["InsertLeave", "TextChanged"]
-
-
-" Treesitteer
-lua <<EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "python",
-  highlight = { enable = true },
-  refactor = {
-    highlight_definitions = { enable = true },
-    smart_rename = {
-      enable = true,
-      keymaps = {
-        smart_rename = "grr",
-      },
-    },
-  },
-}
-EOF
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -256,21 +244,22 @@ set showcmd
 set nofoldenable
 
 
+" Copy/Paste
+if has('macunix')
+  " pbcopy for OSX copy/paste
+  vmap <C-x> :!pbcopy<CR>
+  vmap <C-c> :w !pbcopy<CR><CR>
+endif
+
+
+
 " -- Colorscheme --------------------------------
 set background=dark
+set termguicolors
 
 " set Vim-specific sequences for RGB colors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-
-" -- Neo solarized --
-" colorscheme NeoSolarized
-" let g:neosolarized_contrast = "normal"
-" let g:neosolarized_visibility = "normal"
-" let g:neosolarized_vertSplitBgTrans = 1
-" hi NERDTreeClosable guifg=gui_red ctermfg=9
-" hi NERDTreeOpenable guifg=gui_orange ctermfg=9
-" hi NERDTreeExecFile guifg=gui_red ctermfg=1
 
 " -- Seoul 256 --
 " let g:seoul256_background = 235 " default: 237, range: 233-239
@@ -286,8 +275,10 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 " let g:airline_theme='deep_space'
 
 " -- Nord --
-colorscheme nord
-let g:airline_theme='nord'
+" colorscheme nord
+
+colorscheme tokyonight
+
 " -----------------------------------------------
 
 " tab completion
@@ -343,8 +334,6 @@ map <F2> :e $MYVIMRC<CR>
 map <F5> :T !!<CR>
 map <F6> :vert Ttoggle<CR>
 
-autocmd FileType javascript nmap <F9> :T npm start<CR>
-autocmd FileType javascript nmap <F10> :T npm test  %<CR>
 autocmd FileType python nmap <F9> :T ./run.py<CR>
 " autocmd FileType python nmap <F10> :exec(open(''%').read())<CR>
 
@@ -366,7 +355,6 @@ if exists('&inccommand')
   set inccommand=split
 endif
 
-
 " remove trailing whitespaces
 command! FixWhitespace :%s/\s\+$//e
 
@@ -374,23 +362,6 @@ command! FixWhitespace :%s/\s\+$//e
 " This allows buffers to be hidden if you've modified a buffer.
 " This is almost a must if you wish to use buffers in this way.
 set hidden
-" Now done in barbar
-
-" Move to the next or previous buffer
-" nmap <leader>b :bprevious<CR>
-" nmap <leader>n :bnext<CR>
-" nmap <leader>j :bnext<CR>
-" nmap <leader>k :bprev<CR>
-" " nnoremap ]b :bnext<cr>
-" " nnoremap [b :bprev<cr>
-" nnoremap gb :bprev<cr>
-" nnoremap gn :bnext<cr>
-" nnoremap gj :bnext<cr>
-" nnoremap gk :bprev<cr>
-
-" Close the current buffer and move to the previous one
-" This replicates the idea of closing a tab
-" nmap <leader>q :bp <BAR> bd #<CR>
 
 " Show all open buffers and their status
 nmap <leader>l :ls<CR>
@@ -422,7 +393,16 @@ nnoremap <silent> <Leader>= <C-w>=
 " Shell
 set shell=/bin/zsh
 
-" barbar
+" -- barbar ----------------------------
+let bufferline = get(g:, 'bufferline', {})
+
+" " Enable/disable icons
+" if set to 'numbers', will show buffer index in the tabline
+" if set to 'both', will show buffer index and icons in the tabline
+" let bufferline.icons = v:true
+let bufferline.icons = 'numbers'
+" let bufferline.icons = 'both'
+
 nmap <Leader>1 :BufferGoto 1<CR>
 nmap <Leader>2 :BufferGoto 2<CR>
 nmap <Leader>3 :BufferGoto 3<CR>
@@ -447,41 +427,215 @@ nmap g0 :BufferLast<CR>
 nnoremap <silent>    <leader>c :BufferClose<CR>
 nnoremap <silent>    <leader>q :BufferClose<CR>
 
-
 nmap <leader>b :BufferPrevious<CR>
 nmap <leader>n :BufferNext<CR>
 nmap <leader>k :BufferPrevious<CR>
 nmap <leader>j :BufferNext<CR>
-nnoremap gb :BufferPrevious<CR>
-nnoremap gn :BufferNext<CR>
-nnoremap gk :BufferPrevious<CR>
-nnoremap gj :BufferNext<CR>
+
 
 set showtabline=2
 
-source ~/.config/nvim/statusline.vim
+" source ~/.config/nvim/statusline.vim
 
 
 " LSP
-" https://nathansmith.io/posts/neovim-lsp
-lua <<EOF
-require'nvim_lsp'.jedi_language_server.setup{}
-EOF
-
-" lua require'nvim_lsp'.pyright.setup{}
-nnoremap <silent> gd <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> gh     <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> gh    <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gk    <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gi    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> [d    <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+nnoremap <silent> ]d    <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+nnoremap <silent> <leader>rn    <cmd>lua vim.lsp.buf.rename()<CR>
 " nnoremap <silent> <C-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
-nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+" nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
 nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+" nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+" nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
+"
+" Completion and diagnostics
+
+" Use <Tab> and <S-Tab> to navigate through popup menu
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" Avoid showing message extra message when using completion
+" set shortmess+=c
+
+let g:diagnostic_enable_underline = 0
 
 
-if has('macunix')
-  " pbcopy for OSX copy/paste
-  vmap <C-x> :!pbcopy<CR>
-  vmap <C-c> :w !pbcopy<CR><CR>
-endif
 
+
+
+
+" --------------------------------------------------
+" LUA -- eventuall everything will be lua
+" --------------------------------------------------
+lua << EOF
+
+local function map(mode, lhs, rhs, opts)
+  local options = {noremap = true}
+  if opts then options = vim.tbl_extend('force', options, opts) end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+
+
+-- LSP
+local nvim_lsp = require('lspconfig')
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+  --buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gk', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+  --buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  --buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  --buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  --buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  --buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  --buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  --buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  --buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>', opts)
+  --buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+end
+
+-- Use a loop to conveniently both setup defined servers 
+-- and map buffer local keybindings when the language server attaches
+-- local servers = { "pyright"  }
+-- for _, lsp in ipairs(servers) do
+--   nvim_lsp[lsp].setup { on_attach = on_attach }
+-- end
+ 
+
+require'lspconfig'.pyright.setup{
+  on_attach=on_attach,
+  settings = {       
+    python =  {         
+        analysis = {           
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = 'openFilesOnly',         
+      }       
+    }     
+  }
+}
+
+
+
+
+-- Treesitter
+require'nvim-treesitter.configs'.setup {
+  highlight = {
+    enable = true,
+  },
+  indent = {
+    enable = true,
+    --disable = {"python"}
+  }
+}
+
+
+-- Complete/compe/cmp
+-- vim.o.completeopt = "menuone,noselect"
+-- local cmp = require'cmp'
+-- cmp.setup({
+--   snippet = {
+--     expand = function(args)
+--       vim.fn["vsnip#anonymous"](args.body)
+--     end,
+--   },
+--   mapping = {
+--     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+--   },
+--   sources = {
+--     { name = '...' },
+--     ...
+--   }
+-- })
+
+local lsp = nvim_lsp
+local coq = require "coq"
+lsp.pyright.setup(coq.lsp_ensure_capabilities())
+
+-- Bubbly
+-- blue, should eventually revert this and set colors the right way
+-- Nord colors
+vim.g.bubbly_palette = {
+   background = "#2e3440",
+   foreground = "#4c566a",
+   black = "#3e4249",
+   red = "#81a1c1",
+   green = "#8fbcbb",
+   yellow = "#ebcb8b",
+   --blue = "#81a1c1",
+   blue = "#5e81ac",
+   purple = "#81a1c1",
+   cyan = "#81a1c1",
+   --white = "#e5e9f0",
+   white = "#d8dee9",
+   lightgrey = "#d8dee9",
+   darkgrey = "#3b4252",
+}
+
+vim.g.bubbly_tags = {
+   mode = {
+      normal = 'N',
+      insert = 'I',
+      visual = 'V',
+      visualblock = 'VB',
+      command = 'C',
+      terminal = 'T',
+      replace = 'R',
+      default = '-',
+   },
+   paste = 'P',
+   filetype = {
+      noft = 'no ft',
+   },
+}
+
+
+-- Telescope and plugins
+local actions = require('telescope.actions')
+-- Global remapping
+------------------------------
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+      },
+    },
+  }
+}
+
+-- Plugin: Neoclip
+require('neoclip').setup()
+require('telescope').load_extension('neoclip')
+
+map('n', 'ff', '<cmd>Telescope find_files<cr>', {noremap = true})
+map('n', 'fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
+map('n', 'fb', '<cmd>Telescope buffers<cr>', {noremap = true})
+map('n', 'fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
+map('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
+map('n', 'fc', '<cmd>Telescope neoclip<cr>', {noremap = true})
+vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-j> <Down>')
+vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-k> <Up>')
+
+
+
+-- Circles
+require("circles").setup() -- doesn't work with barbar if icons are turned on
+
+EOF
+" -------------------------------------------------------
