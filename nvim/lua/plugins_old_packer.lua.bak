@@ -1,0 +1,628 @@
+
+
+
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+end
+
+
+-- TODO: autosession w/ auto_session_use_git_branch, session-lens included now
+
+
+
+return require('packer').startup(function(use)
+  -- Packer can manage itself
+  use 'wbthomason/packer.nvim'
+
+
+  -- Dependencies
+  use 'nvim-lua/plenary.nvim'  -- telescope
+  use 'kyazdani42/nvim-web-devicons'
+
+
+  -- Colorschems
+  --Plug 'junegunn/seoul256.vim'
+  use 'jnurmine/Zenburn'
+  use 'nightsense/snow'
+  use 'tyrannicaltoucan/vim-deep-space'
+  -- use 'ryuta69/elly.vim'
+  use {
+     "kyazdani42/blue-moon",
+     config = function()
+       vim.opt.termguicolors = true
+       -- vim.cmd "colorscheme blue-moon"
+     end
+  }
+  use 'folke/tokyonight.nvim'
+  use "rebelot/kanagawa.nvim"
+
+
+  -- Movement
+  use 'wellle/targets.vim'
+  use 'tpope/vim-repeat'
+  use 'tpope/vim-surround'
+  use 'tpope/vim-commentary'
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+
+  -- Tab, Buffer, Window management
+  use 'famiu/bufdelete.nvim'
+  -- use {
+  --   'ThePrimeagen/harpoon',
+  --   requires = {
+  --     {'nvim-lua/plenary.nvim'},
+  --   },
+  --   config = function()
+  --     require("harpoon").setup({
+  --       mark_branch = true,
+  --     })
+  --   end
+  -- }
+
+
+  -- Git
+  use 'tpope/vim-fugitive'
+
+
+  -- Debugger
+  use 'mfussenegger/nvim-dap'
+  use 'rcarriga/nvim-dap-ui'
+  use 'theHamsta/nvim-dap-virtual-text'
+  use 'mfussenegger/nvim-dap-python'
+
+
+  -- Language specific
+  use 'Vimjas/vim-python-pep8-indent'
+
+
+  -- Interface
+  use 'mhinz/vim-startify'
+  --" Plug 'TaDaa/vimade'
+  --" Plug 'RRethy/vim-illuminate'
+  use 'stevearc/dressing.nvim'
+
+  use {
+    "romgrk/barbar.nvim",
+    -- requires = 'nvim-web-devicons',
+    config = function()
+      vim.g.barbar_auto_setup = false -- disable auto-setup
+      require("barbar").setup({
+        icons = {
+          -- Configure the base icons on the bufferline.
+          buffer_index = true,
+          buffer_number = false,
+
+          -- Enables / disables diagnostic symbols
+          diagnostics = {
+            [vim.diagnostic.severity.ERROR] = {enabled = true, icon = ''},
+            [vim.diagnostic.severity.WARN] = {enabled = false},
+            [vim.diagnostic.severity.INFO] = {enabled = false},
+            [vim.diagnostic.severity.HINT] = {enabled = false},
+          },
+          filetype = {
+            -- Requires `nvim-web-devicons` if `true`
+            enabled = false,
+          },
+        },
+      })
+    end
+  }
+
+
+  -- Misc
+  use 'kshenoy/vim-signature'
+  use 'tpope/vim-sleuth'
+  --" Plug 'junegunn/vim-peekaboo'
+  use '907th/vim-auto-save'
+  use 'petobens/poet-v'
+  -- use {
+  --   "rest-nvim/rest.nvim",
+  --   -- Done manually for now via 'luarocks install ' on the cmd line
+  --   -- rocks = { "lua-curl", "nvim-nio", "mimetypes", "xml2lua" },
+  --   config = function()
+  --     require'packer.luarocks'.install_commands()
+  --     require("rest-nvim").setup()
+  --   end,
+  -- }
+
+
+  -- auto F string
+  use {
+    "chrisgrieser/nvim-puppeteer",
+    requires = "nvim-treesitter/nvim-treesitter",
+  }
+
+
+  -- Treesitter
+  use {
+      'nvim-treesitter/nvim-treesitter',
+      run = ':TSUpdate',
+      config = function()
+        require'nvim-treesitter.configs'.setup {
+          ensure_insalled = {
+            'bash',
+            'css',
+            'html',
+            'javascript',
+            'json',
+            'jsonc',
+            'lua',
+            'typescript',
+            'python',
+          },
+          auto_install = true,
+          highlight = {
+            enable = true,
+          },
+          indent = {
+            enable = true,
+            -- disable = {"python"}
+          },
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+              init_selection = '<CR>',
+              scope_incremental = '<CR>',
+              node_incremental = '<TAB>',
+              node_decremental = '<S-TAB>',
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true, -- whether to set jumps in the jumplist
+            goto_next_start = {
+              [']m'] = '@function.outer',
+              [']]'] = '@class.outer',
+            },
+            goto_next_end = {
+              [']M'] = '@function.outer',
+              [']['] = '@class.outer',
+            },
+            goto_previous_start = {
+              ['[m'] = '@function.outer',
+              ['[['] = '@class.outer',
+            },
+            goto_previous_end = {
+              ['[M'] = '@function.outer',
+              ['[]'] = '@class.outer',
+            },
+          },
+        }
+      end
+  }
+
+
+  -- Circles
+  use {
+    "projekt0n/circles.nvim",
+    requires = {"kyazdani42/nvim-web-devicons"},
+    config = function()
+      require("circles").setup({
+        icons = { empty = '', filled = '', lsp_prefix = '' },
+        lsp = true,
+      })
+    end
+  }
+
+
+  -- Telescope
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} },
+    config = function()
+      local actions = require("telescope.actions")
+      require('telescope').setup{
+        defaults = {
+          mappings = {
+            i = {},
+          },
+          pickers = {
+            buffers = { sort_lastused = true },
+            git_branches = {
+              mappings = {
+                i = {
+                  ["<c-r>"] = actions.git_rename_branch
+                },
+              }
+            },
+          }
+        }
+      }
+
+      -- require("telescope").load_extension('harpoon')
+    end
+  }
+
+  use {
+    "LinArcX/telescope-env.nvim",
+    requires = {
+      {'nvim-telescope/telescope.nvim'},
+    },
+    config = function() require'telescope'.load_extension('env') end
+  }
+
+  use {
+    "AckslD/nvim-neoclip.lua",
+    requires = {
+      {'nvim-telescope/telescope.nvim'},
+    },
+    config = function() require('neoclip').setup() end
+  }
+
+  use {
+    "sopa0/telescope-makefile",
+    requires = {
+      {'nvim-telescope/telescope.nvim'},
+    },
+    config = function() require'telescope'.load_extension('make') end
+  }
+
+  use {
+    'LukasPietzschmann/telescope-tabs',
+    requires = { 'nvim-telescope/telescope.nvim' },
+  }
+
+  use {
+    'lpoto/telescope-docker.nvim',
+    requires = { 'nvim-telescope/telescope.nvim' },
+    config = function()
+      require("telescope").setup {
+        extensions = {
+          -- NOTE: this setup is optional
+          docker = {
+            -- These are the default values
+            theme = "ivy",
+            binary = "docker", -- in case you want to use podman or something
+            compose_binary = "docker compose",
+            buildx_binary = "docker buildx",
+            machine_binary = "docker-machine",
+            log_level = vim.log.levels.INFO,
+            init_term = "tabnew", -- "vsplit new", "split new", ...
+            -- NOTE: init_term may also be a function that receives
+            -- a command, a table of env. variables and cwd as input.
+            -- This is intended only for advanced use, in case you want
+            -- to send the env. and command to a tmux terminal or floaterm
+            -- or something other than a built in terminal.
+          },
+        },
+      }
+      -- Load the docker telescope extension
+      require("telescope").load_extension "docker"
+    end
+  }
+
+
+  use {
+    'kyazdani42/nvim-tree.lua',
+    requires = {
+      'kyazdani42/nvim-web-devicons',  -- optional, for file icon
+    },
+    config = function()
+      local circles = require('circles')
+
+      local function on_attach(bufnr)
+        local api = require('nvim-tree.api')
+
+        local function opts(desc)
+          return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+        end
+
+        api.config.mappings.default_on_attach(bufnr)
+        vim.keymap.set('n', '<C-e>', '', { buffer = bufnr })
+        vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+      end
+
+      require'nvim-tree'.setup({
+        on_attach = on_attach,
+        update_cwd = true,
+        renderer = {
+          icons = {
+            glyphs = circles.get_nvimtree_glyphs(),
+          },
+          highlight_opened_files = 'all', -- highlight name and icon
+          add_trailing = true, -- append a trailing slash to folder names
+        },
+        update_focused_file = {
+          enable = true,
+          update_cwd = true
+        },
+        git = {
+          enable = true,
+          ignore = false,
+        },
+        actions = {
+          open_file = {
+            quit_on_open = false,
+            resize_window = false,
+            window_picker = {
+              enable = true,
+              chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890",
+              exclude = {
+                filetype = { "notify", "packer", "qf", "diff", "fugitive", "fugitiveblame" },
+                buftype = { "nofile", "terminal", "help" },
+              },
+            },
+          },
+        },
+      })
+    end -- end config
+  }
+
+
+  use {
+      'neovim/nvim-lspconfig',
+      -- 'williamboman/nvim-lsp-installer',
+  }
+
+
+  -- LSP progress bar
+  use {
+    'j-hui/fidget.nvim',
+    config = function()
+      require('fidget').setup()
+    end
+  }
+
+
+--   use {
+--     'jose-elias-alvarez/null-ls.nvim',
+--   }
+
+
+  use {
+    'nvim-lualine/lualine.nvim',
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    config = function()
+
+      local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
+        return function(str)
+          local win_width = vim.fn.winwidth(0)
+          if hide_width and win_width < hide_width then return ''
+          elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
+             return str:sub(1, trunc_len) .. (no_ellipsis and '' or '...')
+          end
+          return str
+        end
+      end
+      require('lualine').setup{
+        options = {
+          theme  = 'auto',
+          component_separators = '|',
+          section_separators = { left = '', right = '' },
+        },
+        sections = {
+          lualine_a = { {
+            'mode',
+            fmt = function(str) return str:sub(1,1) end,
+            separator = { left = '' },
+            right_padding = 2
+          } },
+          lualine_b = {
+            { 'filename', path = 1, shorting_target = 40 },
+            -- {'branch', fmt = function(str) return str:trunc(40, 30, 50) end}
+            -- TODO: shorten branch if starts with /michaelborowsky.....
+          },
+          lualine_c = { { 'branch' }  },
+          lualine_x = {
+            {
+              'tabs',
+              tab_max_length = 40,
+              mode = 1,
+              path = 1,
+              use_mode_colors = true,
+            }
+          },
+          lualine_y = { 'filetype', 'progress' },
+          lualine_z = {
+            { 'location', separator = { right = '' }, left_padding = 2 },
+          },
+        },
+        inactive_sections = {
+          lualine_a = { 'filename' },
+          lualine_b = {},
+          lualine_c = {},
+          lualine_x = {},
+          lualine_y = {},
+          lualine_z = { 'location' },
+        },
+        tabline = {},
+        extensions = {},
+      }
+    end
+  }
+
+
+  -- Autocomplete and snippets
+  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-nvim-lsp-signature-help'
+  use {
+    'saadparwaiz1/cmp_luasnip',
+    requires = {"rafamadriz/friendly-snippets"},
+    run = "make install_jsregexp",
+    config = function()
+      require("luasnip/loaders/from_vscode").load()
+    end
+  }
+  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  use 'rafamadriz/friendly-snippets' 
+  use 'hrsh7th/cmp-path'
+
+
+  use {
+    "ahmedkhalf/project.nvim",
+    requires = {
+      {'nvim-telescope/telescope.nvim'},
+    },
+    config = function()
+      require("project_nvim").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+      require('telescope').load_extension('projects')
+    end
+  }
+
+
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      require('gitsigns').setup{
+        on_attach = function(bufnr)
+          local gs = package.loaded.gitsigns
+
+          -- local function map(mode, l, r, opts)
+          --   opts = opts or {}
+          --   opts.buffer = bufnr
+          --   vim.keymap.set(mode, l, r, opts)
+          -- end
+
+          -- Navigation
+          vim.keymap.set('n', ']c', function()
+            if vim.wo.diff then return ']c' end
+            vim.schedule(function() gs.next_hunk() end)
+            return '<Ignore>'
+          end, {expr=true})
+
+          vim.keymap.set('n', '[c', function()
+            if vim.wo.diff then return '[c' end
+            vim.schedule(function() gs.prev_hunk() end)
+            return '<Ignore>'
+          end, {expr=true})
+        end
+      }
+    end
+  }
+
+
+  use {
+    "akinsho/toggleterm.nvim",
+    tag = 'v2.*',
+    config = function()
+      require("toggleterm").setup({
+        size = function(term)
+          if term.direction == "float" then
+            return 20
+          elseif term.direction == "vertical" then
+            return vim.o.columns * 0.4
+          else
+            return 20
+          end
+        end,
+        open_mapping = [[<c-\>]], -- can I set option to do direction=float
+        start_in_insert = true,
+        insert_mappings = true, -- whether or not the open mapping applies in insert mode
+        terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
+        persist_mode = true,
+        direction = "float",
+        float_opts = {
+          -- The border key is *almost* the same as 'nvim_open_win'
+          -- see :h nvim_open_win for details on borders however
+          -- the 'curved' border is a custom border type
+          -- not natively supported but implemented in this plugin.
+          border = 'curved',
+          -- like `size`, width and height can be a number or function which is passed the current terminal
+          winblend = 3,
+        },
+      })
+    end
+  }
+
+  use {
+    'rcarriga/nvim-notify'
+  }
+
+
+  -- Testing
+  -- use {
+  --   'nvim-neotest/neotest-python',
+  --   config = function()
+  --   end
+  -- }
+  -- use {
+  --   "nvim-neotest/neotest",
+  --   requires = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --     "antoinemadec/FixCursorHold.nvim"
+  --   },
+  --   config = function()
+  --     require("neotest").setup({
+  --       adapters = {
+  --         require("neotest-python")({
+  --           -- Command line arguments for runner
+  --           -- Can also be a function to return dynamic values
+  --           args = {"--log-level", "DEBUG"},
+  --           -- Runner to use. Will use pytest if available by default.
+  --           -- Can be a function to return dynamic value.
+  --           runner = "pytest",
+  --           python = "docker compose exec -it api python",
+  --         })
+  --       }
+  --     })
+  --   end
+  -- }
+
+
+
+  use {
+    'AckslD/swenv.nvim',
+    config = function()
+      require('swenv').setup({
+        -- Path passed to `get_venvs`.
+        -- venvs_path = vim.fn.expand('~/venvs'),
+        venvs_path = vim.fn.expand('~/workspace/maven/api/.venv'),
+      })
+      vim.keymap.set('n', 'fv', '<cmd>lua require(\'swenv.api\').pick_venv()<cr>', {noremap = true})
+    end
+
+  }
+
+
+  -- use {
+  --   'krivahtoo/silicon.nvim',
+  --   run = './install.sh',
+  --   config = function()
+  --     require('silicon').setup({
+  --       -- font = 'FantasqueSansMono Nerd Font=16',
+  --       -- theme = 'Monokai Extended',
+  --       output = {
+  --         path = "~/screenshots/Pictures/screenshots"
+  --       },
+  --     })
+  --   end
+  -- }
+
+  -- -- Pairs
+  -- use {
+  --   'ZhiyuanLck/smart-pairs',
+  --   event = 'InsertEnter',
+  --   config = function()
+  --     require('pairs'):setup()
+  --   end
+  -- }
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
+end)
+

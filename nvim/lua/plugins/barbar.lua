@@ -1,0 +1,30 @@
+return {}
+-- return {
+--   -- TODO: switch to bufferline?
+--   {
+--     'romgrk/barbar.nvim',
+--     dependencies = {
+--       'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
+--       'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+--     },
+--     init = function() vim.g.barbar_auto_setup = false end,
+--     opts = {
+--       icons = {
+--         -- Configure the base icons on the bufferline.
+--         buffer_index = true,
+--         buffer_number = false,
+--         -- Enables / disables diagnostic symbols
+--         diagnostics = {
+--           [vim.diagnostic.severity.ERROR] = {enabled = true, icon = ''},
+--           [vim.diagnostic.severity.WARN] = {enabled = false},
+--           [vim.diagnostic.severity.INFO] = {enabled = false},
+--           [vim.diagnostic.severity.HINT] = {enabled = false},
+--         },
+--         filetype = {
+--           -- Requires `nvim-web-devicons` if `true`
+--           enabled = false,
+--         },
+--       },
+--     },
+--   },
+-- }
