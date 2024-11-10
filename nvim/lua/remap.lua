@@ -104,45 +104,27 @@ vim.g.python2_host_prog = 'python2'
 vim.g.python3_host_prog = 'python3'
 
 
--- WIP 3 layer switching
-local function three_layer ()
-  local reg_r = vim.fn.getreg('r')
-  local filename = 'appointments/services/v2/' .. reg_r .. '.py'
-  local maven_api = os.getenv("DEV_PATH") .. '/maven/api/'
-  print('----')
-  print(reg_r)
-  print(filename)
-  print(maven_api)
-  print('----')
-  vim.cmd.edit(maven_api .. filename)
-
-end
-vim.keymap.set("n", "<leader>gr", three_layer)
-
-
 -- Telescope pickers
 local builtin = require('telescope.builtin')
-local theme_dropdown = require('telescope.themes').get_dropdown()--{layout_config = {width = 0.8}}
+local themes = require('telescope.themes')
+local theme_dropdown = themes.get_dropdown()--{layout_config = {width = 0.8}}
+local theme_ivy = themes.get_ivy()
 
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<S-h>', function() builtin.buffers(theme_ivy) end, { desc = 'Telescope buffers' })
 vim.keymap.set('n', 'ff', '<cmd>Telescope find_files<cr>', {noremap = true})
--- vim.keymap.set('n', '<leader>ff', function()
---   builtin.find_files({ cwd = '~/workspace/maven/api/appointments' })
--- end, {noremap = true})
 vim.keymap.set('n', 'fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
-vim.keymap.set('n', '<leader>fg', function()
-  builtin.live_grep({search_dirs = { '~/workspace/maven/api/appointments' }})
-end , {noremap = true})
---vim.keymap.set('n', '<C-k>', '<cmd>Telescope live_grep<cr>', {noremap = true})
+-- vim.keymap.set('n', '<leader>fg', function()
+--   builtin.live_grep({search_dirs = { '' }})
+-- end , {noremap = true})
 vim.keymap.set('n', '<c-p>', function() builtin.git_files(theme_dropdown) end, {noremap = true})
-vim.keymap.set('n', 'fa', "<cmd>lua require(\'telescope.builtin').live_grep({search_dirs = { '~/workspace/maven/api/appointments' }})<cr>", {noremap = true})
-vim.keymap.set('n', 'fb', '<cmd>Telescope buffers<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fa', "<cmd>lua require(\'telescope.builtin').live_grep({search_dirs = { '' }})<cr>", {noremap = true})
 vim.keymap.set('n', 'fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
---vim.keymap.set('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
 --vim.keymap.set('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
 vim.keymap.set('n', 'ft', '<cmd>Telescope<cr>', {noremap = true})
 vim.keymap.set('n', 'fc', "<cmd>lua require('telescope').extensions.neoclip.default()<CR>", {noremap = true})
 vim.keymap.set('n', 'fd', '<cmd>Telescope docker containers<cr>', {noremap = true})
-vim.keymap.set('n', 'fe', '<cmd>Telescope env<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fe', '<cmd>Telescope env<cr>', {noremap = true})
 vim.keymap.set('n', 'fp', '<cmd>Telescope projects<cr>', {noremap = true})
 vim.keymap.set('n', 'fr', '<cmd>Telescope resume<cr>', {noremap = true})
 -- vim.keymap.set('n', 'fr', '<cmd>Telescope registers<cr>', {noremap = true})
@@ -208,10 +190,10 @@ vim.keymap.set('n', '<leader>0', '<Cmd>BufferLineGoToBuffer -1<CR>', {noremap = 
 
 -- Maybe use <leader>t?
 --Set trim_spaces=false for sending to REPLs for whitespace-sensitive languages like python. (For python, you probably want to start ipython with ipython --no-autoindent.)
-local trim_spaces = true
-vim.keymap.set("v", "<space>s", function()
-    require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
-end)
+-- local trim_spaces = true
+-- vim.keymap.set("v", "<space>s", function()
+--     require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
+-- end)
 -- For use as an operator map:
 -- Send motion to terminal
 vim.keymap.set("n", [[<leader><c-\>]], function()

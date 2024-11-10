@@ -9,7 +9,7 @@ return {
     'mfussenegger/nvim-dap-python',
     config = function()
       -- loading lazily on dPt
-      require("dap-python").setup("~/workspace/maven/api/.venv/bin/python")
+      require("dap-python").setup("") -- TODO!
 
       -- TODO: move to remap.lua
       -- from: https://github.com/brunobmello25/skeleton.nvim/blob/main/lua/skeleton/plugins/dap.lua
@@ -41,37 +41,6 @@ return {
   -----------------------------------------------------------------------------
   -----------------------------------------------------------------------------
 
--- return {
---   {
---     'aaronhallaert/continuous-testing.nvim',
---     dependencies = {
---       {'rcarriga/nvim-notify'},
---     },
---     opts = {
---       notify = true, -- The default is false
---       run_tests_on_setup = true, -- The default is true, run test on attach
---       framework_setup = {
---         ruby = {
---           test_tool = "rspec",
---           test_cmd = "bundle exec rspec %file",
---         },
---         javascript = {
---           test_tool = "vitest", -- cwd of the executing test will be at package.json
---           test_cmd = "yarn vitest run %file",
---           root_pattern = "tsconfig.json", -- used to populate the root option of vitest
---         },
---       },
---       project_override = {
---         ["$DEV_PATH/maven/api"] = {
---           ruby = {
---             test_tool = "pytest",
---             test_cmd = "docker exec -it name -- pytest target=%file",
---           },
---         },
---       },
---     }
---   }
-    --
   -----------------------------------------------------------------------------
   --NEOTEST--------------------------------------------------------------------
   -----------------------------------------------------------------------------
@@ -96,7 +65,7 @@ return {
       adapters = {
         ["neotest-python"] = {
           runner = "pytest",
-          python = "~/workspace/maven/api/.venv/bin/python"
+          python = "" -- TODO
         }
       },
       status = { virtual_text = true },

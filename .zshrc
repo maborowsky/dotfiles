@@ -1,7 +1,10 @@
+zstyle ':completion:*:*:*:default' menu yes select search
 # zsh-autocomplete instead of compinit
-# autoload -Uz compinit
-# compinit
-source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# zstyle ':completion:*' completer _expand _complete
+# bindkey '\t' autosuggest-accept
+autoload -Uz compinit
+compinit
+# source $HOMEBREW_PREFIX/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # Aliases
 export EDITOR='nvim'
@@ -9,17 +12,18 @@ export EDITOR='nvim'
 alias vim="nvim"
 
 alias cdw="cd ~/workspace"
-alias cdn="cd ~/notes"
+# alias cdn="cd ~/notes"
+alias cdn="cd /Users/michaelborowsky/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/iCloud\ obsidian\ vault"
 alias cdc="cd ~/.config"
 
 alias tab='kitty @ set-tab-title'
 
+
+# Put this before sourcing fzf
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
-
-# I think these add lines to kitty.conf
-# kitty +kitten themes Kanagawa
-# kitty +kitten themes Kanagawa_dragon
 
 # Pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -32,5 +36,3 @@ export PATH="$PATH:/Users/michaelborowsky/.local/bin"
 eval "$(starship init zsh)"
 eval "$(uv generate-shell-completion zsh)"
 eval "$(uvx --generate-shell-completion zsh)"
-
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh

@@ -2,9 +2,7 @@
 -- Michael Borowsky
 -- 
 -- TODO:
---       - make insert mode <C-k> like <C-j>
---       - z + j = move screen down, cursor stays the same
---           - (currently ctrl-y and ctrl-e)
+--     - :)
 -------------------------------------------------
 
 vim.g.mapleader = ' '
@@ -40,13 +38,8 @@ require('options')
 require('remap')
 
 
--- For some reason this isn't being set right unless I do it twice? blue buffers, etc
---vim.cmd("colorscheme kanagawa")
---vim.cmd("colorscheme kanagawa")
-
 -- hi! link DiagnosticUnnecessary DiagnosticWarn
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
-
 
 
 -- Fugitive
@@ -72,7 +65,6 @@ vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
 --             \ {'k': '~/.config/kitty/kitty.conf' },
 --             \ {'l': '~/.config/nvim/lua/lsp.lua' },
 --             \ {'p': '~/.config/nvim/lua/plugins.lua' },
---             \ {'r': '~/workspace/maven/api/appointments/routes.py' },
 --             \ {'s': '~/.config/skhd/skhdrc' },
 --             \ {'y': '~/.config/yabai/yabairc' },
 --             \ {'z': '~/.zshrc' },

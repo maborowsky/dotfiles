@@ -1,30 +1,33 @@
 return {
   {
-      'nvim-telescope/telescope.nvim',
-      dependencies = { 'nvim-lua/plenary.nvim' },
-      config = function()
-        local actions = require("telescope.actions")
-        require('telescope').setup{
-          defaults = {
-            mappings = {
-              i = {},
-            },
-            pickers = {
-              buffers = { sort_lastused = true },
-              find_files = { hidden = true },
-              git_branches = {
-                mappings = {
-                  i = {
-                    ["<c-r>"] = actions.git_rename_branch
-                  },
-                }
-              },
-            }
+    'nvim-telescope/telescope.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local actions = require("telescope.actions")
+      require('telescope').setup{
+        defaults = {
+          mappings = {
+            i = {},
           },
-        } -- end setup
+          pickers = {
+            buffers = { sort_lastused = true },
+            find_files = { hidden = true },
+            git_branches = {
+              mappings = {
+                i = {
+                  ["<c-r>"] = actions.git_rename_branch
+                },
+                n = {
 
-        -- require("telescope").load_extension('harpoon')
-      end
+                },
+              }
+            },
+          }
+        },
+      } -- end setup
+
+      -- require("telescope").load_extension('harpoon')
+    end
   },
   {
     'nvim-telescope/telescope-fzf-native.nvim',
@@ -44,6 +47,7 @@ return {
   -- },
 
   {
+    enabled = false,  -- don't use this really but it is cool and useful
     "LinArcX/telescope-env.nvim",
     dependencies = {
       {'nvim-telescope/telescope.nvim'},
@@ -51,7 +55,7 @@ return {
     config = function() require'telescope'.load_extension('env') end,
     opts={
       -- The path where to search the makefile in the priority order
-      -- makefile_priority = { '.', '$DEV_PATH/maven/api/Makefile' },
+      -- makefile_priority = { '.', '' },
       -- make_bin = "make", -- Custom makefile binary path, uses system make by def
     },
   },

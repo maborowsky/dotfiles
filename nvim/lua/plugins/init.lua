@@ -51,13 +51,12 @@ return {
       require('swenv').setup({
         -- Path passed to `get_venvs`.
         -- venvs_path = vim.fn.expand('~/venvs'),
-        venvs_path = vim.fn.expand('~/workspace/maven/api/.venv'),
       })
       vim.keymap.set('n', 'fv', '<cmd>lua require(\'swenv.api\').pick_venv()<cr>', {noremap = true})
     end,
-    opts = {
-      venvs_path = vim.fn.expand('~/workspace/maven/api/.venv'),
-    },
+    -- opts = {
+    --   venvs_path = vim.fn.expand(''),
+    -- },
   },
 
 
