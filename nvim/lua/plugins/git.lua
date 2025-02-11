@@ -1,4 +1,7 @@
 return {
+  { 'tpope/vim-fugitive' },
+  { 'sindrets/diffview.nvim' },
+
   -- Needs "libgit2" -- `brew install libgit2`
   {
     enabled = false,
@@ -44,6 +47,17 @@ return {
     end
   },
 
-  { 'tpope/vim-fugitive' },
-  { 'sindrets/diffview.nvim' },
+  {
+    "NeogitOrg/neogit",
+    dependencies = {
+      "nvim-lua/plenary.nvim",         -- required
+      "sindrets/diffview.nvim",        -- optional - Diff integration
+
+      -- Only one of these is needed.
+      "nvim-telescope/telescope.nvim", -- optional
+      -- "ibhagwan/fzf-lua",              -- optional
+      -- "echasnovski/mini.pick",         -- optional
+    },
+    config = true
+  },
 } -- end return

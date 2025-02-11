@@ -24,7 +24,7 @@ vim.keymap.set("n", "<leader>oa", ":AutoSaveToggle<cr>")  -- not options i guess
 -----------------------------------------------------------------------------
 -- Only in visual mode
 -- "_dp shifts the cursor back at the end of a line, so c -> <c-r> works better
-vim.keymap.set("v", "<leader>p", "\"_c<C-r><C-o>+<Esc>")  -- only in visual mode
+vim.keymap.set("v", "<leader>p", "\"_c<C-r><C-o>+<Esc>")
 
 vim.keymap.set({"n", "v"}, "_d", "\"_d")
 vim.keymap.set({"n", "v"}, "_c", "\"_c")
@@ -94,8 +94,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", {})
 vim.keymap.set("n", "]q", "<cmd>cnext<cr>", {noremap = true})
 vim.keymap.set("n", "[q", "<cmd>cprev<cr>", {noremap = true})
 
-vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
-vim.keymap.set("n", "<leader>gg", "<cmd>G<cr>", {})
+vim.keymap.set("n", "<leader>G", "<cmd>Neogit<cr>", {})
+vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<cr>", {})
 vim.keymap.set("n", "<leader>gt", "<cmd>tab G<cr>", {})
 
 

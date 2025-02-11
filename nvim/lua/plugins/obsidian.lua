@@ -3,6 +3,7 @@ return {
   "epwalsh/obsidian.nvim",
   version = "*",  -- recommended, use latest release instead of latest commit
   -- lazy = true,
+  lazy = false,
   -- ft = "markdown",
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   -- event = {
@@ -20,6 +21,9 @@ return {
         name = "personal",
         path = icloud_vault,
       },
+    },
+    templates = {
+      folder = "templates",
     },
   },
   mappings = {
@@ -53,6 +57,6 @@ return {
   },
   keys = {
     { "ot", "<cmd>ObsidianToday<cr>", desc = "[O]bsidian [T]oday" },
-    { "on", "<cmd>ObsidianNew", desc = "[O]bsidian [N]ew" },
+    { "on", "<cmd>ObsidianNew<cr>", desc = "[O]bsidian [N]ew" },
   },
 }

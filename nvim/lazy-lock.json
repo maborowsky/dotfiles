@@ -22,6 +22,7 @@
   "mini.indentscope": { "branch": "main", "commit": "da9af64649e114aa79480c238fd23f6524bc0903" },
   "mini.pairs": { "branch": "main", "commit": "7e834c5937d95364cc1740e20d673afe2d034cdb" },
   "mini.sessions": { "branch": "main", "commit": "c9c633f3e423885f91c49e3b9e8e6141af25429e" },
+  "neogit": { "branch": "master", "commit": "8e1e301c2e33c60375850bcf22ba1fb77b684b97" },
   "neorg": { "branch": "main", "commit": "81ee90cb2d72ac43bfadb7dd276646f34c8f85be" },
   "neotest": { "branch": "master", "commit": "6d3d22cdad49999ef774ebe1bc250a4994038964" },
   "neotest-python": { "branch": "master", "commit": "a2861ab3c9a0bf75a56b11835c2bfc8270f5be7e" },
