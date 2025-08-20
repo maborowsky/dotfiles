@@ -116,8 +116,8 @@ vim.keymap.set({"n", "v", "o"}, "<C-j>", "6j", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "<C-k>", "6k", {noremap = true})
 
 
-vim.keymap.set("n", "<leader>G", "<cmd>Neogit<cr>", {})
-vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<cr>", {})
+vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
+vim.keymap.set("n", "<leader>gg", "<cmd>G<cr>", {})
 vim.keymap.set("n", "<leader>gt", "<cmd>tab G<cr>", {})
 
 
