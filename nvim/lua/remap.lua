@@ -1,6 +1,12 @@
 -------------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 -- Keymaps
+-- Ideas:
+--     - sgd -- search gd -- search for the name (or references) of the function i'm currnely in using treesitter
+-- Good bindings
+--     <leader>r is open now that <leader>rn -> grn
+--     - <c-n> <c-p>   -- this gets mapped with some plugins so prob not actually
+--                      - might be good for scrolling in normal mode and when no popup is available
 -------------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 
@@ -8,6 +14,24 @@
 -- -----------------------------------------------------------------------------
 -- IN TESTING:
 -- -----------------------------------------------------------------------------
+vim.keymap.set("n", "<c-;>", "<Esc>:lua ", {noremap = true, desc = ":lua"})
+
+-- "window" management
+-- mini misc -- "zoom()" could be similiar but does it in a floating window
+vim.keymap.set("n", "<leader>wf", "tab split", {noremap = true, desc = "Tab fullscreen"}) -- fullscreen
+vim.keymap.set("n", "<leader>wc", "tab close", {noremap = true, desc = "Tab close"})
+
+-- TODO:
+-- noremap! <c-a> <home>
+-- noremap! <expr> <c-e> pumvisible() ? '<c-e>' : '<end>'
+
+-- auto-chains
+vim.keymap.set(
+  "n",
+  "<leader>gj",
+  function() require('auto-chains').goto_job() end,
+  {noremap = true, desc = "[g]o to [j]ob"}
+)
 
 -- Options Keybinds
 local function toggle_option(option)
@@ -29,10 +53,8 @@ vim.keymap.set("v", "<leader>p", "\"_c<C-r><C-o>+<Esc>")
 vim.keymap.set({"n", "v"}, "_d", "\"_d")
 vim.keymap.set({"n", "v"}, "_c", "\"_c")
 
--- greatest remap ever
 vim.keymap.set("x", "<leader>p", [["_dP]])
 
--- next greatest remap ever : asbjornHaland
 vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 -----------------------------------------------------------------------------
@@ -41,11 +63,15 @@ vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 -- Term
 local relative_filepath = vim.fn.expand("%:.")
-local function test_test_cmd ()
-  return ":TermExec cmd='make test target=" .. relative_filepath .. "'<CR>"
+local function toggleterm_test_cmd()
+  local count = vim.v.count
+  -- not sure what 12 is doing at the end
+  require('toggleterm').exec("bin/run-tests.sh " .. vim.fn.expand("%:."), count)
 end
-local test_cmd = ":TermExec cmd='make test target=" .. relative_filepath .. "'<CR>"
-vim.keymap.set("n", "<F5>", test_test_cmd)
+
+-- local test_cmd = ":TermExec cmd='make test target=" .. relative_filepath .. "'<CR>"
+-- vim.keymap.set("n", "<F5>", test_test_cmd)
+vim.keymap.set({"n", "v", "o", "t", "i"}, "<C-t>", toggleterm_test_cmd)
 
 -- Go To Unit test file
 local unit_test_filepath = 'appointments/pytests/unit/' .. string.sub(relative_filepath, 14)
@@ -68,9 +94,10 @@ vim.keymap.set("i", "jk", "<Esc>", {noremap = true, silent = true})
 
 vim.keymap.set("n", "<esc>", ":noh<return><esc>", {noremap = true, silent = true})
 
-vim.keymap.set("n", "<Leader>w", ":wa<CR>", {noremap = true, desc = "Save all buffers"})
+-- vim.keymap.set("n", "<Leader>w", ":wa<CR>", {noremap = true, desc = "Save all buffers"})
 
-vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = true, desc = "Open nvim-tree"})
+vim.keymap.set({"n", "i", "t", "v"}, "<c-e>", function() require('snacks').explorer() end, {noremap = true, desc = "Snacks explorer", silent = true})
+-- vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = true, desc = "Open nvim-tree"})
 --nnoremap <C-f> :NvimTreeFindFile<CR>
 
 
@@ -84,15 +111,10 @@ vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = tr
 -- vim.keymap.set({"n", "v", "o"}, "K", "{", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "J", "6j", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "K", "6k", {noremap = true})
--- vim.keymap.set({"n", "v", "o"}, "J", "}", {})
--- vim.keymap.set({"n", "v", "o"}, "K", "{", {})
+-- I've been using the above forever but <C-j>/<C-k> don't interfere with other maps so lets try
+vim.keymap.set({"n", "v", "o"}, "<C-j>", "6j", {noremap = true})
+vim.keymap.set({"n", "v", "o"}, "<C-k>", "6k", {noremap = true})
 
-vim.keymap.set("n", "<C-d>", "<C-d>zz", {})
-vim.keymap.set("n", "<C-u>", "<C-u>zz", {})
-
--- From vim-unimpaired: https://github.com/tpope/vim-unimpaired
-vim.keymap.set("n", "]q", "<cmd>cnext<cr>", {noremap = true})
-vim.keymap.set("n", "[q", "<cmd>cprev<cr>", {noremap = true})
 
 vim.keymap.set("n", "<leader>G", "<cmd>Neogit<cr>", {})
 vim.keymap.set("n", "<leader>gg", "<cmd>Neogit<cr>", {})
@@ -103,52 +125,60 @@ vim.keymap.set("n", "<leader>gt", "<cmd>tab G<cr>", {})
 vim.g.python2_host_prog = 'python2'
 vim.g.python3_host_prog = 'python3'
 
+-- movement in cmdline
+vim.keymap.set("c", "<C-a>", "<Home>", {noremap = true})
+vim.keymap.set("c", "<C-e>", "<End>", {noremap = true})
+-- :cnoremap <C-A> <Home>
+-- :cnoremap <C-F> <Right>
+-- :cnoremap <C-B> <Left>
+-- :cnoremap <Esc>b <S-Left>
+-- :cnoremap <Esc>f <S-Right>
 
 -- Telescope pickers
-local builtin = require('telescope.builtin')
-local themes = require('telescope.themes')
-local theme_dropdown = themes.get_dropdown()--{layout_config = {width = 0.8}}
-local theme_ivy = themes.get_ivy()
-
-vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
-vim.keymap.set('n', '<S-h>', function() builtin.buffers(theme_ivy) end, { desc = 'Telescope buffers' })
-vim.keymap.set('n', 'ff', '<cmd>Telescope find_files<cr>', {noremap = true})
-vim.keymap.set('n', 'fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
--- vim.keymap.set('n', '<leader>fg', function()
---   builtin.live_grep({search_dirs = { '' }})
--- end , {noremap = true})
-vim.keymap.set('n', '<c-p>', function() builtin.git_files(theme_dropdown) end, {noremap = true})
--- vim.keymap.set('n', 'fa', "<cmd>lua require(\'telescope.builtin').live_grep({search_dirs = { '' }})<cr>", {noremap = true})
-vim.keymap.set('n', 'fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
---vim.keymap.set('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
-vim.keymap.set('n', 'ft', '<cmd>Telescope<cr>', {noremap = true})
-vim.keymap.set('n', 'fc', "<cmd>lua require('telescope').extensions.neoclip.default()<CR>", {noremap = true})
-vim.keymap.set('n', 'fd', '<cmd>Telescope docker containers<cr>', {noremap = true})
--- vim.keymap.set('n', 'fe', '<cmd>Telescope env<cr>', {noremap = true})
-vim.keymap.set('n', 'fp', '<cmd>Telescope projects<cr>', {noremap = true})
-vim.keymap.set('n', 'fr', '<cmd>Telescope resume<cr>', {noremap = true})
--- vim.keymap.set('n', 'fr', '<cmd>Telescope registers<cr>', {noremap = true})
-vim.keymap.set('n', 'fq', '<cmd>Telescope quickfix<cr>', {noremap = true})
-vim.keymap.set('n', 'fm', '<cmd>Telescope make<cr>', {noremap = true})
-vim.keymap.set('n', '<leader>m', '<cmd>Telescope marks<cr>', {noremap = true})
-vim.keymap.set('n', 'fo', '<cmd>Telescope oldfiles<cr>', {noremap = true})
--- vim.keymap.set('n', '<leader>hm', '<cmd>Telescope harpoon marks<cr>', {noremap = true})
--- sort not working
--- TODO: sort a la `git branch --sort=-committerdate`
--- vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches({opts='--sort=-committerdate'})<cr>", {noremap = true})
-vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches()<cr>", {noremap = true})
--- git branches --> <c-r> to rename a branch
-vim.keymap.set('n', '<leader>gc', '<cmd>Telescope git_bcommits<cr>', {noremap = true})
-vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', {noremap = true})
-vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-j> <Down>')
-vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-k> <Up>')
+-- local builtin = require('telescope.builtin')
+-- local themes = require('telescope.themes')
+-- local theme_dropdown = themes.get_dropdown()--{layout_config = {width = 0.8}}
+-- local theme_ivy = themes.get_ivy()
+--
+-- vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+-- vim.keymap.set('n', '<S-h>', function() builtin.buffers(theme_ivy) end, { desc = 'Telescope buffers' })
+-- vim.keymap.set('n', 'ff', '<cmd>Telescope find_files<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
+-- -- vim.keymap.set('n', '<leader>fg', function()
+-- --   builtin.live_grep({search_dirs = { '' }})
+-- -- end , {noremap = true})
+-- vim.keymap.set('n', '<c-p>', function() builtin.git_files(theme_dropdown) end, {noremap = true})
+-- -- vim.keymap.set('n', 'fa', "<cmd>lua require(\'telescope.builtin').live_grep({search_dirs = { '' }})<cr>", {noremap = true})
+-- vim.keymap.set('n', 'fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
+-- --vim.keymap.set('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
+-- vim.keymap.set('n', 'ft', '<cmd>Telescope<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fc', "<cmd>lua require('telescope').extensions.neoclip.default()<CR>", {noremap = true})
+-- vim.keymap.set('n', 'fd', '<cmd>Telescope docker containers<cr>', {noremap = true})
+-- -- vim.keymap.set('n', 'fe', '<cmd>Telescope env<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fp', '<cmd>Telescope projects<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fr', '<cmd>Telescope resume<cr>', {noremap = true})
+-- -- vim.keymap.set('n', 'fr', '<cmd>Telescope registers<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fq', '<cmd>Telescope quickfix<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fm', '<cmd>Telescope make<cr>', {noremap = true})
+-- vim.keymap.set('n', 'fo', '<cmd>Telescope oldfiles<cr>', {noremap = true})
+-- -- vim.keymap.set('n', '<leader>hm', '<cmd>Telescope harpoon marks<cr>', {noremap = true})
+-- -- sort not working
+-- -- TODO: sort a la `git branch --sort=-committerdate`
+-- -- vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches({opts='--sort=-committerdate'})<cr>", {noremap = true})
+-- vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches()<cr>", {noremap = true})
+-- -- git branches --> <c-r> to rename a branch
+-- vim.keymap.set('n', '<leader>gc', '<cmd>Telescope git_bcommits<cr>', {noremap = true})
+-- vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', {noremap = true})
+-- vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-j> <Down>')
+-- vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-k> <Up>')
 
 
 -- Notes
 function _G.noteOpen()
+  -- TODO: change to obsidian path and note
   local note_dir = '~/notes/tickets/'
   local git_branch = vim.trim(vim.fn.system('git branch --show-current'))
-  local note_path = note_dir .. git_branch:gsub("/", "_") .. '.norg'
+  local note_path = note_dir .. git_branch:gsub("/", "_") .. '.md'
   vim.keymap.set('n', '<leader>;', '<cmd>e '.. note_path .. '<CR>', {noremap = true})
 end
 vim.api.nvim_command([[
@@ -157,9 +187,17 @@ vim.api.nvim_command([[
 
 
 -- Buffers
+local function close_buffer()
+  -- not supposed to do it this way: https://vi.stackexchange.com/questions/44166/conditional-key-mapping-in-neovim-based-on-file-type
+  if vim.bo.filetype == 'fugitiveblame' then
+    vim.cmd ":q"
+  else
+    require('snacks').bufdelete()
+  end
+end
 --   See ideas at: https://www.lazyvim.org/keymaps#bufferlinenvim
---vim.keymap.set('n', '<leader>q', "<cmd>:bdelete<cr>", {noremap = true})
-vim.keymap.set('n', '<leader>q', "<cmd>:Bdelete<cr>", {noremap = true})
+vim.keymap.set('n', '<leader>q', "<cmd>lua require('snacks').bufdelete()<cr>", {noremap = true})
+vim.keymap.set('n', '<leader>c', close_buffer, {noremap = true})
 --vim.keymap.set('n', '<leader>b', "<cmd>:bprev<cr>", {noremap = true})
 vim.keymap.set('n', '<leader>n', "<cmd>:bnext<cr>", {noremap = true})
 vim.keymap.set('n', ']b', "<cmd>:BufferLineCycleNext<cr>", {noremap = true})
@@ -172,13 +210,13 @@ vim.keymap.set('n', '[t', "<cmd>:tabprevous<cr>", {noremap = true})
 -- nmap <leader>j :BufferNext<CR>
 vim.keymap.set('n', '<leader>bb', "<cmd>BufferLinePick<cr>", {noremap = true})
 vim.keymap.set('n', '<leader>bp', "<cmd>BufferLineTogglePin<cr>", {noremap = true})
-vim.keymap.set('n', '<leader>sb', '<cmd>Telescope buffers<cr>', {noremap = true})
 vim.keymap.set('n', '<leader>bl', '<cmd>BufferLineMoveNext<cr>', {noremap = true})
 vim.keymap.set('n', '<leader>bh', '<cmd>BufferLineMovePrev<cr>', {noremap = true})
 
+-- Map bufferline numbers. Second param `true` is for absolute buffer num
 for i = 1, 9 do
   local lhs = '<leader>' .. i
-  local rhs = '<Cmd>BufferLineGoToBuffer ' .. i ..'<CR>'
+  local rhs = ':lua require("bufferline").go_to_buffer(' .. i .. ', true)<CR>'
   vim.keymap.set('n', lhs, rhs, {noremap = true})
 end
 vim.keymap.set('n', '<leader>0', '<Cmd>BufferLineGoToBuffer -1<CR>', {noremap = true})
@@ -188,7 +226,7 @@ vim.keymap.set('n', '<leader>0', '<Cmd>BufferLineGoToBuffer -1<CR>', {noremap = 
 -- Term
 ---------------------------------
 
--- Maybe use <leader>t?
+-- <leader>t? or <c-t>
 --Set trim_spaces=false for sending to REPLs for whitespace-sensitive languages like python. (For python, you probably want to start ipython with ipython --no-autoindent.)
 -- local trim_spaces = true
 -- vim.keymap.set("v", "<space>s", function()
@@ -217,22 +255,28 @@ end)
 --  vim.api.nvim_feedkeys("ggg@G''", "n", false)
 --end)
 
-------------------------------------------------------------------
-------------------------------------------------------------------
+vim.keymap.set({"n", "v", "o", "t", "i"}, "<F4>", "<esc>:TermExec cmd='!!'<CR>")
+vim.keymap.set({"n", "v", "o", "t", "i"}, "<F5>", "<esc>:ToggleTerm direction=horizontal<CR>")
+vim.keymap.set({"n", "v", "o", "t", "i"}, "<F6>", "<esc>:ToggleTerm direction=float<CR>")
+-- vim.keymap.set({"n", "v", "o"}, "<F7>", ":TermExec cmd='dklog api' name='Api Logs'<CR>")
+-- vim.keymap.set({"n", "v", "o"}, "<F8>", ":TermExec cmd='dklog admin' name='Admin Logs'<CR>")
+-- <c-\> is set in toggleterm plugin spec
+-- vim.keymap.set({"n", "v", "o", "t", "i"}, "<c-/>", "<esc>:ToggleTerm direction=vertical<CR>")
+-- exe v:count1 . "ToggleTerm"
 
-
-
-vim.keymap.set({"n", "v", "o"}, "<F1>", ":Alpha<CR>")
-vim.keymap.set({"n", "v", "o"}, "<F2>", ":e $MYVIMRC<CR>")
-
--- Terminal
-vim.keymap.set({"n", "v", "o", "t", "i"}, "<F4>", ":TermExec cmd='!!'<CR>")
-vim.keymap.set({"n", "v", "o", "t", "i"}, "<F5>", ":ToggleTerm direction=horizontal<CR>")
-vim.keymap.set({"n", "v", "o", "t", "i"}, "<F6>", ":ToggleTerm direction=vertical<CR>")
-vim.keymap.set({"n", "v", "o"}, "<F7>", ":TermExec cmd='dklog api' name='Api Logs'<CR>")
-vim.keymap.set({"n", "v", "o"}, "<F8>", ":TermExec cmd='dklog admin' name='Admin Logs'<CR>")
+vim.keymap.set({"n", "v", "o", "t"}, "<c-/>", '<Cmd>exe v:count1 . "ToggleTerm direction=horizontal"<CR>')
+vim.keymap.set("i", "<c-/>", '<Esc><Cmd>exe v:count1 . "ToggleTerm direction=horizontal"<CR>')
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+
+------------------------------------------------------------------
+------------------------------------------------------------------
+
+
+
+-- vim.keymap.set({"n", "v", "o"}, "<F1>", ":Alpha<CR>")
+vim.keymap.set({"n", "v", "o"}, "<F2>", ":e $MYVIMRC<CR>")
+
 
 ------------------------------------------------------------------
 -- Buffers like tabs -------------------------------------------------------
@@ -257,4 +301,31 @@ vim.keymap.set("n", "<C-Q>", ":q<cr>")
 --vim.keymap.set("n", "<Leader>+", ":exe \"resize " .. (vim.fn.winheight(0) * 3/2) .. "<CR>", {silent = true})
 --vim.keymap.set("n", "<Leader>-", ":exe \"resize " .. (vim.fn.winheight(0) * 2/3) .. "<CR>", {silent = true})
 vim.keymap.set("n", "<Leader>=", "<C-w>=")
+-------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------
+-- LSP -----------------------------------------------------------
+------------------------------------------------------------------
+-- See `:help vim.diagnostic.*` for documentation on any of the below functions
+-- diagnostic on d conflicts with (eventual) debug. gotta figure out
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist)
+
+-- Default LSP rename binding is grn
+-- vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, {desc = "[R]e[n]ame"})
+
+vim.keymap.set('n', 'gk', function() vim.lsp.buf.hover({ buffer = 'rounded' }) end, {desc = "Hover"})
+vim.keymap.set('n', 'gK', function() vim.lsp.buf.signature_help({ buffer = 'rounded' }) end, {desc = "Signature Help"})
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+
+
+------------------------------------------------------------------
+-- Git -----------------------------------------------------------
+------------------------------------------------------------------
+vim.keymap.set('n', '<leader>g-', ":Gitsigns stage_hunk", {desc = "Git stage hunk"})
+-------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

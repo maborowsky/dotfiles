@@ -15,6 +15,8 @@ return {
           local icon = level:match("error") and " " or " "
           return " " .. icon .. count
         end,
+        max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+        show_duplicate_prefix = true,
         numbers = "ordinal",
         show_buffer_icons = false,
         show_buffer_close_icons = false,
@@ -22,6 +24,12 @@ return {
           {
             filetype = "neo-tree",
             text = "Neo-tree",
+            highlight = "Directory",
+            text_align = "left",
+          },
+          {
+            filetype = "snakcs-picker-list",
+            text = "Snacks picker list",
             highlight = "Directory",
             text_align = "left",
           },

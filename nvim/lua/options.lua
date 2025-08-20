@@ -1,3 +1,5 @@
+local opt = vim.opt
+
 -- " Save from insert mode
 -- " inoremap :w <Esc>:w
 -- " inoremap :W <Esc>:w
@@ -6,32 +8,40 @@
 -- Don't show mode
 -- set noshowmode
 
+opt.showtabline = 2
 
-vim.opt.showtabline = 2
+opt.termguicolors = true
 
+vim.o.cmdheight = 0
+vim.o.laststatus = 3
+opt.spell = true
+
+--Decrease update time
+opt.updatetime = 250
+vim.wo.signcolumn = 'yes'
 
 -- Tabs
-vim.opt.tabstop = 4
-vim.opt.softtabstop = 4
-vim.opt.shiftwidth = 4
-vim.opt.expandtab = true
-vim.opt.smartindent = true
+opt.tabstop = 4
+opt.softtabstop = 4
+opt.shiftwidth = 4
+opt.expandtab = true
+opt.smartindent = true
 
-vim.opt.wrap = true
+opt.wrap = true
 
-vim.opt.nu = true
+opt.nu = true
 --vim.o.nu = 'rnu'
-vim.opt.relativenumber = true
+opt.relativenumber = true
 
 -- Mouse support -- default 'nvi'
 -- vim.o.mouse='nvi'
 
 
-vim.opt.scrolloff = 8
+opt.scrolloff = 8
 -- Always show at least one line left/right of the cursor.
 -- set sidescrolloff=5
 
-vim.o.colorcolumn = "88"
+-- opt.colorcolumn = "88"
 
 -- Git settings
 -- default: 'internal,filler,closeoff'
@@ -46,7 +56,7 @@ vim.o.splitright = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
-vim.o.previewheight=20
+-- vim.o.previewheight=20
 
 
 -- Highlight folds
@@ -64,4 +74,25 @@ vim.g.auto_save = 1
 vim.g.auto_save_events = {"InsertLeave", "TextChanged"}
 
 -- Diagnostics
-vim.diagnostic.config({ virtual_text = true })
+-- vim.diagnostic.config({ virtual_text = true })
+vim.diagnostic.config({
+  virtual_text = true, 
+  -- virtual_lines = true,
+  -- virtual_lines = { current_line = true },
+})
+
+-- Python
+vim.g.python_indent = {
+  closed_paren_align_last_line = false,
+  open_paren = "shiftwidth()",
+  continue = "shiftwidth()",
+  nested_paren = "shiftwidth()",
+}
+
+
+-- disable netrw because we are using nvim-tree
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- Terminal scrollback
+vim.o.scrollback=100000

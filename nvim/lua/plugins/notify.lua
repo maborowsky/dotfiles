@@ -1,6 +1,6 @@
 return {
   {
-    -- enabled = false, -- trying out vigoux/notifier.nvim
+    enabled = false, -- trying out snacks
     'rcarriga/nvim-notify',
     config = function ()
       require("notify").setup({

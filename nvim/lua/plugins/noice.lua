@@ -22,11 +22,14 @@ return {
           -- view = "mini",
         },
         messages = {
-          view = 'mini',
-          view_warn = "mini",
+          -- view = 'mini',
+          -- view_warn = "mini",
+          enabled = true,
+          view = "notify",
         },
         notify = {
-          view = 'mini',
+          enabled = false,
+          -- view = 'mini',
         },
         lsp = {
           -- override markdown rendering so that **cmp** and other plugins use **Treesitter**

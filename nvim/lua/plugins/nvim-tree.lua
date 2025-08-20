@@ -1,10 +1,11 @@
 return {
   {
     'nvim-tree/nvim-tree.lua',
+    enabled = false,  -- trying out snacks explorer
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     lazy = false,
     config = function()
-      local circles = require('circles')
+      -- local circles = require('circles')
 
       local function on_attach(bufnr)
         local api = require('nvim-tree.api')
@@ -22,9 +23,9 @@ return {
         on_attach = on_attach,
         update_cwd = true,
         renderer = {
-          icons = {
-            glyphs = circles.get_nvimtree_glyphs(),
-          },
+          -- icons = {
+          --   glyphs = circles.get_nvimtree_glyphs(),
+          -- },
           highlight_opened_files = 'all', -- highlight name and icon
           add_trailing = true, -- append a trailing slash to folder names
         },

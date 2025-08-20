@@ -41,6 +41,39 @@ return {
   -----------------------------------------------------------------------------
   -----------------------------------------------------------------------------
 
+
+  -----------------------------------------------------------------------------
+  --- pytest
+  -----------------------------------------------------------------------------
+  {
+    "richardhapb/pytest.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    config = function()
+      -- require('nvim-treesitter.configs').setup {
+      --   ensure_installed = { 'python', 'xml' },
+      -- }
+
+      require('pytest').setup({
+        -- add_args = { "-vv", "-s" }, -- Verbose output
+        -- add_args = { "--version" }, -- Verbose output
+        open_output_onfail = true,
+        docker = {
+          enabled = true,
+          container = 'torchtest',  -- Container where the tests will be run
+          docker_path = '/code',  -- This is the default path, if you use docker compose this is obtained from the docker compose file
+          docker_path_prefix = '', -- This is the prefix for the path in the cwd in your local, for example: root/app/<docker_app_content>
+          local_path_prefix = '',
+          enable_docker_compose = false,  -- Enable docker compose support
+          -- docker_compose_file = 'docker-compose.yml',  -- This is the default docker compose file name
+          -- docker_compose_service = 'app',  -- This is docker service name in docker compose for looking for retrieve docker path
+        },
+      })
+    end
+  },
+  -----------------------------------------------------------------------------
+  -----------------------------------------------------------------------------
+
+
   -----------------------------------------------------------------------------
   --NEOTEST--------------------------------------------------------------------
   -----------------------------------------------------------------------------

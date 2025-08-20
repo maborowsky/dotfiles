@@ -5,21 +5,71 @@ return {
     config = function()
       require('lualine').setup {
         options = {
+          globalstatus = true,
           icons_enabled = true,
+          theme = 'auto',
+          -- Should probably make a local variable for this, but a filetype needs to be in both to work properly
+          ignore_focus = {
+            "toggleterm",
+            "lspinfo",
+            "fugitive",
+            "snacks_picker_input",
+            "NvimTree",
+            "snacks_terminal",
+          },
+          -- disabled_filetypes = {
+          --   "toggleterm",
+          --   "lspinfo",
+          --   "fugitive",
+          --   "snacks_picker_input",
+          --   "NvimTree",
+          --   "snacks_terminal",
+          -- },
           component_separators = '|',
           section_separators = '',
         },
         sections = {
-          lualine_x = {
+          lualine_a = { {
+            'mode',
+            fmt = function(str) return str:sub(1,1) end,
+            -- separator = { left = '' },
+            -- right_padding = 2,
+          } },
+          lualine_b = {
             {
-              require("noice").api.statusline.mode.get,
-              cond = require("noice").api.statusline.mode.has,
-              -- color = { fg = "#ff9e64" },
+              'branch',
+              fmt = function(str)
+                return string.gsub(str, "michael/", "m/")
+              end,
+            }
+          },
+          lualine_c = {
+            {
+              'filename',
+              path = 1,                -- 0: Just the filename
+                                       -- 1: Relative path
+                                       -- 2: Absolute path
+                                       -- 3: Absolute path, with tilde as the home directory
+                                       -- 4: Filename and parent dir, with tilde as the home directory
             },
+
+          },
+          lualine_x = {
+            -- {
+            --   'tabs',
+            --   tab_max_length = 40,
+            --   mode = 1,
+            --   path = 1,
+            --   use_mode_colors = true,
+            -- }
+          },
+          -- lualine_y = { 'filetype', 'progress' },
+          lualine_y = { 'progress' },
+          lualine_z = {
             {
-              require("noice").api.status.command.get,
-              cond = require("noice").api.status.command.has,
-              -- color = { fg = "#ff9e64" },
+              'location',
+              -- separator = { right = '' },
+              left_padding = 2,
             },
           },
         }
@@ -27,80 +77,3 @@ return {
     end
   },
 } -- end return
--- return {
---   {
---     'nvim-lualine/lualine.nvim',
---     dependencies = { 'nvim-tree/nvim-web-devicons' },
---     config = function()
---
---       -- local function trunc(trunc_width, trunc_len, hide_width, no_ellipsis)
---       --   return function(str)
---       --     local win_width = vim.fn.winwidth(0)
---       --     if hide_width and win_width < hide_width then return ''
---       --     elseif trunc_width and trunc_len and win_width < trunc_width and #str > trunc_len then
---       --        return str:sub(1, trunc_len) .. (no_ellipsis and '' or '...')
---       --     end
---       --     return str
---       --   end
---       -- end
---       require('lualine').setup{
---         options = {
---           disable_filetypes = { "toggleterm" },
---           theme  = 'auto',
---           -- component_separators = '|',
---           -- section_separators = { left = '', right = '' },
---           component_separators = "",
---           section_separators = "",
---         },
---         sections = {
---           lualine_a = { {
---             'mode',
---             fmt = function(str) return str:sub(1,1) end,
---             -- separator = { left = '' },
---             -- right_padding = 2,
---           } },
---           lualine_b = {
---             -- { 'filename', path = 1, shorting_target = 40 },
---             { 'filename', path = 1 },
---           },
---           lualine_c = {
---             {
---               'branch',
---               fmt = function(str)
---                 return string.gsub(str, "michaelborowsky/", "mb/")
---               end,
---             }
---           },
---           lualine_x = {
---             -- {
---             --   'tabs',
---             --   tab_max_length = 40,
---             --   mode = 1,
---             --   path = 1,
---             --   use_mode_colors = true,
---             -- }
---           },
---           -- lualine_y = { 'filetype', 'progress' },
---           lualine_y = { 'progress' },
---           lualine_z = {
---             {
---               'location',
---               -- separator = { right = '' },
---               left_padding = 2,
---             },
---           },
---         },
---         inactive_sections = {
---           lualine_a = { 'filename' },
---           lualine_b = {},
---           lualine_c = {},
---           lualine_x = {},
---           lualine_y = {},
---           lualine_z = { 'location' },
---         },
---         tabline = {},
---         extensions = {},
---       }
---     end
---   },
--- } -- end return

@@ -6,29 +6,6 @@ return {
   --     require('mini.starter').setup()
   --   end,
   -- },
-  -- Trying out alpha instead of starter
-  -- {
-  --   'echasnovski/mini.starter',
-  --   version = false,
-  --   config = function()
-  --     require('mini.starter').setup()
-  --   end,
-  -- },
-  -- Moving back to bufdelete, seems to work better with toggleterm, could be wrong
-  -- {
-  --   'echasnovski/mini.bufremove',
-  --   version = false,
-  --  config = function()
-  --     require('mini.bufremove').setup()
-  --   end,
-  -- },
-  {
-    'echasnovski/mini.indentscope',
-    version = false,
-    config = function()
-      require('mini.indentscope').setup()
-    end,
-  },
   {
     'echasnovski/mini.pairs',
     version = false,
@@ -43,5 +20,13 @@ return {
     config = function()
       require('mini.sessions').setup()
     end,
+  },
+  { 'echasnovski/mini.ai', version = false },
+  {
+    'echasnovski/mini.misc',
+    version = false,
+    config = function()
+      require('mini.misc').setup_termbg_sync()
+    end
   },
 }

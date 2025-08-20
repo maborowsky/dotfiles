@@ -1,10 +1,9 @@
 local icloud_vault = "/Users/michaelborowsky/Library/Mobile Documents/iCloud~md~obsidian/Documents/iCloud obsidian vault"
 return {
-  "epwalsh/obsidian.nvim",
+  "obsidian-nvim/obsidian.nvim",
   version = "*",  -- recommended, use latest release instead of latest commit
-  -- lazy = true,
   lazy = false,
-  -- ft = "markdown",
+  ft = "markdown",
   -- Replace the above line with this if you only want to load obsidian.nvim for markdown files in your vault:
   -- event = {
   --   -- If you want to use the home shortcut '~' here you need to call 'vim.fn.expand'.
@@ -15,11 +14,16 @@ return {
   -- },
   dependencies = { "nvim-lua/plenary.nvim" },
   opts = {
+    legacy_commands = false,
     ui = { enable = false }, -- using render-markdown.nvim instead
     workspaces = {
+      -- {
+      --   name = "personal",
+      --   path = icloud_vault,
+      -- },
       {
-        name = "personal",
-        path = icloud_vault,
+        name = "work",
+        path = "~/notes/",
       },
     },
     templates = {
@@ -56,7 +60,7 @@ return {
     -- },
   },
   keys = {
-    { "ot", "<cmd>ObsidianToday<cr>", desc = "[O]bsidian [T]oday" },
-    { "on", "<cmd>ObsidianNew<cr>", desc = "[O]bsidian [N]ew" },
+    { "ot", "<cmd>Obsidian today<cr>", desc = "[O]bsidian [T]oday" },
+    { "on", "<cmd>Obsidian new<cr>", desc = "[O]bsidian [N]ew" },
   },
 }

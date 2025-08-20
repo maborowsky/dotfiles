@@ -1,61 +1,71 @@
 return {
   {
     'saghen/blink.cmp',
-    lazy = false, -- lazy loading handled internally
     -- optional: provides snippets for the snippet source
     dependencies = 'rafamadriz/friendly-snippets',
-
-    -- use a release tag to download pre-built binaries
-    version = 'v0.*',
-    -- OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
+    version = '1.*',
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
       -- 'default' for mappings similar to built-in completion
       -- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-      -- see the "default configuration" section below for full documentation on how to define
-      -- your own keymap. when defining your own, no keybinds will be assigned automatically.
-      keymap = 'default',
-      highlight = {
-        -- sets the fallback highlight groups to nvim-cmp's highlight groups
-        -- useful for when your theme doesn't support blink.cmp
-        -- will be removed in a future release, assuming themes add support
+      -- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
+      -- See the full "keymap" documentation for information on defining your own keymap.
+      keymap = { preset = 'default' },
+
+      appearance = {
+        -- Sets the fallback highlight groups to nvim-cmp's highlight groups
+        -- Useful for when your theme doesn't support blink.cmp
+        -- Will be removed in a future release
         use_nvim_cmp_as_default = true,
+        -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono'
       },
-      -- set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-      -- adjusts spacing to ensure icons are aligned
-      -- nerd_font_variant = 'normal',
-      nerd_font_variant = 'mono',
 
-      -- experimental auto-brackets support
-      accept = { auto_brackets = { enabled = true } },
+      completion = {
+        -- Disable auto brackets
+        -- NOTE: some LSPs may add auto brackets themselves anyway
+        -- Whether to auto-insert brackets for functions
+        -- Disabling for now as it can't recognize type hints
+        accept = { auto_brackets = { enabled = false }, },
+        menu = { draw = { treesitter = { 'lsp' } } },
+        documentation = {
+          window = {
+            min_width = 10,
+            max_width = 60,
+            max_height = 10,
+          },
+        },
+      },
 
-      -- experimental signature help support
-      trigger = { signature_help = { enabled = true } },
+      -- currently disabled, it's annoying when type hinting in a signature because it
+      -- adds parentheses automatically. This happens when i accept an auto completion
+      -- for a type hint, I think there is additional config elsewhere for this, but
+      -- its not really signature related
+      signature = {
+        enabled = false,
+        window = {
+          show_documentation = false,
+          border = "rounded",
+        },
+      },
 
-      windows = {
-        autocomplete = { border = 'rounded' },
-      }
+      -- Default list of enabled providers defined so that you can extend it
+      -- elsewhere in your config, without redefining it, due to `opts_extend`
+      sources = {
+        default = { 'lazydev', 'lsp', 'path', 'snippets', 'buffer' },
+        providers = {
+          lazydev = {
+            name = "LazyDev",
+            module = "lazydev.integrations.blink",
+            -- make lazydev completions top priority (see `:h blink.cmp`)
+            score_offset = 100,
+          },
+        },
+      },
     },
-  },
-  { 'hrsh7th/nvim-cmp', enabled = false },
+    opts_extend = { "sources.default" }
+  }
 }
-
--- CMP plugins
-  -- -- Autocomplete and snippets
-  -- { 'hrsh7th/nvim-cmp' },  -- Autocompletion plugin
-  -- { 'hrsh7th/cmp-nvim-lsp' },
-  -- { 'hrsh7th/cmp-nvim-lsp-signature-help' },
-  -- {
-  --   'saadparwaiz1/cmp_luasnip',
-  --   dependencies = {"rafamadriz/friendly-snippets"},
-  --   build = "make install_jsregexp",
-  --   config = function()
-  --     require("luasnip/loaders/from_vscode").lazy_load()
-  --   end
-  -- },
-  -- { 'L3MON4D3/LuaSnip' },  -- Snippets plugin
-  -- { 'rafamadriz/friendly-snippets' },
-  -- { 'hrsh7th/cmp-path' },

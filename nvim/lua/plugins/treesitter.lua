@@ -5,7 +5,19 @@ return {
     config = function ()
       local configs = require("nvim-treesitter.configs")
       configs.setup({
-        ensure_insalled = { 'bash', 'css', 'html', 'javascript', 'json', 'jsonc', 'lua', 'typescript', 'python', },
+        ensure_insalled = {
+          'bash',
+          'css',
+          'html',
+          'javascript',
+          'json',
+          'jsonc',
+          'lua',
+          'regex',
+          'typescript',
+          'python',
+          'yaml',
+        },
         auto_install = true,
         highlight = {
           enable = true,
@@ -47,3 +59,15 @@ return {
     end  -- end config
   },
 }
+
+
+-- treesitter text objects
+        -- swap = {
+        --   enable = true,
+        --   swap_next = {
+        --     ["<leader>right"] = "@parameter.inner",
+        --   },
+        --   swap_previous = {
+        --     ["<leader>left"] = "@parameter.inner",
+        --   },
+        -- },
