@@ -3,10 +3,12 @@
 -- Keymaps
 -- Ideas:
 --     - sgd -- search gd -- search for the name (or references) of the function i'm currnely in using treesitter
+--     - gq -> go to definition and close current buffer
 -- Good bindings
 --     <leader>r is open now that <leader>rn -> grn
 --     - <c-n> <c-p>   -- this gets mapped with some plugins so prob not actually
 --                      - might be good for scrolling in normal mode and when no popup is available
+--     <leader>[ and <leader>]
 -------------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 
@@ -14,6 +16,13 @@
 -- -----------------------------------------------------------------------------
 -- IN TESTING:
 -- -----------------------------------------------------------------------------
+-- GO TO FIXTURE
+vim.keymap.set('n', 'gf', function()
+  local word = vim.fn.expand('<cword>')
+  require('fixture_picker').picker(word)
+end, { desc = 'Find pytest fixture' })
+
+vim.keymap.set("n", "<leader>c", function() require('conform').format() end, {noremap = true, desc = "[C]onform format"})
 vim.keymap.set("n", "<c-;>", "<Esc>:lua ", {noremap = true, desc = ":lua"})
 
 -- "window" management
@@ -28,20 +37,25 @@ vim.keymap.set("n", "<leader>wc", "tab close", {noremap = true, desc = "Tab clos
 -- auto-chains
 vim.keymap.set(
   "n",
-  "<leader>gj",
-  function() require('auto-chains').goto_job() end,
-  {noremap = true, desc = "[g]o to [j]ob"}
+  "<leader>z",
+  function() require('auto-chains').set_marks() end,
+  {noremap = true, desc = "auto chains"}
 )
+
+-- This was annoying me
+vim.keymap.set("v", "\"*Y", "\"*y", {noremap = true, desc = "Tab close"})
 
 -- Options Keybinds
 local function toggle_option(option)
   if option == false then option = true else option = false end
 end
 vim.keymap.set("n", "<leader>oa", ":AutoSaveToggle<cr>")  -- not options i guess but it fits
--- not options i guess but it fits
--- vim.keymap.set("n", "<leader>oa",function()
---   toggle_option(vim.g.diagnostic_enable_underline)
--- end, {noremap = false})
+vim.keymap.set(
+  "n",
+  "<leader>ou",
+  function() toggle_option(vim.g.diagnostic_enable_underline) end,
+  { noremap = false }
+)
 
 -----------------------------------------------------------------------------
 -- Cutting and pasting
@@ -96,7 +110,9 @@ vim.keymap.set("n", "<esc>", ":noh<return><esc>", {noremap = true, silent = true
 
 -- vim.keymap.set("n", "<Leader>w", ":wa<CR>", {noremap = true, desc = "Save all buffers"})
 
-vim.keymap.set({"n", "i", "t", "v"}, "<c-e>", function() require('snacks').explorer() end, {noremap = true, desc = "Snacks explorer", silent = true})
+-- NOTE: my ideal would be to have <c-e> open to the file but also toggle
+vim.keymap.set({"n", "i", "v"}, "<c-e>", function() require('snacks').explorer() end, {noremap = true, desc = "Snacks explorer", silent = true})
+vim.keymap.set({"n", "i", "v"}, "<c-f>", function() require('snacks').explorer.reveal() end, {noremap = true, desc = "Snacks explorer", silent = true})
 -- vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = true, desc = "Open nvim-tree"})
 --nnoremap <C-f> :NvimTreeFindFile<CR>
 
@@ -185,7 +201,6 @@ vim.api.nvim_command([[
   autocmd BufEnter * lua _G.noteOpen()
 ]])
 
-
 -- Buffers
 local function close_buffer()
   -- not supposed to do it this way: https://vi.stackexchange.com/questions/44166/conditional-key-mapping-in-neovim-based-on-file-type
@@ -196,8 +211,8 @@ local function close_buffer()
   end
 end
 --   See ideas at: https://www.lazyvim.org/keymaps#bufferlinenvim
-vim.keymap.set('n', '<leader>q', "<cmd>lua require('snacks').bufdelete()<cr>", {noremap = true})
-vim.keymap.set('n', '<leader>c', close_buffer, {noremap = true})
+vim.keymap.set('n', '<leader>q', function() require('snacks').bufdelete() end, {noremap = true})
+vim.keymap.set('n', '<leader>Q', "<cmd>bd<cr>", {noremap = true})
 --vim.keymap.set('n', '<leader>b', "<cmd>:bprev<cr>", {noremap = true})
 vim.keymap.set('n', '<leader>n', "<cmd>:bnext<cr>", {noremap = true})
 vim.keymap.set('n', ']b', "<cmd>:BufferLineCycleNext<cr>", {noremap = true})
@@ -300,7 +315,7 @@ vim.keymap.set("n", "<C-Q>", ":q<cr>")
 -- NOTE: these are kinda dumb anyway
 --vim.keymap.set("n", "<Leader>+", ":exe \"resize " .. (vim.fn.winheight(0) * 3/2) .. "<CR>", {silent = true})
 --vim.keymap.set("n", "<Leader>-", ":exe \"resize " .. (vim.fn.winheight(0) * 2/3) .. "<CR>", {silent = true})
-vim.keymap.set("n", "<Leader>=", "<C-w>=")
+-- vim.keymap.set("n", "<Leader>=", "<C-w>=")
 -------------------------------------------------------------------------------
 
 
@@ -318,6 +333,10 @@ vim.keymap.set('n', '<leader>dq', vim.diagnostic.setloclist)
 
 vim.keymap.set('n', 'gk', function() vim.lsp.buf.hover({ buffer = 'rounded' }) end, {desc = "Hover"})
 vim.keymap.set('n', 'gK', function() vim.lsp.buf.signature_help({ buffer = 'rounded' }) end, {desc = "Signature Help"})
+
+
+vim.keymap.set('n', '<leader>c', function() vim.lsp.buf.format { async = true } end, {desc = "Format"})
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
@@ -326,6 +345,8 @@ vim.keymap.set('n', 'gK', function() vim.lsp.buf.signature_help({ buffer = 'roun
 ------------------------------------------------------------------
 -- Git -----------------------------------------------------------
 ------------------------------------------------------------------
-vim.keymap.set('n', '<leader>g-', ":Gitsigns stage_hunk", {desc = "Git stage hunk"})
+vim.keymap.set('n', '<leader>g-', ":Gitsigns stage_hunk<return>", {desc = "[G]it stage hunk"})
+vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end, {desc = "[G]it MiniDiff toggle [o]verlay"})
+
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

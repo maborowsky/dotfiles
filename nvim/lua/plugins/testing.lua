@@ -45,31 +45,34 @@ return {
   -----------------------------------------------------------------------------
   --- pytest
   -----------------------------------------------------------------------------
-  {
-    "richardhapb/pytest.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
-    config = function()
-      -- require('nvim-treesitter.configs').setup {
-      --   ensure_installed = { 'python', 'xml' },
-      -- }
-
-      require('pytest').setup({
-        -- add_args = { "-vv", "-s" }, -- Verbose output
-        -- add_args = { "--version" }, -- Verbose output
-        open_output_onfail = true,
-        docker = {
-          enabled = true,
-          container = 'torchtest',  -- Container where the tests will be run
-          docker_path = '/code',  -- This is the default path, if you use docker compose this is obtained from the docker compose file
-          docker_path_prefix = '', -- This is the prefix for the path in the cwd in your local, for example: root/app/<docker_app_content>
-          local_path_prefix = '',
-          enable_docker_compose = false,  -- Enable docker compose support
-          -- docker_compose_file = 'docker-compose.yml',  -- This is the default docker compose file name
-          -- docker_compose_service = 'app',  -- This is docker service name in docker compose for looking for retrieve docker path
-        },
-      })
-    end
-  },
+  -- {
+  --   "richardhapb/pytest.nvim",
+  --   dependencies = { "nvim-treesitter/nvim-treesitter" },
+  --   config = function()
+  --     -- require('nvim-treesitter.configs').setup {
+  --     --   ensure_installed = { 'python', 'xml' },
+  --     -- }
+  --
+  --     require('pytest').setup({
+  --       -- add_args = { "-vv", "-s" }, -- Verbose output
+  --       -- add_args = { "--version" }, -- Verbose output
+  --       open_output_onfail = true,
+  --       docker = {
+  --         enabled = true,
+  --         container = 'torchtest',  -- Container where the tests will be run
+  --         docker_path = '/code',  -- This is the default path, if you use docker compose this is obtained from the docker compose file
+  --         docker_path_prefix = '', -- This is the prefix for the path in the cwd in your local, for example: root/app/<docker_app_content>
+  --         local_path_prefix = '',
+  --         enable_docker_compose = false,  -- Enable docker compose support
+  --         -- docker_compose_file = 'docker-compose.yml',  -- This is the default docker compose file name
+  --         -- docker_compose_service = 'app',  -- This is docker service name in docker compose for looking for retrieve docker path
+  --       },
+  --     })
+  --   end,
+  --   keys ={
+  --     { "<leader>tp", ":Pytest", desc = "[T]est [P]ytest", ft = "python" },
+  --   },
+  -- },
   -----------------------------------------------------------------------------
   -----------------------------------------------------------------------------
 
@@ -89,31 +92,36 @@ return {
       require("neotest").setup({
         adapters = {
           require("neotest-python")({
-            dap = { justMyCode = false },
+            -- dap = { justMyCode = false },
+            docker = {
+              container = "torchtest",  -- Required: container name or ID
+              args = {"-i"},        -- Optional: additional docker arguments
+              workdir = "/code",                   -- Optional: working directory (default: "/app")
+            },
           }),
         },
       })
     end,
-    opts = {
-      adapters = {
-        ["neotest-python"] = {
-          runner = "pytest",
-          python = "" -- TODO
-        }
-      },
-      status = { virtual_text = true },
-      output = { open_on_run = true },
-      quickfix = {
-        open = function()
-          -- if LazyVim.has("trouble.nvim") then
-          --   require("trouble").open({ mode = "quickfix", focus = false })
-          -- else
-          --   vim.cmd("copen")
-          -- end
-          vim.cmd("copen")
-        end,
-      },
-    },
+    -- opts = {
+    --   adapters = {
+    --     ["neotest-python"] = {
+    --       runner = "pytest",
+    --       python = "" -- TODO
+    --     }
+    --   },
+    --   status = { virtual_text = true },
+    --   output = { open_on_run = true },
+    --   quickfix = {
+    --     open = function()
+    --       -- if LazyVim.has("trouble.nvim") then
+    --       --   require("trouble").open({ mode = "quickfix", focus = false })
+    --       -- else
+    --       --   vim.cmd("copen")
+    --       -- end
+    --       vim.cmd("copen")
+    --     end,
+    --   },
+    -- },
     keys = {
       {"<leader>t", "", desc = "+test"},
       { "<leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end, desc = "Run File" },
@@ -129,7 +137,9 @@ return {
     },
   },
   {
-    "nvim-neotest/neotest-python",
+    -- "nvim-neotest/neotest-python",
+    -- Currently using this fork to use docker
+    "diidiiman/neotest-python",
   },
   -----------------------------------------------------------------------------
   -----------------------------------------------------------------------------

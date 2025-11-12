@@ -15,7 +15,7 @@ return {
   dependencies = { "nvim-lua/plenary.nvim" },
   opts = {
     legacy_commands = false,
-    ui = { enable = false }, -- using render-markdown.nvim instead
+    ui = { enable = true },
     workspaces = {
       -- {
       --   name = "personal",
@@ -26,8 +26,11 @@ return {
         path = "~/notes/",
       },
     },
-    templates = {
-      folder = "templates",
+    checkbox = {
+      order = {" ", "x", ">"},
+    },
+    daily_notes = {
+      folder = 'daily',
     },
   },
   mappings = {
@@ -44,7 +47,7 @@ return {
     --   end,
     --   opts = { buffer = true },
     -- },
-    -- Toggle check-boxes.
+    -- Toggle check-boxes. -- not working
     ["<leader>oc"] = {
       action = function()
         return require("obsidian").util.toggle_checkbox()
@@ -60,7 +63,7 @@ return {
     -- },
   },
   keys = {
-    { "ot", "<cmd>Obsidian today<cr>", desc = "[O]bsidian [T]oday" },
-    { "on", "<cmd>Obsidian new<cr>", desc = "[O]bsidian [N]ew" },
+    { "<leader>ot", "<cmd>Obsidian today<cr>", desc = "[O]bsidian [T]oday" },
+    { "<leader>on", "<cmd>Obsidian new<cr>", desc = "[O]bsidian [N]ew" },
   },
 }

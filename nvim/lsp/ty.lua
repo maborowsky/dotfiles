@@ -1,7 +1,14 @@
 return {
   settings = {
     ty = {
-      -- ty language server settings go here
+      -- show variable types as inlay hings
+      inlayHints = {
+        variableTypes = true,
+      },
+      experimental = {
+        rename = true,
+        autoImport = true,
+      },
     }
   }
 }

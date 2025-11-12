@@ -1,6 +1,7 @@
 return {
   {
     "folke/noice.nvim",
+    enabled=false, -- using vim._extui now
     event = "VeryLazy",
     opts = {
       -- add any options here
@@ -16,6 +17,7 @@ return {
     config = function()
       require("noice").setup({
          cmdline = {
+          -- might be overwritten by extui -- check options.lua
           enabled = true, -- enables the Noice cmdline UI
           -- view = "cmdline_popup",
           view = "cmdline",

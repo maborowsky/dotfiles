@@ -30,25 +30,26 @@ return {
           enabled = true,
         },
         preload = {
-          modules = {"langchain", "langchain-core", "torchweb.app.core.dbtypes_v2", "black", "chardet", "numpy"}
+          enabled = false,
+          -- modules = {"langchain", "langchain-core", "torchweb.app.core.dbtypes_v2", "black", "chardet"}
         },
         ruff = {
-          enabled = true,
+          enabled = false, -- using ruff lsp
         },
         flake8 = { enabled = false },
         pycodestyle = { enabled = false },
         mccabe = { enabled = false },
         pyflakes = { enabled = false },
-        black = {
-          enabled = true,
-        },
         pylsp_mypy = {
-          enabled = true,
+          enabled = false,
           live_mode = false,
           -- doesn't work with live_mode rn: https://github.com/python-lsp/pylsp-mypy
           ["follow-imports"] = "normal",  -- can't be silent w/ dmypy
           -- mypy_command = '/Users/michaelborowsky/src/torchweb/venv-dev/bin/mypy'
-          -- mypy_command = '/Users/michaelborowsky/.asdf/shims/mypy'
+        },
+        -- using conform for black/isort now
+        black = {
+          enabled = false,
         },
         -- isort = {
         --   enabled = true,

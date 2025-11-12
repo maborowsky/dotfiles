@@ -19,7 +19,7 @@ return {
         show_duplicate_prefix = true,
         numbers = "ordinal",
         show_buffer_icons = false,
-        show_buffer_close_icons = false,
+        show_buffer_close_icons = true,
         offsets = {
           {
             filetype = "neo-tree",

@@ -3,11 +3,14 @@ return {
     "coder/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
     opts = {
-      terminal = {
-        provider = "native",
-      },
+      open_in_new_tab = true,
+      hide_terminal_in_new_tab = true,
+      -- terminal = {
+      --   provider = "native",
+      -- },
     },
     keys = {
+      { "<c-enter>", "<cmd>ClaudeCode<cr>", mode = {"n", "t"}, desc = "Toggle Claude" },
       { "<leader>a", nil, desc = "AI/Claude Code" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },

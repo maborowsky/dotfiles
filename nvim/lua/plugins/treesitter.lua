@@ -58,16 +58,35 @@ return {
       })
     end  -- end config
   },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        textobjects = {
+          swap = {
+            enable = true,
+            swap_next = {
+              ["<leader>right"] = "@parameter.inner",
+            },
+            swap_previous = {
+              ["<leader>left"] = "@parameter.inner",
+            },
+          },
+        },
+      })
+    end,
+    -- opts = {
+    --   textobjects = {
+    --     swap = {
+    --       enable = true,
+    --       swap_next = {
+    --         ["<leader>right"] = "@parameter.inner",
+    --       },
+    --       swap_previous = {
+    --         ["<leader>left"] = "@parameter.inner",
+    --       },
+    --     },
+    --   },
+    -- },
+  },
 }
-
-
--- treesitter text objects
-        -- swap = {
-        --   enable = true,
-        --   swap_next = {
-        --     ["<leader>right"] = "@parameter.inner",
-        --   },
-        --   swap_previous = {
-        --     ["<leader>left"] = "@parameter.inner",
-        --   },
-        -- },

@@ -25,6 +25,7 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    enabled = false, -- currently trying out mini diff
     config = function()
       require('gitsigns').setup({
         on_attach = function(bufnr)
@@ -58,5 +59,13 @@ return {
         end,
       },
     },
+  },
+
+  -- Inline diffs
+  {
+    'axkirillov/unified.nvim',
+    opts = {
+      -- your configuration comes here
+    }
   },
 } -- end return

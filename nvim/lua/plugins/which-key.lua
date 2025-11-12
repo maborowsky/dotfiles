@@ -7,9 +7,10 @@ return {
       vim.o.timeoutlen = 300
     end,
     opts = {
+      preset = "helix",  -- classic, modern, or helix
       defaults = {
         ["<leader>d"] = { name = "+debug" },
       },
-    },
-  }
+  },
+}
 }

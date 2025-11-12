@@ -61,16 +61,27 @@ return {
             --   mode = 1,
             --   path = 1,
             --   use_mode_colors = true,
-            -- }
+            -- },
+            --
+            {
+              'lsp_status',
+              icon = '', -- f013
+              symbols = {
+                -- Standard unicode symbols to cycle through for LSP progress:
+                spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
+                -- Standard unicode symbol for when LSP is done:
+                done = '✓',
+                -- Delimiter inserted between LSP names:
+                separator = ' ',
+              },
+              -- List of LSP names to ignore (e.g., `null-ls`):
+              ignore_lsp = {},
+            },
           },
           -- lualine_y = { 'filetype', 'progress' },
           lualine_y = { 'progress' },
           lualine_z = {
-            {
-              'location',
-              -- separator = { right = '' },
-              left_padding = 2,
-            },
+            { 'location', left_padding = 2 },
           },
         }
       }
