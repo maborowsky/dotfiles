@@ -12,12 +12,11 @@ opt.showtabline = 2
 
 opt.termguicolors = true
 
-vim.o.cmdheight = 0
 vim.o.laststatus = 3
 opt.spell = true
 
 --Decrease update time
-opt.updatetime = 250
+opt.updatetime = 50
 vim.wo.signcolumn = 'yes'
 
 -- Tabs
@@ -96,3 +95,7 @@ vim.g.loaded_netrwPlugin = 1
 
 -- Terminal scrollback
 vim.o.scrollback=100000
+
+
+-- Required for obsidian
+vim.o.conceallevel=1

@@ -1,13 +1,13 @@
 return {
   -- {
-  --   'echasnovski/mini.nvim',
+  --   'nvim-mini/mini.nvim',
   --   version = false,
   --   config = function()
   --     require('mini.starter').setup()
   --   end,
   -- },
   {
-    'echasnovski/mini.pairs',
+    'nvim-mini/mini.pairs',
     version = false,
     config = function()
       require('mini.pairs').setup()
@@ -15,18 +15,33 @@ return {
     enabled = false,  -- Trying out nvim-autopairs
   },
   {
-    'echasnovski/mini.sessions',
+    'nvim-mini/mini.sessions',
     version = false,
     config = function()
       require('mini.sessions').setup()
     end,
   },
-  { 'echasnovski/mini.ai', version = false },
+  { 'nvim-mini/mini.ai', version = false },
   {
-    'echasnovski/mini.misc',
+    'nvim-mini/mini.misc',
     version = false,
     config = function()
       require('mini.misc').setup_termbg_sync()
     end
+  },
+  -- Git
+  {
+    'nvim-mini/mini.diff',
+    enabled = false, -- using gitsigns
+    opts = {
+      view = {
+        -- Visualization style. Possible values are 'sign' and 'number'.
+        -- Default: 'number' if line numbers are enabled, 'sign' otherwise.
+        style = 'sign',
+        -- Signs used for hunks with 'sign' view
+        signs = { add = '┃', change = '┃', delete = '┃' },
+        wrap_goto = false,
+      }
+    },
   },
 }

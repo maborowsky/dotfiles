@@ -1,5 +1,6 @@
 return {
   {
+    enabled=true,
     'saghen/blink.cmp',
     -- optional: provides snippets for the snippet source
     dependencies = 'rafamadriz/friendly-snippets',
@@ -18,7 +19,7 @@ return {
         -- Sets the fallback highlight groups to nvim-cmp's highlight groups
         -- Useful for when your theme doesn't support blink.cmp
         -- Will be removed in a future release
-        use_nvim_cmp_as_default = true,
+        -- use_nvim_cmp_as_default = true,
         -- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono'
@@ -29,7 +30,8 @@ return {
         -- NOTE: some LSPs may add auto brackets themselves anyway
         -- Whether to auto-insert brackets for functions
         -- Disabling for now as it can't recognize type hints
-        accept = { auto_brackets = { enabled = false }, },
+        -- nvm re enabling lol
+        accept = { auto_brackets = { enabled = true }, },
         menu = { draw = { treesitter = { 'lsp' } } },
         documentation = {
           window = {
@@ -45,11 +47,11 @@ return {
       -- for a type hint, I think there is additional config elsewhere for this, but
       -- its not really signature related
       signature = {
-        enabled = false,
-        window = {
-          show_documentation = false,
-          border = "rounded",
-        },
+        enabled = true,
+         -- window = {
+         --   show_documentation = false,
+         --   border = "rounded",
+         -- },
       },
 
       -- Default list of enabled providers defined so that you can extend it

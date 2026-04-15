@@ -1,4 +1,5 @@
 return {
+  enabled=true,
   "Pocco81/auto-save.nvim",
   lazy = false,
   opts = {

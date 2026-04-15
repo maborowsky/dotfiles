@@ -86,10 +86,24 @@ return {
   -- },
   {
     'sainnhe/everforest',
+    enabled=false,
+    lazy = false,
     priority = 1000,
     config = function()
+      vim.g.everforest_background = 'medium'  -- soft, medium, hard
+      -- vim.api.nvim_set_hl(0, "PmenuSel", {})
       -- vim.cmd("colorscheme everforest")
     end
+  },
+  {
+    -- Lua everforest. not sure if it'll be very different
+    "neanias/everforest-nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require("everforest").setup({})
+      -- vim.cmd("colorscheme everforest")
+    end,
   },
   {
     'rebelot/kanagawa.nvim',
@@ -148,7 +162,7 @@ return {
       })
 
       -- setup must be called before loading
-      -- vim.cmd("colorscheme kanagawa")
+      vim.cmd("colorscheme kanagawa")
     end, -- end config
   },
   {
@@ -167,10 +181,10 @@ return {
   --   priority = 1000
   -- },
   {
-    'MikeWelsh801/eye-cancer',
-    dir = "~/src/eye-cancer.nvim",
+    dir = "~/src/eye-see.nvim",
     config = function()
-      vim.cmd.colorscheme("eye-see")
+      -- vim.api.nvim_set_hl(0, "@keyword.return", { fg =  })
+      -- vim.cmd.colorscheme("eye-see")
     end,
     priority = 1000
   },

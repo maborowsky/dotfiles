@@ -19,6 +19,7 @@ function M.goto_job()
     M.export(filename)
 end
 
+-- Instead of setting marks we should just provide a way to go to prompt, job, schema
 -- lua require('auto-chains').set_marks()
 function M.set_marks()
     local filename = M.ingest()
