@@ -1,7 +1,7 @@
 -- For `plugins/markview.lua` users.
 return {
     -- Using obsidian for now
-    enabled=false,
+    enabled=true,
     "OXY2DEV/markview.nvim",
     lazy = false,
 

@@ -1,17 +1,34 @@
 return {
   {
     "coder/claudecode.nvim",
+    -- "snirt/claudecode.nvim",
+    branch = "nvim-integration-xg1c",
     dependencies = { "folke/snacks.nvim" },
     opts = {
-      open_in_new_tab = true,
+      open_in_new_tab = false,
       hide_terminal_in_new_tab = true,
-      -- terminal = {
-      --   provider = "native",
-      -- },
+      terminal = {
+        -- provider = "native",
+        provider = "snacks",
+      },
+      -- Tab bar for multiple sessions
+      tabs = {
+        enabled = true,
+        mouse_enabled = true,
+      },
+      -- Diff behavior
+      diff_opts = {
+        auto_close_on_accept = true,
+        -- auto_close_on_accept = true, -- Close diff windows after accepting
+        -- vertical_split = true, -- Use vertical splits for diffs
+        -- open_in_current_tab = false, -- Don't create new tabs
+        -- keep_terminal_focus = true, -- Keep focus on Claude terminal
+      },
     },
     keys = {
       { "<c-enter>", "<cmd>ClaudeCode<cr>", mode = {"n", "t"}, desc = "Toggle Claude" },
-      { "<leader>a", nil, desc = "AI/Claude Code" },
+      -- { "<leader>a", nil, desc = "AI/Claude Code" },
+      { "<leader>a", group = "Claude" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
@@ -27,6 +44,9 @@ return {
       -- Diff management
       { "<leader>aa", "<cmd>ClaudeCodeDiffAccept<cr>", desc = "Accept diff" },
       { "<leader>ad", "<cmd>ClaudeCodeDiffDeny<cr>", desc = "Deny diff" },
+      -- Multi-session
+      { "<leader>an", "<cmd>ClaudeCodeNew<cr>", desc = "New session" },
+      { "<leader>al", "<cmd>ClaudeCodeSessions<cr>", desc = "List sessions" },
     },
   },
 }

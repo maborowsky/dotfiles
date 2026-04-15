@@ -32,6 +32,7 @@ return {
   -- Git
   {
     'nvim-mini/mini.diff',
+    enabled = false, -- using gitsigns
     opts = {
       view = {
         -- Visualization style. Possible values are 'sign' and 'number'.
@@ -39,7 +40,7 @@ return {
         style = 'sign',
         -- Signs used for hunks with 'sign' view
         signs = { add = '┃', change = '┃', delete = '┃' },
-
+        wrap_goto = false,
       }
     },
   },

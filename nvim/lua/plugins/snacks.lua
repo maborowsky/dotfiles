@@ -1,5 +1,6 @@
 return {
   {
+    enabled=true,
     "folke/snacks.nvim",
     priority = 1000,
     lazy = false,
@@ -10,7 +11,7 @@ return {
       -- refer to the configuration section below
       bigfile = { enabled = true },
       dashboard = {
-        enabled = true,
+        enabled = false,
         sections = {
           {
             section = "terminal",
@@ -50,7 +51,16 @@ return {
         expand = true,
         position = "float",
       },
-      picker = { enabled = true },
+      picker = {
+        enabled = true,
+        file = {
+          --- * left: truncate the beginning of the path
+          --- * center: truncate the middle of the path
+          --- * right: truncate the end of the path
+          ---@type "left"|"center"|"right"
+          truncate = "left",
+        },
+      },
       notifier = {
         enabled = true,
         timeout = 3000,
@@ -60,6 +70,16 @@ return {
       scroll = { enabled = false },  -- trying out neoscroll
       statuscolumn = { enabled = true },
       words = { enabled = true },
+    },
+    terminal = {
+      -- trying to disable double tap for esc but it's not working
+      -- keys = {
+      --   term_normal = {
+      --     "<esc>",
+      --     "<C-\\><C-n>",
+      --     mode = "t",
+      --   },
+      -- },
     },
     keys = {
       -- Top Pickers & Explorer
@@ -73,6 +93,7 @@ return {
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
       { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      { "<leader>f*", function() Snacks.picker.files({ pattern = vim.fn.getreg("+") }) end, desc = "Find File in Clipboard" },
       { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help" },
       { "<leader>fp", function() Snacks.picker.pickers() end, desc = "Pickers" },
@@ -83,13 +104,13 @@ return {
       { "<leader>sH", function() Snacks.picker.highlights() end, desc = "Highlights" },
 
       -- git
-      { "<leader>gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
-      { "<leader>gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
-      { "<leader>gL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
-      { "<leader>gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
-      { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
-      { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
-      { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
+      { "<leader>Gb", function() Snacks.picker.git_branches() end, desc = "Git Branches" },
+      { "<leader>Gl", function() Snacks.picker.git_log() end, desc = "Git Log" },
+      { "<leader>GL", function() Snacks.picker.git_log_line() end, desc = "Git Log Line" },
+      { "<leader>Gs", function() Snacks.picker.git_status() end, desc = "Git Status" },
+      { "<leader>GS", function() Snacks.picker.git_stash() end, desc = "Git Stash" },
+      { "<leader>Gd", function() Snacks.picker.git_diff() end, desc = "Git Diff (Hunks)" },
+      { "<leader>Gf", function() Snacks.picker.git_log_file() end, desc = "Git Log File" },
       -- Grep
       { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
       { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },

@@ -2,8 +2,8 @@
 -- vim.lsp.enable('pylsp')
 -- vim.lsp.enable("basedpyright")
 vim.lsp.enable("ruff")
--- vim.lsp.enable("zuban")
-vim.lsp.enable('ty')
+vim.lsp.enable("zuban")
+-- vim.lsp.enable('ty')
 
 -- Lua
 vim.lsp.enable('lua_ls')

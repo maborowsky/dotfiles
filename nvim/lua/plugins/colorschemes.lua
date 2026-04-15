@@ -181,8 +181,7 @@ return {
   --   priority = 1000
   -- },
   {
-    'MikeWelsh801/eye-cancer',
-    dir = "~/src/eye-cancer.nvim",
+    dir = "~/src/eye-see.nvim",
     config = function()
       -- vim.api.nvim_set_hl(0, "@keyword.return", { fg =  })
       -- vim.cmd.colorscheme("eye-see")

@@ -4,9 +4,6 @@ local opt = vim.opt
 -- " inoremap :w <Esc>:w
 -- " inoremap :W <Esc>:w
 
--- New :messages
--- require('vim._extui').enable({})
-
 
 -- Don't show mode
 -- set noshowmode
@@ -15,7 +12,6 @@ opt.showtabline = 2
 
 opt.termguicolors = true
 
-vim.o.cmdheight = 0
 vim.o.laststatus = 3
 opt.spell = true
 

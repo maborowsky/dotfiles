@@ -27,8 +27,8 @@ vim.keymap.set("n", "<c-;>", "<Esc>:lua ", {noremap = true, desc = ":lua"})
 
 -- "window" management
 -- mini misc -- "zoom()" could be similiar but does it in a floating window
-vim.keymap.set("n", "<leader>wf", "tab split", {noremap = true, desc = "Tab fullscreen"}) -- fullscreen
-vim.keymap.set("n", "<leader>wc", "tab close", {noremap = true, desc = "Tab close"})
+vim.keymap.set("n", "<leader>wf", "<cmd>tab split<cr>", {noremap = true, desc = "Tab fullscreen"}) -- fullscreen
+vim.keymap.set("n", "<leader>wc", "<cmd>tabclose<cr>", {noremap = true, desc = "Tab close"})
 
 -- TODO:
 -- noremap! <c-a> <home>
@@ -132,8 +132,18 @@ vim.keymap.set({"n", "v", "o"}, "<C-j>", "6j", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "<C-k>", "6k", {noremap = true})
 
 
-vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
-vim.keymap.set("n", "<leader>gg", "<cmd>G<cr>", {})
+-- vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
+vim.keymap.set("n", "<C-g>", function()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == "fugitive" then
+      vim.api.nvim_win_close(win, false)
+      return
+    end
+  end
+  vim.cmd("G")
+end, {})
+-- vim.keymap.set("n", "<leader>gg", "<cmd>G<cr>", {})
 vim.keymap.set("n", "<leader>gt", "<cmd>tab G<cr>", {})
 
 

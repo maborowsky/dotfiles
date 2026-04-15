@@ -1,7 +1,7 @@
 return {
   {
     "folke/noice.nvim",
-    enabled=false, -- using vim._extui now
+    enabled=false, -- using vim ui2 now with tinycmd
     event = "VeryLazy",
     opts = {
       -- add any options here
