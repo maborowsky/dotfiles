@@ -1,0 +1,25 @@
+stores:
+  gh:
+    target: "~/.config/gh"
+  ghostty:
+    target: "~/.config/ghostty"
+  kitty:
+    target: "~/.config/kitty"
+  lazydocker:
+    target: "~/.config/lazydocker"
+  linearmouse:
+    target: "~/.config/linearmouse"
+  nvim:
+    target: "~/.config/nvim"
+  wezterm:
+    target: "~/.config/wezterm"
+  zed:
+    target: "~/.config/zed"
+  starship:
+    target: "~/.config"
+    files:
+      - starship.toml
+  fzf:
+    target: "~/.config"
+    files:
+      - fzf-git.sh
