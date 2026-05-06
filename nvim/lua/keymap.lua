@@ -16,13 +16,7 @@
 -- -----------------------------------------------------------------------------
 -- IN TESTING:
 -- -----------------------------------------------------------------------------
--- GO TO FIXTURE
-vim.keymap.set('n', 'gf', function()
-  local word = vim.fn.expand('<cword>')
-  require('fixture_picker').picker(word)
-end, { desc = 'Find pytest fixture' })
 
-vim.keymap.set("n", "<leader>c", function() require('conform').format() end, {noremap = true, desc = "[C]onform format"})
 vim.keymap.set("n", "<c-;>", "<Esc>:lua ", {noremap = true, desc = ":lua"})
 
 -- "window" management
@@ -98,6 +92,10 @@ vim.keymap.set("n", "g+", function()
   vim.cmd.edit(vim.fn.getreg("+"))
 end, {noremap = true})
 
+
+-- Undotree
+vim.keymap.set("n", "<leader>u", function() require("undotree").open() end)
+
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
@@ -133,14 +131,22 @@ vim.keymap.set({"n", "v", "o"}, "<C-k>", "6k", {noremap = true})
 
 
 -- vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
+local _fugitive_last_press = 0
 vim.keymap.set("n", "<C-g>", function()
+  local now = vim.uv.now()
   for _, win in ipairs(vim.api.nvim_list_wins()) do
     local buf = vim.api.nvim_win_get_buf(win)
     if vim.bo[buf].filetype == "fugitive" then
-      vim.api.nvim_win_close(win, false)
+      if (now - _fugitive_last_press) < 300 then
+        vim.api.nvim_win_close(win, false)
+      else
+        vim.api.nvim_win_call(win, function() vim.cmd("e") end)
+      end
+      _fugitive_last_press = now
       return
     end
   end
+  _fugitive_last_press = now
   vim.cmd("G")
 end, {})
 -- vim.keymap.set("n", "<leader>gg", "<cmd>G<cr>", {})
@@ -160,44 +166,6 @@ vim.keymap.set("c", "<C-e>", "<End>", {noremap = true})
 -- :cnoremap <Esc>b <S-Left>
 -- :cnoremap <Esc>f <S-Right>
 
--- Telescope pickers
--- local builtin = require('telescope.builtin')
--- local themes = require('telescope.themes')
--- local theme_dropdown = themes.get_dropdown()--{layout_config = {width = 0.8}}
--- local theme_ivy = themes.get_ivy()
---
--- vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
--- vim.keymap.set('n', '<S-h>', function() builtin.buffers(theme_ivy) end, { desc = 'Telescope buffers' })
--- vim.keymap.set('n', 'ff', '<cmd>Telescope find_files<cr>', {noremap = true})
--- vim.keymap.set('n', 'fg', '<cmd>Telescope live_grep<cr>', {noremap = true})
--- -- vim.keymap.set('n', '<leader>fg', function()
--- --   builtin.live_grep({search_dirs = { '' }})
--- -- end , {noremap = true})
--- vim.keymap.set('n', '<c-p>', function() builtin.git_files(theme_dropdown) end, {noremap = true})
--- -- vim.keymap.set('n', 'fa', "<cmd>lua require(\'telescope.builtin').live_grep({search_dirs = { '' }})<cr>", {noremap = true})
--- vim.keymap.set('n', 'fh', '<cmd>Telescope help_tags<cr>', {noremap = true})
--- --vim.keymap.set('n', 'ft', '<cmd>Telescope treesitter<cr>', {noremap = true})
--- vim.keymap.set('n', 'ft', '<cmd>Telescope<cr>', {noremap = true})
--- vim.keymap.set('n', 'fc', "<cmd>lua require('telescope').extensions.neoclip.default()<CR>", {noremap = true})
--- vim.keymap.set('n', 'fd', '<cmd>Telescope docker containers<cr>', {noremap = true})
--- -- vim.keymap.set('n', 'fe', '<cmd>Telescope env<cr>', {noremap = true})
--- vim.keymap.set('n', 'fp', '<cmd>Telescope projects<cr>', {noremap = true})
--- vim.keymap.set('n', 'fr', '<cmd>Telescope resume<cr>', {noremap = true})
--- -- vim.keymap.set('n', 'fr', '<cmd>Telescope registers<cr>', {noremap = true})
--- vim.keymap.set('n', 'fq', '<cmd>Telescope quickfix<cr>', {noremap = true})
--- vim.keymap.set('n', 'fm', '<cmd>Telescope make<cr>', {noremap = true})
--- vim.keymap.set('n', 'fo', '<cmd>Telescope oldfiles<cr>', {noremap = true})
--- -- vim.keymap.set('n', '<leader>hm', '<cmd>Telescope harpoon marks<cr>', {noremap = true})
--- -- sort not working
--- -- TODO: sort a la `git branch --sort=-committerdate`
--- -- vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches({opts='--sort=-committerdate'})<cr>", {noremap = true})
--- vim.keymap.set('n', '<leader>gb', "<cmd>:lua require'telescope.builtin'.git_branches()<cr>", {noremap = true})
--- -- git branches --> <c-r> to rename a branch
--- vim.keymap.set('n', '<leader>gc', '<cmd>Telescope git_bcommits<cr>', {noremap = true})
--- vim.keymap.set('n', '<leader>gs', '<cmd>Telescope git_status<cr>', {noremap = true})
--- vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-j> <Down>')
--- vim.api.nvim_command('autocmd FileType TelescopePrompt imap <buffer> <C-k> <Up>')
-
 
 -- Notes
 function _G.noteOpen()
@@ -212,14 +180,6 @@ vim.api.nvim_command([[
 ]])
 
 -- Buffers
-local function close_buffer()
-  -- not supposed to do it this way: https://vi.stackexchange.com/questions/44166/conditional-key-mapping-in-neovim-based-on-file-type
-  if vim.bo.filetype == 'fugitiveblame' then
-    vim.cmd ":q"
-  else
-    require('snacks').bufdelete()
-  end
-end
 --   See ideas at: https://www.lazyvim.org/keymaps#bufferlinenvim
 vim.keymap.set('n', '<leader>q', function() require('snacks').bufdelete() end, {noremap = true})
 vim.keymap.set('n', '<leader>Q', "<cmd>bd<cr>", {noremap = true})
@@ -356,7 +316,8 @@ vim.keymap.set('n', '<leader>c', function() vim.lsp.buf.format { async = true } 
 -- Git -----------------------------------------------------------
 ------------------------------------------------------------------
 vim.keymap.set('n', '<leader>g-', ":Gitsigns stage_hunk<return>", {desc = "[G]it stage hunk"})
-vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end, {desc = "[G]it MiniDiff toggle [o]verlay"})
+-- vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end, {desc = "[G]it MiniDiff toggle [o]verlay"})
+vim.keymap.set('n', '<leader>gu', function() require('unified').toggle() end, {desc = "[G]it [U]nified diff toggle (vs HEAD)"})
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

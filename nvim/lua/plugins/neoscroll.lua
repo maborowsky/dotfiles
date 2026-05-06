@@ -1,7 +1,7 @@
 return {
   "karb94/neoscroll.nvim",
   opts = {
-    duration_multiplier = 0.5,   -- Global duration multiplier
+    duration_multiplier = 0.3,   -- Global duration multiplier
   },
   config = function()
     -- removed <c-f>, <c-b>

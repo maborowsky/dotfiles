@@ -2,27 +2,29 @@ return {
   {
     "coder/claudecode.nvim",
     -- "snirt/claudecode.nvim",
-    branch = "nvim-integration-xg1c",
     dependencies = { "folke/snacks.nvim" },
     opts = {
+      focus_after_send = false,
       open_in_new_tab = false,
       hide_terminal_in_new_tab = true,
       terminal = {
         -- provider = "native",
         provider = "snacks",
-      },
-      -- Tab bar for multiple sessions
-      tabs = {
-        enabled = true,
-        mouse_enabled = true,
-      },
+        snacks_win_opts = {
+          position = "right",
+          width = 0.4,
+        },
+      }
+      ,
       -- Diff behavior
       diff_opts = {
+        layout = "vertical",
+        split_side = "right",
+        split_width_percentage = 0.40,
         auto_close_on_accept = true,
         -- auto_close_on_accept = true, -- Close diff windows after accepting
         -- vertical_split = true, -- Use vertical splits for diffs
-        -- open_in_current_tab = false, -- Don't create new tabs
-        -- keep_terminal_focus = true, -- Keep focus on Claude terminal
+        keep_terminal_focus = true, -- Keep focus on Claude terminal
       },
     },
     keys = {

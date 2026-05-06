@@ -14,7 +14,23 @@ return {
   {
     "EdenEast/nightfox.nvim",
     config = function()
-      -- vim.cmd("colorscheme nightfox")
+      local palette = require('nightfox.palette').load('nightfox')
+      require('nightfox').setup({
+        options = {
+          transparent = false,     -- Disable setting background
+          dim_inactive = false,    -- Non focused panes set to alternative background
+        },
+        groups = {
+          all = {
+            WinSeparator    = { fg = palette.fg3, bg = "NONE" },
+            InclineNormal   = { bg = palette.bg0, fg = palette.fg1 },
+            InclineNormalNC = { bg = palette.bg0, fg = palette.fg3 },
+            -- Floats transparent so snacks picker has no seam between border and panel.
+            NormalFloat     = { bg = "NONE" },
+          },
+        },
+      })
+      vim.cmd("colorscheme nightfox")
       -- vim.cmd("colorscheme terafox")
     end,
   },
@@ -36,54 +52,6 @@ return {
     --   vim.cmd.colorscheme('naysayer')
     -- end,
   },
-  -- {
-  --   -- In between naysayer and kanagawa
-  --   -- also same backgrond as terafox
-  --   'MikeWelsh801/eye-cancer',
-  --   priority = 1000,
-  --   dependencies = { 'rebelot/kanagawa.nvim' },
-  --   config = function(colors)
-  --     local c = require('eye-cancer.pallet') -- colors isn't working
-  --     c.bg_brightened = "#1d2d30"
-  --     require('eye-cancer').setup({
-  --       brighten = false,
-  --     -- vim.cmd("colorscheme eye-aids")
-  --     })
-  --     -- vim.cmd("colorscheme eye-cancer")
-  --
-  --     -- This is set up weird in https://github.com/MikeWelsh801/eye-cancer.nvim/blob/main/lua/eye-cancer/kana_setup.lua
-  --     -- and is hard to overwrite.
-  --     vim.api.nvim_set_hl(0, "@comment", { link = "Comment" })
-  --
-  --     -- I think the config of these is messing up some highlighting for snacks picker
-  --     -- vim.api.nvim_set_hl(0, "NonText", { fg="#625e5a", bg=none })
-  --     -- vim.api.nvim_set_hl(0, "NonText", { fg=c.blue, bg=none })
-  --     vim.api.nvim_set_hl(0, "LineNr", { fg=c.dark_grey, bg=none})
-  --
-  --     -- Snacks picker
-  --     vim.api.nvim_set_hl(0, "SnacksPickerDir", { fg=c.blue, bg=none })
-  --     vim.api.nvim_set_hl(0, "SnacksPickerBufFlags", { fg=c.dark_grey, bg=none })
-  --
-  --     -- trying out yellow for this
-  --     vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg="#E6B800" })
-  --     -- #FFD23F
-  --     -- #FFCC33
-  --     -- #E6B800
-  --     --
-  --
-  --     -- Purples from chatgpt
-  --     purple = "#7A5C9E"
-  --     -- #8E6BAF
-  --     -- #6C4F82
-  --     -- maybe from kanagawa #957fb8
-  --
-  --     vim.api.nvim_set_hl(0, "ColorColumn", { bg=c.bg_brightened })
-  --
-  --     -- vim.api.nvim_set_hl(0, "MatchParen", { fg="#659099" })
-  --     -- vim.api.nvim_set_hl(0, "MatchParen", { fg=purple })
-  --     vim.api.nvim_set_hl(0, "MatchParen", { fg="#957fb8" })
-  --   end
-  -- },
   {
     'sainnhe/everforest',
     enabled=false,
@@ -132,9 +100,9 @@ return {
           overrides = function(colors)
             local theme = colors.theme
             return {
-              -- NormalFloat = { bg = "none" },
-              -- FloatBorder = { bg = "none" },
-              -- FloatTitle = { bg = "none" },
+              NormalFloat = { bg = "none" },
+              FloatBorder = { bg = "none" },
+              FloatTitle = { bg = "none" },
 
               -- Save an hlgroup with dark background and dimmed foreground
               -- so that you can use it where your still want darker windows.
@@ -162,11 +130,12 @@ return {
       })
 
       -- setup must be called before loading
-      vim.cmd("colorscheme kanagawa")
+      -- vim.cmd("colorscheme kanagawa")
     end, -- end config
   },
   {
     "webhooked/kanso.nvim",
+    enabled=false,
     lazy = false,
     priority = 1000,
     -- config = function()
@@ -187,5 +156,15 @@ return {
       -- vim.cmd.colorscheme("eye-see")
     end,
     priority = 1000
+  },
+  {
+    "navarasu/onedark.nvim",
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('onedark').setup {
+        style = 'darker'
+      }
+      -- require('onedark').load()
+    end
   },
 }

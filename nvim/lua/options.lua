@@ -44,7 +44,7 @@ opt.scrolloff = 8
 
 -- Git settings
 -- default: 'internal,filler,closeoff'
-vim.opt.diffopt = {'internal' ,'filler', 'closeoff', 'indent-heuristic'}
+vim.opt.diffopt = {'internal', 'filler', 'closeoff', 'indent-heuristic', 'algorithm:histogram', 'linematch:60'}
 
 
 -- tab completion
@@ -56,6 +56,9 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 
 -- vim.o.previewheight=20
+
+-- trying this for edgy
+vim.opt.splitkeep = "screen"
 
 
 -- Highlight folds
@@ -75,7 +78,7 @@ vim.g.auto_save_events = {"InsertLeave", "TextChanged"}
 -- Diagnostics
 -- vim.diagnostic.config({ virtual_text = true })
 vim.diagnostic.config({
-  virtual_text = true, 
+  virtual_text = true,
   -- virtual_lines = true,
   -- virtual_lines = { current_line = true },
 })
@@ -96,6 +99,12 @@ vim.g.loaded_netrwPlugin = 1
 -- Terminal scrollback
 vim.o.scrollback=100000
 
+-- Auto-reload buffers when files change on disk (e.g. Claude edits via Bash)
+vim.o.autoread = true
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "TermLeave" }, {
+  pattern = "*",
+  command = "silent! checktime",
+})
 
 -- Required for obsidian
 vim.o.conceallevel=1

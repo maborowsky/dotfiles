@@ -28,17 +28,21 @@ return {
           },
         },
       },
-      explorer = { enabled = true },
-      -- gitbrowse = { enabled = true }, -- i think this is just there by default?
+      explorer = {
+        enabled = true,
+     },
+      gitbrowse = { enabled = true }, -- i think this is just there by default?
       image = { enabled = true },
       indent = {
-        enabled = false,
+        enabled = true,
         hl = "SnacksIndent",
-        index = { only_scope = true },
-        only_scope = false,
+        only_scope = true,
+        only_current = false, -- only show indent guides in the current window
         scope = {
           only_current = true, -- only show scope in the current window
           -- hl = "SnacksIndentScope", ---@type string|string[] hl group for scopes
+          enabled = true,
+
         },
       },
       input = {
@@ -60,12 +64,19 @@ return {
           ---@type "left"|"center"|"right"
           truncate = "left",
         },
+        sources = {
+          explorer = {
+            hidden = true,
+            ignored = true,
+          },
+        },
       },
       notifier = {
         enabled = true,
         timeout = 3000,
+        style = "minimal",
       },
-      quickfile = { enabled = false },
+      quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = false },  -- trying out neoscroll
       statuscolumn = { enabled = true },
@@ -154,7 +165,7 @@ return {
       -- { "<leader>sR", function() Snacks.picker.resume() end, desc = "Resume" },
       { "<leader>su", function() Snacks.picker.undo() end, desc = "Undo History" },
       -- { "<leader>uC", function() Snacks.picker.colorschemes() end, desc = "Colorschemes" },
-      -- Lsp -- 
+      -- Lsp --
       { "gd", function() Snacks.picker.lsp_definitions() end, desc = "Goto Definition" },
       { "gD", function() Snacks.picker.lsp_declarations() end, desc = "Goto Declaration" },
       -- currently conflicting with default map of grn for rename
@@ -164,6 +175,9 @@ return {
       { "<leader>ss", function()
         Snacks.picker.lsp_symbols({layout = {preset = "vscode", preview = "main"}})
       end, desc = "LSP Symbols" },
+      { "<leader>sn", function()
+        Snacks.picker.lsp_symbols({layout = {preset = "dropdown", preview = "main"}})
+      end, desc = "Jump to LSP symbol" },
       -- st for "testing" lol change this to default if its good
       --   https://github.com/folke/snacks.nvim/blob/main/docs/picker.md#lsp_symbols
       { "<leader>st", function()

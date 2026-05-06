@@ -72,10 +72,10 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    enabled = true, -- currently trying out mini diff
     config = function()
       -- TODO: add in desc for which key
       require('gitsigns').setup({
+        signs_staged_enable = true,
         on_attach = function(bufnr)
           local gitsigns = require('gitsigns')
 
@@ -144,6 +144,7 @@ return {
   },
   {
     'sindrets/diffview.nvim',
+    enabled=false,
     opts = {
       hooks = {
         diff_buf_read = function(bufnr)

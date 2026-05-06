@@ -1,55 +1,76 @@
 # This is the configuration file for Ghostty.
 #
-# This template file has been automatically created at the following
-# path since Ghostty couldn't find any existing config files on your system:
-#
-#   /Users/michaelborowsky/Library/Application Support/com.mitchellh.ghostty/config
-#
-# The template does not set any default options, since Ghostty ships
-# with sensible defaults for all options. Users should only need to set
-# options that they want to change from the default.
-#
 # Run `ghostty +show-config --default --docs` to view a list of
 # all available config options and their default values.
 #
 # Additionally, each config option is also explained in detail
 # on Ghostty's website, at https://ghostty.org/docs/config.
-
-# Config syntax crash course
-# # Empty values are used to reset config keys to default.
-# key =
 #
-# # Some config options have unique syntaxes for their value,
-# # which is explained in the docs for that config option.
-# # Just for example:
-# resize-overlay-duration = 4s 200ms
-# ==========================
-# # The config file consists of simple key-value pairs,
-# # separated by equals signs.
+
 
 #font-family = BlexMono Nerd Font Mono
 #font-family = CommitMono
-font-family = InputMonoNarrow
-# font-family = InputMono
 #font-family = Berkeley Mono Trial
+# -- Lilex -----
+font-family = Lilex
+font-variation = wght=400
+adjust-cell-height = 10%
 
+# Input Font Settings -- trying to match the default from website
+# font-family = InputMonoNarrow
+# adjust-cell-height = 20%
+# font-variation = wght=400
+
+# Generic font settings
 font-size = 16
-font-thicken=false
-font-thicken-strength=0
+# font-thicken=false
+# font-thicken-strength=0
 
 # window-padding-x = 2
-keybind = cmd+i=prompt_surface_title
+keybind = cmd+i=prompt_tab_title
+
+
+# Window Appearance
+# macos-titlebar-style=transparent
+# macos-titlebar-style=tabs
+# macos-window-buttons=hidden
+
+# Transparency
+# background-opacity = 0.99
+# background-blur=true is equivalent to the default blur intensity of 20, which is reasonable for a good looking blur.
+background-blur=true
+background-blur-radius=40
+# NOTE for after updating osx------------
+# Whether to blur the background when background-opacity is less than 1.
+#
+# Valid values are:
+#
+# a nonnegative integer specifying the blur intensity
+# false, equivalent to a blur intensity of 0
+# true, equivalent to the default blur intensity of 20, which is reasonable for a good looking blur. Higher blur intensities may cause strange rendering and performance issues.
+# On macOS 26.0 and later, there are additional special values that can be set to use the native macOS glass effects:
+#
+# macos-glass-regular - Standard glass effect with some opacity
+# macos-glass-clear - Highly transparent glass effect
+# If the macOS values are set, then this implies background-blur = true on non-macOS platforms.
 
 
 window-new-tab-position = end
 
 cursor-style = block
 
-working-directory = home
+working-directory=home
+# window-inherit-working-directory=false
+tab-inherit-working-directory=true
 
 # Mac features:
-macos-option-as-alt = true
-macos-titlebar-style=transparent
+macos-option-as-alt = left
+macos-icon = custom-style
+
+# Shaders
+# custom-shader = ~/.config/ghostty/shaders/grain2.glsl
 
 #theme = /Users/michaelborowsky/dotfiles/terafox.ghostty
-theme = Kanagawa Wave
+# theme = Kanagawa Wave
+# theme = Atom One Dark
+theme = NightFox

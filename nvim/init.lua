@@ -17,6 +17,12 @@ require('autocmds')
 -- require('auto-chains')
 
 
+-- Nvim 0.12 built in undotree
+-- has to be after Lazy setup
+vim.cmd.packadd ('nvim.undotree')
+-- vim.cmd.packadd ('nvim.difftool') -- git config calls -c packadd difftool
+
+
 -- Moving to vim.pack testing
 -- vim.pack.add({
 --     'https://github.com/tpope/vim-fugitive'
@@ -28,30 +34,6 @@ require('autocmds')
 -- vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
 
 
-
--- startify
--- vim.g:startify_use_env = 1
--- vim.g:startify_fortune_use_unicode = 1
--- vim.g:startify_change_to_vcs_root = 0
--- vim.g:startify_change_to_dir = 0
--- vim.g:startify_list_order = [
---     \ ['   Bookmarks:'],
---     \ 'bookmarks',
---     \ ['   Sessions'],
---     \ 'sessions',
---     \ ['   MRU:'],
---     \ 'files',
---     \ ]
-
--- vim.g:startify_bookmarks = [ {'v': '$MYVIMRC'} ]
--- vim.g:startify_bookmarks += [
---             \ {'k': '~/.config/kitty/kitty.conf' },
---             \ {'l': '~/.config/nvim/lua/lsp.lua' },
---             \ {'p': '~/.config/nvim/lua/plugins.lua' },
---             \ {'s': '~/.config/skhd/skhdrc' },
---             \ {'y': '~/.config/yabai/yabairc' },
---             \ {'z': '~/.zshrc' },
--- \ ]
 
 
 -- Experimental UI2: floating cmdline and messages
@@ -103,5 +85,5 @@ if vim.g.neovide then
     require('neovide_config')
 end
 
--- Require options to be loaded after plugins
+-- Load options after plugins
 require('options')

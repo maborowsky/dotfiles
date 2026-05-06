@@ -9,6 +9,7 @@ return {
     opts = {
       preset = "helix",  -- classic, modern, or helix
       defaults = {
+        ["<leader>b"] = { name = "+buffers" },
         ["<leader>d"] = { name = "+debug" },
       },
   },
