@@ -7,8 +7,6 @@ stores:
     target: "~/.config/kitty"
   lazydocker:
     target: "~/.config/lazydocker"
-  linearmouse:
-    target: "~/.config/linearmouse"
   nvim:
     target: "~/.config/nvim"
   wezterm:
