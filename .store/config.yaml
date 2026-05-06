@@ -21,3 +21,8 @@ stores:
     target: "~/.config"
     files:
       - fzf-git.sh
+  zsh:
+    target: "~"
+    files:
+      - .zshrc
+      - .zprofile
