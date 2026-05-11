@@ -1,7 +1,7 @@
 return {
   {
     'nvim-tree/nvim-tree.lua',
-    enabled = false,  -- trying out snacks explorer
+    enabled = true,  -- trying out snacks explorer
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     lazy = false,
     config = function()

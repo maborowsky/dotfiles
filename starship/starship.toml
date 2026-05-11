@@ -35,14 +35,23 @@ format = "[$branch]($style)"
 style = "bright-black"
 
 [git_status]
-format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style)"
+format = "[*](bright-black)[($ahead_behind$stashed)]($style) "
 style = "cyan"
-conflicted = "​"
-untracked = "​"
-modified = "​"
-staged = "​"
-renamed = "​"
-deleted = "​"
+conflicted = ""
+untracked = ""
+modified = ""
+staged = ""
+renamed = ""
+deleted = ""
+# TODO: switch to these or Nerd Font glyphs once terminal/font setup renders them everywhere.
+# Original starship defaults / pink-glyph variant:
+# format = "[[(*$conflicted$untracked$modified$staged$renamed$deleted)](218) ($ahead_behind$stashed)]($style) "
+# conflicted = "​"
+# untracked = "​"
+# modified = "​"
+# staged = "​"
+# renamed = "​"
+# deleted = "​"
 stashed = "≡"
 
 [git_state]

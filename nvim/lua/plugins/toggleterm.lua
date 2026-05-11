@@ -12,17 +12,27 @@ local function detect_root()
 end
 
 -- Computed lazily on first terminal spawn so LSP has had a chance to attach.
+-- PID is mixed in so each nvim instance gets its own session namespace; sessions
+-- are killed on VimLeavePre so they don't outlive the nvim that spawned them.
 local cached_prefix
 local function project_prefix()
   if cached_prefix then return cached_prefix end
   local root = detect_root()
   local slug = vim.fn.fnamemodify(root, ':t')
   local hash = vim.fn.sha256(root):sub(1, 6)
-  cached_prefix = string.format('nvim.%s-%s.', slug, hash)
+  cached_prefix = string.format('nvim.%s-%s.%d.', slug, hash, vim.fn.getpid())
   return cached_prefix
 end
 
-local zmx_available = vim.fn.executable('zmx') == 1 and vim.env.ZMX_SESSION == nil
+-- Disabled: zmx's daemon captures env at session-spawn time, so $NVIM (the
+-- parent nvim's RPC socket, set per-job by :terminal) never reaches the shell
+-- inside the session. Without it, unnest.nvim can't phone home and `nvim foo`
+-- nests instead of opening in the parent.
+local zmx_enabled = false
+local zmx_available = zmx_enabled
+  and vim.fn.executable('zmx') == 1
+  and vim.env.ZMX_SESSION == nil
+local spawned_slots = {}
 
 return {
   {
@@ -68,11 +78,15 @@ return {
         if zmx_available then
           vim.env.ZMX_SESSION_PREFIX = project_prefix()
           cmd = string.format('zmx a %d', count)
+          spawned_slots[count] = true
         end
         tt.Terminal:new({
           cmd = cmd,
           count = count,
           direction = opts.direction,
+          on_exit = function(t)
+            vim.schedule(function() t:shutdown() end)
+          end,
         }):toggle()
       end
 
@@ -101,6 +115,22 @@ return {
       if zmx_available then
         vim.keymap.set('n', '<leader>tr', '<cmd>ZmxReflow<cr>',
           { desc = 'Reflow zmx terminal' })
+
+        vim.api.nvim_create_autocmd('VimLeavePre', {
+          desc = 'Kill zmx sessions spawned by this nvim',
+          callback = function()
+            local prefix = cached_prefix
+            if not prefix then return end
+            local names = {}
+            for slot in pairs(spawned_slots) do
+              table.insert(names, prefix .. slot)
+            end
+            if #names == 0 then return end
+            local argv = vim.list_extend({ 'zmx', 'k' }, names)
+            table.insert(argv, '--force')
+            vim.fn.jobstart(argv, { detach = true })
+          end,
+        })
       end
     end,
   },

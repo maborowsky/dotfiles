@@ -31,9 +31,10 @@ keybind = cmd+i=prompt_tab_title
 
 
 # Window Appearance
-# macos-titlebar-style=transparent
-# macos-titlebar-style=tabs
+macos-titlebar-style=tabs
 # macos-window-buttons=hidden
+# macos-window-shadow
+
 
 # Transparency
 # background-opacity = 0.99

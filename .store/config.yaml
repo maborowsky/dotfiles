@@ -1,28 +1,32 @@
 stores:
-  gh:
-    target: "~/.config/gh"
-  ghostty:
-    target: "~/.config/ghostty"
-  kitty:
-    target: "~/.config/kitty"
-  lazydocker:
-    target: "~/.config/lazydocker"
-  nvim:
-    target: "~/.config/nvim"
-  wezterm:
-    target: "~/.config/wezterm"
-  zed:
-    target: "~/.config/zed"
-  starship:
-    target: "~/.config"
-    files:
-      - starship.toml
-  fzf:
-    target: "~/.config"
-    files:
-      - fzf-git.sh
-  zsh:
-    target: "~"
-    files:
-      - .zshrc
-      - .zprofile
+    aerospace:
+        target: ~/.config/aerospace
+    fzf:
+        target: ~/.config
+        files:
+            - fzf-git.sh
+    gh:
+        target: ~/.config/gh
+    ghostty:
+        target: ~/.config/ghostty
+    kitty:
+        target: ~/.config/kitty
+    lazydocker:
+        target: ~/.config/lazydocker
+    nvim:
+        target: ~/.config/nvim
+    sketchybar:
+        target: ~/.config/sketchybar
+    starship:
+        target: ~/.config
+        files:
+            - starship.toml
+    wezterm:
+        target: ~/.config/wezterm
+    zed:
+        target: ~/.config/zed
+    zsh:
+        target: "~"
+        files:
+            - .zshrc
+            - .zprofile

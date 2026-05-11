@@ -78,7 +78,16 @@ vim.g.auto_save_events = {"InsertLeave", "TextChanged"}
 -- Diagnostics
 -- vim.diagnostic.config({ virtual_text = true })
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = {
+    prefix = "●",
+    spacing = 2,
+    source = true,
+  },
+  underline = {
+    severity = { min = vim.diagnostic.severity.ERROR },
+  },
+  signs = true,
+  severity_sort = true,
   -- virtual_lines = true,
   -- virtual_lines = { current_line = true },
 })
@@ -98,6 +107,12 @@ vim.g.loaded_netrwPlugin = 1
 
 -- Terminal scrollback
 vim.o.scrollback=100000
+
+-- Forward BEL from :terminal jobs to the outer terminal (so ghostty's tab
+-- indicator fires on Claude alerts). Default is 'all', which mutes everything;
+-- list every category except 'term' so internal beeps stay silent.
+vim.opt.belloff = 'backspace,cursor,complete,copy,ctrlg,error,esc,ex,hangul,insertmode,lang,mess,showmatch,operator,register,shell,spell,wildmode'
+vim.opt.visualbell = false
 
 -- Auto-reload buffers when files change on disk (e.g. Claude edits via Bash)
 vim.o.autoread = true

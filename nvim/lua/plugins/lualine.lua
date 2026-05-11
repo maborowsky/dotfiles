@@ -41,7 +41,12 @@ return {
               fmt = function(str)
                 return string.gsub(str, "michael/", "m/")
               end,
-            }
+            },
+            {
+              function() return '⇋ ' .. (vim.b.minidiff_ref or '') end,
+              cond = function() return vim.b.minidiff_ref ~= nil end,
+              color = { fg = '#e5c07b', gui = 'bold' },
+            },
           },
           lualine_c = {
             {

@@ -59,6 +59,21 @@ alias helm_upgrade="helm upgrade --install torchweb ./helm -f deploy/local.yaml 
 # Git
 alias gog='git log --pretty=format:"%h%x09%an%x09%ad%x09%s"'
 
+review() {
+  local branch=$1
+  if [[ -z $branch ]]; then
+    echo "usage: review <branch>" >&2
+    return 1
+  fi
+  local root
+  root=$(git rev-parse --show-toplevel) || return
+  git fetch origin "$branch" || return
+  local path="$root/.worktrees/reviews/${branch:t}"
+  git worktree add "$path" "$branch" || return
+  cd "$path"
+  echo "run in nvim: :Octo review start"
+}
+
 # GitHub
 function mypr() {
   gh pr list --author @me --json number,title,reviewDecision,statusCheckRollup --jq '
@@ -98,6 +113,7 @@ compinit
 # Abduco/Tmux/zmx
 # trying out abduco but it's annoying that <C-\> conflicts with terminal in nvim
 alias abduco='abduco -e ^b'
+alias zexit='zmx kill $ZMX_SESSION'
 export ABDUCO_CMD='zsh'
 # ZMX_DETACH_KEY=ctrl-b
 # zmx also uses <c-\> which is annoying

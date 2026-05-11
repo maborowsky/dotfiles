@@ -109,10 +109,10 @@ vim.keymap.set("n", "<esc>", ":noh<return><esc>", {noremap = true, silent = true
 -- vim.keymap.set("n", "<Leader>w", ":wa<CR>", {noremap = true, desc = "Save all buffers"})
 
 -- NOTE: my ideal would be to have <c-e> open to the file but also toggle
-vim.keymap.set({"n", "i", "v"}, "<c-e>", function() require('snacks').explorer() end, {noremap = true, desc = "Snacks explorer", silent = true})
-vim.keymap.set({"n", "i", "v"}, "<c-f>", function() require('snacks').explorer.reveal() end, {noremap = true, desc = "Snacks explorer", silent = true})
--- vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = true, desc = "Open nvim-tree"})
---nnoremap <C-f> :NvimTreeFindFile<CR>
+-- vim.keymap.set({"n", "i", "v"}, "<c-e>", function() require('snacks').explorer() end, {noremap = true, desc = "Snacks explorer", silent = true})
+-- vim.keymap.set({"n", "i", "v"}, "<c-f>", function() require('snacks').explorer.reveal() end, {noremap = true, desc = "Snacks explorer", silent = true})
+vim.keymap.set("n", "<C-e>", ":NvimTreeToggle<CR>", {noremap = true, silent = true, desc = "Toggle nvim-tree"})
+vim.keymap.set("n", "<C-f>", ":NvimTreeFindFile<CR>", {noremap = true, silent = true, desc = "Reveal current file in nvim-tree"})
 
 
 
@@ -315,9 +315,15 @@ vim.keymap.set('n', '<leader>c', function() vim.lsp.buf.format { async = true } 
 ------------------------------------------------------------------
 -- Git -----------------------------------------------------------
 ------------------------------------------------------------------
-vim.keymap.set('n', '<leader>g-', ":Gitsigns stage_hunk<return>", {desc = "[G]it stage hunk"})
--- vim.keymap.set('n', '<leader>go', function() MiniDiff.toggle_overlay() end, {desc = "[G]it MiniDiff toggle [o]verlay"})
-vim.keymap.set('n', '<leader>gu', function() require('unified').toggle() end, {desc = "[G]it [U]nified diff toggle (vs HEAD)"})
+-- There isn't a nice way to pass in `-s` for snacks
+vim.keymap.set('n', '<leader>gu', function()
+  local state = require('unified.state')
+  if state.is_active() then
+    require('unified.command').reset()
+  else
+    require('unified.command').run('-s HEAD')
+  end
+end, {desc = "Unified diff toggle (vs HEAD)"})
 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------

@@ -13,27 +13,27 @@ return {
     keys = {
       -- TODO: <leader>o is for options, trying <leader>O
       {
-        "<leader>Ghi",
+        "<leader>goi",
         "<CMD>Octo issue list<CR>",
-        desc = "[G]it[hub] [I]ssues",
+        desc = "Issues",
       },
       {
-        "<leader>Ghp",
+        "<leader>gop",
         "<CMD>Octo pr list<CR>",
-        desc = "List [G]it[h]ub [p]ull requests",
+        desc = "Pull requests",
       },
       {
-        "<leader>Ghd",
+        "<leader>god",
         "<CMD>Octo discussion list<CR>",
-        desc = "List GitHub Discussions",
+        desc = "Discussions",
       },
       {
-        "<leader>Ghn",
+        "<leader>gon",
         "<CMD>Octo notification list<CR>",
-        desc = "List GitHub Notifications",
+        desc = "Notifications",
       },
       {
-        "<leader>Ghs",
+        "<leader>gos",
         function()
           require("octo.utils").create_base_search_command { include_current_repo = true }
         end,
@@ -72,6 +72,7 @@ return {
   {
     'lewis6991/gitsigns.nvim',
     dependencies = { 'nvim-lua/plenary.nvim' },
+    event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       -- TODO: add in desc for which key
       require('gitsigns').setup({
@@ -90,7 +91,7 @@ return {
             if vim.wo.diff then
               vim.cmd.normal({']c', bang = true})
             else
-              gitsigns.nav_hunk('next')
+              gitsigns.nav_hunk('next', { target = 'all' })
             end
           end)
 
@@ -98,39 +99,37 @@ return {
             if vim.wo.diff then
               vim.cmd.normal({'[c', bang = true})
             else
-              gitsigns.nav_hunk('prev')
+              gitsigns.nav_hunk('prev', { target = 'all' })
             end
           end)
 
           -- Actions
-          map('n', '<leader>hs', gitsigns.stage_hunk)
-          map('n', '<leader>hr', gitsigns.reset_hunk)
+          map('n', '<leader>ghs', gitsigns.stage_hunk, { desc = 'Stage hunk' })
+          map('n', '<leader>ghr', gitsigns.reset_hunk, { desc = 'Reset hunk' })
 
-          map('v', '<leader>hs', function()
+          map('v', '<leader>ghs', function()
             gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-          end)
+          end, { desc = 'Stage selection' })
 
-          map('v', '<leader>hr', function()
+          map('v', '<leader>ghr', function()
             gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-          end)
+          end, { desc = 'Reset selection' })
 
-          map('n', '<leader>hS', gitsigns.stage_buffer)
-          map('n', '<leader>hR', gitsigns.reset_buffer)
-          map('n', '<leader>hp', gitsigns.preview_hunk)
-          map('n', '<leader>hi', gitsigns.preview_hunk_inline)
+          map('n', '<leader>ghS', gitsigns.stage_buffer,  { desc = 'Stage buffer' })
+          map('n', '<leader>ghR', gitsigns.reset_buffer,  { desc = 'Reset buffer' })
 
-          map('n', '<leader>hb', function()
+          map('n', '<leader>ghb', function()
             gitsigns.blame_line({ full = true })
-          end)
+          end, { desc = 'Blame line' })
 
-          map('n', '<leader>hd', gitsigns.diffthis)
+          map('n', '<leader>ghd', gitsigns.diffthis, { desc = 'Diff against index' })
 
-          map('n', '<leader>hD', function()
+          map('n', '<leader>ghD', function()
             gitsigns.diffthis('~')
-          end)
+          end, { desc = 'Diff against last commit' })
 
-          map('n', '<leader>hQ', function() gitsigns.setqflist('all') end)
-          map('n', '<leader>hq', gitsigns.setqflist)
+          map('n', '<leader>ghQ', function() gitsigns.setqflist('all') end, { desc = 'Quickfix all hunks' })
+          map('n', '<leader>ghq', gitsigns.setqflist, { desc = 'Quickfix buffer hunks' })
 
           -- Toggles
           -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
@@ -140,7 +139,19 @@ return {
           map({'o', 'x'}, 'ih', gitsigns.select_hunk)
         end
       })
-    end
+    end,
+    keys = {
+      {
+        '<leader>ghp',
+        function() require('gitsigns').preview_hunk() end,
+        desc = "Preview hunk",
+      },
+      {
+        '<leader>ghi',
+        function() require('gitsigns').preview_hunk_inline() end,
+        desc = "Preview hunk inline",
+      },
+    },
   },
   {
     'sindrets/diffview.nvim',
@@ -159,7 +170,10 @@ return {
   {
     'axkirillov/unified.nvim',
     opts = {
-      -- your configuration comes here
+      file_tree = {
+        width = 0.3, -- Width of the file tree window
+        filename_first = true, -- Show filename before directory path (Snacks backend only)
+      },
     }
   },
 

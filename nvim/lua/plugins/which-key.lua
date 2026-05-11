@@ -11,6 +11,9 @@ return {
       defaults = {
         ["<leader>b"] = { name = "+buffers" },
         ["<leader>d"] = { name = "+debug" },
+        ["<leader>g"] = { name = "+git" },
+        ["<leader>gh"] = { name = "+hunks" },
+        ["<leader>go"] = { name = "+github (octo)" },
       },
   },
 }
