@@ -159,6 +159,9 @@ return {
   -- },
   {
     dir = "~/src/eye-see.nvim",
+    enabled = function()
+      return vim.fn.isdirectory(vim.fn.expand("~/src/eye-see")) == 1
+    end,
     config = function()
       -- vim.api.nvim_set_hl(0, "@keyword.return", { fg =  })
       -- vim.cmd.colorscheme("eye-see")
