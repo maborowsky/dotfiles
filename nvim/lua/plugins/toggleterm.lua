@@ -58,6 +58,7 @@ return {
       insert_mappings = true,
       terminal_mappings = true,
       persist_mode = true,
+      shade_terminals = false,
       direction = "vertical",
       windbar = { enabled = true },
       float_opts = {

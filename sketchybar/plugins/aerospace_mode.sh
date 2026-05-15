@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
 
-# Triggered by aerospace_mode_change. Receives MODE env var.
-# Shows a colored indicator when not in main mode.
-
 MODE="${MODE:-main}"
 
 case "$MODE" in
-    service)
-        sketchybar --set "$NAME" \
-            drawing=on \
-            label="SERVICE" \
-            label.color=0xffff5555 \
-            background.drawing=on \
-            background.color=0x33ff5555
-        ;;
-    *)
-        sketchybar --set "$NAME" drawing=off
-        ;;
+  main)
+    sketchybar --set "$NAME" drawing=off
+    ;;
+  service)
+    sketchybar --set "$NAME" \
+      label="$MODE" \
+      drawing=on \
+      icon.color=0xffff5555 \
+      label.color=0xffff5555 \
+      background.color=0x33ff5555
+    ;;
+  *)
+    sketchybar --set "$NAME" \
+      label="$MODE" \
+      drawing=on \
+      icon.color=0xffffaa00 \
+      label.color=0xffffaa00 \
+      background.color=0x33ffaa00
+    ;;
 esac

@@ -11,6 +11,9 @@ vim.lsp.enable('lua_ls')
 -- Typescript
 vim.lsp.enable('ts_ls')
 
+-- C/C++
+vim.lsp.enable('clangd')
+
 -- Disable go-to-definition for pylsp
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --   group = vim.api.nvim_create_augroup('disable_pylsp_definition', { clear = true }),

@@ -15,6 +15,7 @@ return {
     "EdenEast/nightfox.nvim",
     config = function()
       local palette = require('nightfox.palette').load('nightfox')
+
       require('nightfox').setup({
         options = {
           transparent = false,     -- Disable setting background
@@ -27,9 +28,16 @@ return {
             InclineNormalNC = { bg = palette.bg0, fg = palette.fg3 },
             -- Floats transparent so snacks picker has no seam between border and panel.
             NormalFloat     = { bg = "NONE" },
+            FloatBorder = { bg = "none" },
+            FloatTitle = { bg = "none" },
+
+            -- Bufferline
+            BufferLineFill = { bg = palette.bg0 },
+            -- BufferLineBufferSelected = { bg = palette.bg3 },
           },
         },
       })
+
       vim.cmd("colorscheme nightfox")
       -- vim.cmd("colorscheme terafox")
     end,

@@ -1,6 +1,10 @@
 stores:
     aerospace:
         target: ~/.config/aerospace
+    claude:
+        target: ~/.claude
+        patterns:
+            - scripts/kitty_focus_next_claude.sh
     fzf:
         target: ~/.config
         files:
@@ -13,6 +17,11 @@ stores:
         target: ~/.config/kitty
     lazydocker:
         target: ~/.config/lazydocker
+    michaelmux:
+        target: ~/.local
+        patterns:
+            - bin/**
+            - lib/**
     nvim:
         target: ~/.config/nvim
     sketchybar:
