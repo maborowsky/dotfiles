@@ -16,7 +16,8 @@ return {
         preset = {
           header = "            ▀" .. string.rep(" ", 7 + 6) .. "\n         █▀█▄█▀█▀█▀█" .. string.rep(" ", 6),
           keys = {
-            { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
+            -- { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "f", desc = "Find File - fzf",     action = ":lua require('fzf-lua').files()" },
             { icon = " ", key = "n", desc = "New File",      action = ":ene | startinsert" },
             { icon = " ", key = "g", desc = "Find Text",     action = ":lua Snacks.dashboard.pick('live_grep')" },
             { icon = " ", key = "r", desc = "Recent Files",  action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -67,13 +68,18 @@ return {
       },
       picker = {
         enabled = true,
-        file = {
-          --- * left: truncate the beginning of the path
-          --- * center: truncate the middle of the path
-          --- * right: truncate the end of the path
-          ---@type "left"|"center"|"right"
-          truncate = "left",
+        formatters = {
+          file = {
+            filename_first = true, -- Displays 'filename.lua  path/to/' instead of 'path/to/filename.lua'
+          },
         },
+        -- file = {
+        --   --- * left: truncate the beginning of the path
+        --   --- * center: truncate the middle of the path
+        --   --- * right: truncate the end of the path
+        --   ---@type "left"|"center"|"right"
+        --   truncate = "left",
+        -- },
         sources = {
           explorer = {
             hidden = true,

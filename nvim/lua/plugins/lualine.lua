@@ -1,3 +1,22 @@
+local worktree_cache = {}
+local function worktree_marker()
+  local cwd = vim.fn.getcwd()
+  local cached = worktree_cache[cwd]
+  if cached ~= nil then return cached end
+  local git_dir = vim.fn.systemlist({ 'git', 'rev-parse', '--git-dir' })[1] or ''
+  local common_dir = vim.fn.systemlist({ 'git', 'rev-parse', '--git-common-dir' })[1] or ''
+  local marker = ''
+  if vim.v.shell_error == 0 and git_dir ~= '' and git_dir ~= common_dir then
+    local name = git_dir:match('worktrees/([^/]+)') or ''
+    marker = '⑂ ' .. name
+  end
+  worktree_cache[cwd] = marker
+  return marker
+end
+vim.api.nvim_create_autocmd({ 'DirChanged', 'VimEnter' }, {
+  callback = function() worktree_cache = {} end,
+})
+
 return {
   {
     'nvim-lualine/lualine.nvim',
@@ -46,6 +65,11 @@ return {
               function() return '⇋ ' .. (vim.b.minidiff_ref or '') end,
               cond = function() return vim.b.minidiff_ref ~= nil end,
               color = { fg = '#e5c07b', gui = 'bold' },
+            },
+            {
+              worktree_marker,
+              cond = function() return worktree_marker() ~= '' end,
+              color = { fg = '#98c379', gui = 'bold' },
             },
           },
           lualine_c = {

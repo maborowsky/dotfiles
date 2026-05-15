@@ -16,6 +16,12 @@ return {
   opts = {
     legacy_commands = false,
     ui = { enable = true },
+    note_id_func = function(title)
+      if title ~= nil then
+        return title:gsub(" ", "-"):gsub("[^A-Za-z0-9-]", ""):lower()
+      end
+      return tostring(os.time())
+    end,
     workspaces = {
       -- {
       --   name = "personal",
