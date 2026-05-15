@@ -1,4 +1,9 @@
 --@type vim.lsp.Config
 return {
-    settings = {},
+    settings = {
+        Lua = {
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
+        },
+    },
 }

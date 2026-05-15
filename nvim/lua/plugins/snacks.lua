@@ -30,7 +30,8 @@ return {
           },
         },
         sections = {
-          { section = "header", padding = 1, align = "right" },
+          -- { section = "header", padding = 1, indent = 20 }, -- ~1/3 of default dashboard width (60)
+          { section = "header", padding = 2, align = "right" },
           { section = "keys", gap = 0, padding = 1 },
           { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1, limit = 5 },
           { icon = " ", title = "Projects",     section = "projects",     indent = 2, padding = 1, limit = 5 },
@@ -43,7 +44,7 @@ return {
       gitbrowse = { enabled = true }, -- i think this is just there by default?
       image = { enabled = true },
       indent = {
-        enabled = true,
+        enabled = false,
         hl = "SnacksIndent",
         only_scope = true,
         only_current = false, -- only show indent guides in the current window

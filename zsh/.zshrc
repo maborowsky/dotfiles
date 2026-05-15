@@ -12,10 +12,19 @@ path=(
 
 setopt SHARE_HISTORY
 
+# zsh picks vi mode when $EDITOR/$VISUAL contains "vi" (nvim qualifies),
+# which collides with nvim terminal-mode <Esc>. Force emacs keys.
+bindkey -e
+
 if [[ "$TERM_PROGRAM" == "WezTerm" ]]; then
   source $HOME/.config/wezterm/wezterm.sh
 fi
 
+
+# michaelmux
+export MICHAELMUX_DEFAULT_REPO="$HOME/src/torchweb"
+alias mm_ps="michaelmux ps"
+alias mmps="michaelmux ps"
 
 # Aliases
 alias vim=nvim
@@ -110,10 +119,23 @@ autoload -Uz compinit
 compinit
 
 
+# fzf worktrees - WIP
+# (cds && git worktree list | fzf | awk '{print $1}')
+
 # Abduco/Tmux/zmx
 # trying out abduco but it's annoying that <C-\> conflicts with terminal in nvim
 alias abduco='abduco -e ^b'
 alias zexit='zmx kill $ZMX_SESSION'
+function zmx_git_branch() {
+    local branch_name=$(git symbolic-ref --short HEAD)
+    local short="${branch_name#michael/}"
+    kitten @ set-tab-title "$short"
+    zmx a "$short"
+}
+function tabtitle() {
+    local branch_name=$(git symbolic-ref --short HEAD)
+    kitten @ set-tab-title "${branch_name#michael/}"
+}
 export ABDUCO_CMD='zsh'
 # ZMX_DETACH_KEY=ctrl-b
 # zmx also uses <c-\> which is annoying

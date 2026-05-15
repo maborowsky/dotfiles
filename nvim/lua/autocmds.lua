@@ -12,12 +12,12 @@ autocmd("TextYankPost", {
 })
 
 -- Remove trailing whitespace on save
-augroup("TrimWhitespace", { clear = true })
-autocmd("BufWritePre", {
-  group = "TrimWhitespace",
-  pattern = "*",
-  command = [[%s/\s\+$//e]],
-})
+-- augroup("TrimWhitespace", { clear = true })
+-- autocmd("BufWritePre", {
+--   group = "TrimWhitespace",
+--   pattern = "*",
+--   command = [[%s/\s\+$//e]],
+-- })
 
 -- Restore cursor position when reopening a file
 augroup("RestoreCursor", { clear = true })

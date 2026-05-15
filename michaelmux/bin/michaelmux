@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MICHAELMUX_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# shellcheck source=../lib/common.sh
+source "$MICHAELMUX_ROOT/lib/common.sh"
+
+usage() {
+    cat <<EOF
+Usage: michaelmux <command> [args]
+
+Commands:
+  open [-c] [-z] [--base <ref>] <branch-or-pr>
+                        Create/find worktree, open or focus kitty tab.
+                        -c/--create makes the branch if it doesn't exist.
+                        -z/--zmx wraps the tab in a zmx session named after
+                        the tab title. MICHAELMUX_USE_ZMX=1 makes it default.
+  list                  Show worktrees with tab + PR status.
+  goto <name>           Focus or open the tab for a worktree.
+  ps                    Show kitty tabs and zmx sessions with git context.
+EOF
+}
+
+cmd="${1:-}"; shift || true
+case "$cmd" in
+    open)  source "$MICHAELMUX_ROOT/lib/cmd_open.sh";  cmd_open  "$@" ;;
+    list)  source "$MICHAELMUX_ROOT/lib/cmd_list.sh";  cmd_list  "$@" ;;
+    goto)  source "$MICHAELMUX_ROOT/lib/cmd_goto.sh";  cmd_goto  "$@" ;;
+    ps)    source "$MICHAELMUX_ROOT/lib/cmd_ps.sh";    cmd_ps    "$@" ;;
+    -h|--help|help|"") usage ;;
+    *) echo "unknown command: $cmd" >&2; usage >&2; exit 1 ;;
+esac

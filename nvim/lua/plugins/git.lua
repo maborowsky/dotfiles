@@ -191,5 +191,19 @@ return {
       keys = {
         { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
       },
-  }
+  },
+
+  {
+    "barrettruth/diffs.nvim",
+    init = function()
+      vim.g.diffs = {
+        integrations = {
+          fugitive = true,
+          neogit = true,
+          neojj = false,
+          gitsigns = true,
+        },
+      }
+    end,
+  },
 } -- end return

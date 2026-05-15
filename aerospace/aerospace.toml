@@ -19,7 +19,7 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # See: https://nikitabobko.github.io/AeroSpace/guide#layouts
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
-accordion-padding = 30
+accordion-padding = 10
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'accordion'
@@ -77,8 +77,8 @@ on-mode-changed = []
     inner.vertical =   8
     outer.left =       8
     outer.bottom =     8
-    outer.top =        10   # clearance below sketchybar (already starts below menu bar)
-    outer.right =      8
+    outer.top =        8
+    outer.right =      60   # 60 - clearance for vertical sketchybar on the right
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -223,7 +223,12 @@ on-mode-changed = []
     alt-shift-k = ['join-with up', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main']
     alt-shift-l = ['join-with right', 'mode main', 'exec-and-forget sketchybar --trigger aerospace_mode_change MODE=main']
 
-# Windows opened on workspace 1 default to floating (no tiling).
+# Windows opened on workspace 2 default to tiling.
+# Order matters: aerospace stops at the first matching rule by default.
 [[on-window-detected]]
-if.workspace = "1"
+if.workspace = "2"
+run = ["layout tiling"]
+
+# All other windows default to floating.
+[[on-window-detected]]
 run = ["layout floating"]
