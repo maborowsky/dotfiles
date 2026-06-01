@@ -9,7 +9,11 @@ return {
     ---@module "fzf-lua"
     ---@type fzf-lua.Config|{}
     ---@diagnostic disable: missing-fields
-    opts = {}
+    opts = {
+      defaults = {
+        formatter = "path.filename_first",
+      },
+    },
     ---@diagnostic enable: missing-fields
   },
 }

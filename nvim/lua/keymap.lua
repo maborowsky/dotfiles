@@ -253,6 +253,13 @@ vim.keymap.set({"n", "v", "o", "t"}, "<c-/>", '<Cmd>exe v:count1 . "ToggleTerm d
 vim.keymap.set("i", "<c-/>", '<Esc><Cmd>exe v:count1 . "ToggleTerm direction=horizontal"<CR>')
 
 vim.keymap.set("t", "<Esc>", "<C-\\><C-n>")
+-- <Esc> drops to normal mode (above). To send a literal <Esc> to the program
+-- in the terminal (e.g. Claude Code interrupt/clear), use <S-Esc>.
+-- Requires the kitty keyboard protocol so the terminal distinguishes the two
+-- (kitty/wezterm/ghostty all support it; nvim 0.10+ enables it automatically).
+vim.keymap.set("t", "<S-Esc>", function()
+  vim.fn.chansend(vim.b.terminal_job_id, "\27")
+end, { desc = "Send <Esc> to terminal" })
 
 ------------------------------------------------------------------
 ------------------------------------------------------------------

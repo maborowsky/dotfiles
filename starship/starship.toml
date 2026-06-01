@@ -13,6 +13,7 @@ format = """
 $username\
 $hostname\
 $directory\
+${custom.worktree}\
 $git_branch\
 $git_state\
 $git_status\
@@ -32,6 +33,22 @@ vimcmd_symbol = "[❮](green)"
 
 [git_branch]
 format = "[$branch]($style)"
+style = "bright-black"
+
+[custom.worktree]
+description = "Marker shown before $git_branch when inside a linked git worktree"
+# Swap `symbol` below to change the glyph. Candidates:
+#
+
+#   󰐆 
+#   󰐅
+#   󰹩
+#   󱏒
+#   󰐆
+when = '''[ "$(git rev-parse --git-dir 2>/dev/null)" != "$(git rev-parse --git-common-dir 2>/dev/null)" ]'''
+command = "echo"
+symbol = "󰐅 "
+format = "[$symbol]($style)"
 style = "bright-black"
 
 [git_status]

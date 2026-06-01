@@ -8,7 +8,14 @@ local function worktree_marker()
   local marker = ''
   if vim.v.shell_error == 0 and git_dir ~= '' and git_dir ~= common_dir then
     local name = git_dir:match('worktrees/([^/]+)') or ''
-    marker = '⑂ ' .. name
+    -- Swap the glyph below to change the worktree marker. Candidates:
+    --
+    --   󰐆
+    --   󰐅
+    --   󰹩
+    --   󱏒
+    --   󰐆
+    marker = '󰐅 ' .. name
   end
   worktree_cache[cwd] = marker
   return marker
@@ -60,16 +67,17 @@ return {
               fmt = function(str)
                 return string.gsub(str, "michael/", "m/")
               end,
-            },
-            {
-              function() return '⇋ ' .. (vim.b.minidiff_ref or '') end,
-              cond = function() return vim.b.minidiff_ref ~= nil end,
-              color = { fg = '#e5c07b', gui = 'bold' },
+              cond = function() return worktree_marker() == '' end,
             },
             {
               worktree_marker,
               cond = function() return worktree_marker() ~= '' end,
-              color = { fg = '#98c379', gui = 'bold' },
+              -- color = { fg = '#98c379', gui = 'bold' },
+            },
+            {
+              function() return '⇋ ' .. (vim.b.minidiff_ref or '') end,
+              cond = function() return vim.b.minidiff_ref ~= nil end,
+              -- color = { fg = '#e5c07b', gui = 'bold' },
             },
           },
           lualine_c = {

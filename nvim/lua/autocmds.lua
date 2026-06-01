@@ -34,6 +34,33 @@ autocmd("BufReadPost", {
 -- end Claude auto generated:
 
 
+-- Claude Code is an Ink TUI that redraws with cursor-relative, in-place updates.
+-- When a floating window (tinycmd cmdline, notifier, etc.) overlaps the terminal
+-- and Claude writes output underneath, Neovim's terminal grid desyncs. :redraw!
+-- can't recover it (it faithfully repaints the already-wrong grid); only an
+-- app-side full repaint does. Sending a literal Ctrl-L (\012) to the terminal
+-- channel forces Ink to emit a fresh frame, so we do that when a float closes.
+local function repaint_claude_terms()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].buftype == "terminal"
+      and vim.api.nvim_buf_get_name(buf):lower():find("claude", 1, true) then
+      local chan = vim.bo[buf].channel
+      if chan and chan > 0 then
+        pcall(vim.api.nvim_chan_send, chan, "\012")
+      end
+    end
+  end
+end
+
+augroup("ClaudeRepaint", { clear = true })
+autocmd({ "CmdlineLeave", "WinClosed" }, {
+  group = "ClaudeRepaint",
+  -- Defer so the float is fully gone before we ask Claude to repaint.
+  callback = function()
+    vim.schedule(repaint_claude_terms)
+  end,
+})
 
 
 
