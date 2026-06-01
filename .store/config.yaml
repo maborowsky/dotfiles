@@ -1,8 +1,11 @@
+# https://github.com/cushycush/store
 stores:
     aerospace:
         target: ~/.config/aerospace
     claude:
         target: ~/.claude
+        files:
+            - CLAUDE.md
         patterns:
             - scripts/kitty_focus_next_claude.sh
     fzf:

@@ -81,7 +81,7 @@ _create_branch_if_missing() {
         die 1 "base ref '$base' not found"
     fi
 
-    git -C "$root" branch "$branch" "$base" >/dev/null \
+    git -C "$root" branch --no-track "$branch" "$base" >/dev/null \
         || die 1 "failed to create branch '$branch' from '$base'"
     log "michaelmux: created '$branch' from '$base'"
 }
@@ -117,7 +117,7 @@ _ensure_worktree() {
 
     local err
     err="$(mktemp)"
-    if git -C "$root" worktree add "$wt" "$branch" 2>"$err"; then
+    if git -C "$root" worktree add "$wt" "$branch" >/dev/null 2>"$err"; then
         rm -f "$err"
         printf '%s\n' "$wt"
         return 0

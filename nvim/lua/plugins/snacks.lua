@@ -1,3 +1,48 @@
+local function pick_worktrees()
+  Snacks.picker.pick({
+    source = "worktrees",
+    title = "Git Worktrees",
+    finder = function()
+      local out = vim.fn.systemlist("git worktree list --porcelain")
+      if vim.v.shell_error ~= 0 then
+        vim.notify("Not in a git repository", vim.log.levels.ERROR)
+        return {}
+      end
+      local items, cur = {}, {}
+      local function flush()
+        if cur.path then
+          local label = cur.branch or cur.head or "(detached)"
+          cur.text = string.format("%-40s %s", label, cur.path)
+          table.insert(items, cur)
+        end
+        cur = {}
+      end
+      for _, line in ipairs(out) do
+        if line:match("^worktree ") then
+          flush()
+          cur.path = line:sub(10)
+        elseif line:match("^branch ") then
+          cur.branch = line:sub(8):gsub("^refs/heads/", "")
+        elseif line:match("^HEAD ") then
+          cur.head = line:sub(6, 13)
+        elseif line == "detached" then
+          cur.detached = true
+        end
+      end
+      flush()
+      return items
+    end,
+    format = "text",
+    confirm = function(picker, item)
+      picker:close()
+      if item and item.path then
+        vim.cmd.tcd(item.path)
+        vim.cmd.edit(item.path)
+      end
+    end,
+  })
+end
+
 return {
   {
     enabled=true,
@@ -16,7 +61,8 @@ return {
         preset = {
           header = "            ▀" .. string.rep(" ", 7 + 6) .. "\n         █▀█▄█▀█▀█▀█" .. string.rep(" ", 6),
           keys = {
-            { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
+            -- { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "f", desc = "Find File - fzf",     action = ":lua require('fzf-lua').files()" },
             { icon = " ", key = "n", desc = "New File",      action = ":ene | startinsert" },
             { icon = " ", key = "g", desc = "Find Text",     action = ":lua Snacks.dashboard.pick('live_grep')" },
             { icon = " ", key = "r", desc = "Recent Files",  action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -67,13 +113,18 @@ return {
       },
       picker = {
         enabled = true,
-        file = {
-          --- * left: truncate the beginning of the path
-          --- * center: truncate the middle of the path
-          --- * right: truncate the end of the path
-          ---@type "left"|"center"|"right"
-          truncate = "left",
+        formatters = {
+          file = {
+            filename_first = true, -- Displays 'filename.lua  path/to/' instead of 'path/to/filename.lua'
+          },
         },
+        -- file = {
+        --   --- * left: truncate the beginning of the path
+        --   --- * center: truncate the middle of the path
+        --   --- * right: truncate the end of the path
+        --   ---@type "left"|"center"|"right"
+        --   truncate = "left",
+        -- },
         sources = {
           explorer = {
             hidden = true,
@@ -113,12 +164,13 @@ return {
       -- find
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-      { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      -- { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
+      { "<leader>ff", function() require('fzf-lua').files() end, desc = "Find Files" },  -- trying this out
       { "<leader>f*", function() Snacks.picker.files({ pattern = vim.fn.getreg("+") }) end, desc = "Find File in Clipboard" },
       { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help" },
       { "<leader>fp", function() Snacks.picker.pickers() end, desc = "Pickers" },
-      { "<leader>fp", function() Snacks.picker.projects() end, desc = "Projects" },
+      { "<leader>fP", function() Snacks.picker.projects() end, desc = "Projects" },
       -- { "<leader>fr", function() Snacks.picker.recent() end, desc = "Recent" },
       { "<leader>fr", function() Snacks.picker.resume() end, desc = "Resume" },
       { "<leader>fz", function() Snacks.picker.zoxide() end, desc = "Zoxide" },
@@ -132,6 +184,7 @@ return {
       { "<leader>gS", function() Snacks.picker.git_stash() end, desc = "Stash" },
       { "<leader>gd", function() Snacks.picker.git_diff() end, desc = "Diff (hunks)" },
       { "<leader>gf", function() Snacks.picker.git_log_file() end, desc = "Log (file)" },
+      { "<leader>gw", pick_worktrees, desc = "Worktrees" },
       -- Grep
       { "<leader>sb", function() Snacks.picker.lines() end, desc = "Buffer Lines" },
       { "<leader>sB", function() Snacks.picker.grep_buffers() end, desc = "Grep Open Buffers" },
@@ -143,14 +196,6 @@ return {
           Snacks.picker.grep_word({search = vim.fn.getreg("*")})
         end,
         desc = "Grep for word in * register",
-        mode = { "n", "x" }
-      },
-      {
-        '<leader>s"',
-        function()
-          Snacks.picker.grep_word({search = vim.fn.getreg('"')})
-        end,
-        desc = "Grep for word in \" register",
         mode = { "n", "x" }
       },
       -- search

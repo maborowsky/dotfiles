@@ -3,6 +3,20 @@ return {
     "coder/claudecode.nvim",
     -- "snirt/claudecode.nvim",
     dependencies = { "folke/snacks.nvim" },
+    init = function()
+      vim.api.nvim_create_user_command("ClaudeAgents", function()
+        Snacks.terminal.toggle("claude agents", {
+          win = {
+            position = "float",
+            width = 0.9,
+            height = 0.9,
+            border = "rounded",
+            title = " Claude Background Agents ",
+            title_pos = "center",
+          },
+        })
+      end, { desc = "Toggle Claude background agents overview" })
+    end,
     opts = {
       focus_after_send = false,
       open_in_new_tab = false,
@@ -32,10 +46,21 @@ return {
       -- { "<leader>a", nil, desc = "AI/Claude Code" },
       { "<leader>a", group = "Claude" },
       { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      { "<leader>ag", "<cmd>ClaudeAgents<cr>", mode = { "n", "t" }, desc = "Background agents overview" },
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
       { "<leader>aC", "<cmd>ClaudeCode --continue<cr>", desc = "Continue Claude" },
       { "<leader>ab", "<cmd>ClaudeCodeAdd %<cr>", desc = "Add current buffer" },
+      {
+        "<leader>ap",
+        function()
+          vim.cmd("enew")
+          vim.cmd("put +")
+          vim.bo.buftype = "nofile"
+          vim.bo.filetype = "markdown"
+        end,
+        desc = "Paste /copy into scratch buffer",
+      },
       { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
       {
         "<leader>as",

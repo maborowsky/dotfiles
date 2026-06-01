@@ -174,7 +174,15 @@ return {
         width = 0.3, -- Width of the file tree window
         filename_first = true, -- Show filename before directory path (Snacks backend only)
       },
-    }
+    },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "unified_tree",
+        callback = function()
+          vim.opt_local.wrap = false
+        end,
+      })
+    end,
   },
 
   {
@@ -188,8 +196,10 @@ return {
         -- "esmuellert/codediff.nvim",      -- optional
       },
       cmd = "Neogit",
+      -- kind: tab (default) | floating | split | vsplit | split_above | replace | auto
+      -- Set globally via opts = { kind = "floating" }, or per-invocation: :Neogit kind=floating
       keys = {
-        { "<leader>gg", "<cmd>Neogit<cr>", desc = "Show Neogit UI" }
+        { "<leader>gg", "<cmd>Neogit kind=floating<cr>", desc = "Show Neogit UI" }
       },
   },
 
@@ -205,5 +215,12 @@ return {
         },
       }
     end,
+  },
+  {
+    'kokusenz/deltaview.nvim',
+    dependencies = {
+      "kokusenz/delta.lua",
+    },
+    opts = {},
   },
 } -- end return

@@ -33,6 +33,7 @@ vim.cmd.packadd ('nvim.undotree')
 -- TODO: move to a colors file
 -- vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
 
+vim.api.nvim_set_hl(0, "WinSeparator", { bg = "NONE" })       
 
 
 
