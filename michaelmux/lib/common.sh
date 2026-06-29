@@ -29,6 +29,18 @@ repo_root() {
     die 2 "not in a git repo and MICHAELMUX_DEFAULT_REPO is unset"
 }
 
+# Repo root for unit-of-work commands (`a`). A unit of work belongs to the main
+# project, not whatever repo you happen to be browsing, so when
+# MICHAELMUX_DEFAULT_REPO is set it wins regardless of cwd. Otherwise this is
+# just repo_root (cwd's repo, or the same default as a fallback).
+uow_repo_root() {
+    if [[ -n "${MICHAELMUX_DEFAULT_REPO:-}" && -d "$MICHAELMUX_DEFAULT_REPO" ]]; then
+        printf '%s\n' "$MICHAELMUX_DEFAULT_REPO"
+        return
+    fi
+    repo_root
+}
+
 # Print the first kitty tab id whose any window has cwd == $1, or empty.
 kitty_tab_for_cwd() {
     local cwd="$1"

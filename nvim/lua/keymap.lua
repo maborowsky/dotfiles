@@ -118,16 +118,13 @@ vim.keymap.set("n", "<C-f>", ":NvimTreeFindFile<CR>", {noremap = true, silent = 
 
 
 -- Easy movement mappings
---noremap H ^
---noremap L $
--- noremap mode is 'nvo'
 -- vim.keymap.set({"n", "v", "o"}, "J", "}", {noremap = true})
 -- vim.keymap.set({"n", "v", "o"}, "K", "{", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "J", "6j", {noremap = true})
 vim.keymap.set({"n", "v", "o"}, "K", "6k", {noremap = true})
--- I've been using the above forever but <C-j>/<C-k> don't interfere with other maps so lets try
-vim.keymap.set({"n", "v", "o"}, "<C-j>", "6j", {noremap = true})
-vim.keymap.set({"n", "v", "o"}, "<C-k>", "6k", {noremap = true})
+-- trying these out
+vim.keymap.set({"n", "v", "o"}, "H", "^", {noremap = true})
+vim.keymap.set({"n", "v", "o"}, "L", "$", {noremap = true})
 
 
 -- vim.keymap.set("n", "<leader>G", "<cmd>G<cr>", {})
@@ -210,23 +207,15 @@ vim.keymap.set('n', '<leader>0', '<Cmd>BufferLineGoToBuffer -1<CR>', {noremap = 
 ---------------------------------
 -- Term
 ---------------------------------
-
--- <leader>t? or <c-t>
---Set trim_spaces=false for sending to REPLs for whitespace-sensitive languages like python. (For python, you probably want to start ipython with ipython --no-autoindent.)
--- local trim_spaces = true
--- vim.keymap.set("v", "<space>s", function()
---     require("toggleterm").send_lines_to_terminal("single_line", trim_spaces, { args = vim.v.count })
--- end)
--- For use as an operator map:
 -- Send motion to terminal
-vim.keymap.set("n", [[<leader><c-\>]], function()
+vim.keymap.set("n", [[<leader><c-/>]], function()
   set_opfunc(function(motion_type)
     require("toggleterm").send_lines_to_terminal(motion_type, false, { args = vim.v.count })
   end)
   vim.api.nvim_feedkeys("g@", "n", false)
 end)
 -- Double the command to send line to terminal
-vim.keymap.set("n", [[<leader><c-\><c-\>]], function()
+vim.keymap.set("n", [[<leader><c-/><c-/>]], function()
   set_opfunc(function(motion_type)
     require("toggleterm").send_lines_to_terminal(motion_type, false, { args = vim.v.count })
   end)
@@ -317,6 +306,31 @@ vim.keymap.set('n', '<leader>c', function() vim.lsp.buf.format { async = true } 
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
+vim.keymap.set(
+  'n',
+  '<leader>z',
+  function()
+    local ui = vim.api.nvim_list_uis()[1]
+    local width  = math.floor(ui.width * 0.8)
+    local height = math.floor(ui.height * 0.8)
+    local buf = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_open_win(buf, true, {
+      relative = 'editor',
+      width    = width,
+      height   = height,
+      row      = math.floor((ui.height - height) / 2),
+      col      = math.floor((ui.width  - width)  / 2),
+      style    = 'minimal',
+      border   = 'rounded',
+    })
+
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, vim.fn.systemlist({ 'zmx', 'list' }))
+
+    -- q to close
+    vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = buf, nowait = true })
+  end,
+  { desc = "zmx list" }
+)
 
 
 ------------------------------------------------------------------

@@ -25,7 +25,21 @@ return {
       end, {})
     end,
   },
-  { 'nvim-mini/mini.ai', version = false },
+  {
+    'nvim-mini/mini.ai',
+    version = false,
+    config = function()
+      require('mini.ai').setup({
+        -- These conflict with defaults, see :h MiniAi-default-an-in
+        mappings = {
+          around_next = 'aN',
+          inside_next = 'iN',
+          around_last = 'aL',
+          inside_last = 'iL',
+        }
+      })
+    end,
+  },
   {
     'nvim-mini/mini.misc',
     version = false,
@@ -95,4 +109,90 @@ return {
         { desc = 'Reset diff ref to index (mini.diff)' })
     end,
   },
+  {
+    'nvim-mini/mini.input',
+    version = false,
+    enabled = false, -- switched back to tiny-cmdline
+    config = function()
+      -- `setup()` creates the global `MiniInput` table used below
+      require('mini.input').setup()
+
+      -- Build `MiniInput.get()` options for an editor-centered floating prompt.
+      -- `prompt` is rendered inline (e.g. ": " or "lua ") via `include_prompt`,
+      -- so the border title is blanked to avoid showing it twice.
+      local function make_opts(prompt, parser, completion)
+        local highlight_parser = MiniInput.gen_highlight.treesitter(parser)
+        local highlight = function(state)
+          state = highlight_parser(state) or state
+          return MiniInput.default_highlight(state) or state
+        end
+        return {
+          prompt = prompt,
+          scope = 'editor',
+          completion = completion,
+          handlers = {
+            view = MiniInput.gen_view.floatwin({
+              style = 'MM',
+              to_chunks = function(state, max_width)
+                return MiniInput.state_to_chunks(state, max_width, { include_prompt = true })
+              end,
+              adjust_config = function(_, config)
+                local width = math.floor(vim.o.columns * 0.5)
+                config.width = width
+                config.col = math.floor((vim.o.columns - width) / 2)
+                config.border = 'rounded'
+                config.title = '' -- prompt is shown inline instead
+                return config
+              end,
+            }),
+            highlight = highlight,
+          },
+        }
+      end
+
+      -- `:` — run input as an Ex command
+      local cmdline_opts = make_opts(':', 'vim', 'cmdline')
+      vim.keymap.set('n', ':', function()
+        local cmd = MiniInput.get(cmdline_opts)
+        if cmd ~= nil then vim.cmd(cmd) end
+      end)
+
+      -- `<C-:>` — run input as Lua
+      local lua_opts = make_opts('lua', 'lua', 'lua')
+      vim.keymap.set('n', '<C-:>', function()
+        local cmd = MiniInput.get(lua_opts)
+        if cmd ~= nil then vim.cmd('lua ' .. cmd) end
+      end)
+    end,
+  },
+
+  {
+    'nvim-mini/mini.colors',
+    version = false,
+    config = function()
+      require('mini.colors').setup()
+    end,
+  },
+
+  {
+    'nvim-mini/mini.jump',
+    enabled = false,
+    version = false,
+    config = function()
+      require('mini.jump').setup()
+    end,
+  },
+
+  {
+    'nvim-mini/mini.jump2d',
+    enabled = false,  -- Using flash.nvim for 2d jumping
+    version = false,
+    config = function()
+      require('mini.jump2d').setup()
+    end,
+  },
+
 }
+
+
+

@@ -50,16 +50,17 @@ return {
           return 20
         end
       end,
-      -- open_mapping omitted; the keymap below routes <count><C-\> through
+      -- open_mapping omitted; the keymap below routes <count><C-/> through
       -- Terminal:new() with a per-slot `zmx a <count>` cmd. toggleterm's
       -- shell opt resolves once with no term context, so it can't differentiate
       -- slots on its own.
+      open_mapping = [[<c-/>]],
+      direction = "horizontal", -- claude has been vertical lately
       start_in_insert = true,
       insert_mappings = true,
       terminal_mappings = true,
       persist_mode = true,
       shade_terminals = false,
-      direction = "vertical",
       windbar = { enabled = true },
       float_opts = {
         border = 'curved',
@@ -91,13 +92,13 @@ return {
         }):toggle()
       end
 
-      vim.keymap.set('n', [[<C-\>]], function()
-        toggle_slot(vim.v.count > 0 and vim.v.count or 1)
-      end, { desc = 'Toggle zmx terminal (count = slot)' })
-
-      vim.keymap.set({ 't', 'i' }, [[<C-\>]], function()
-        toggle_slot(vim.b.toggle_number or 1)
-      end, { desc = 'Toggle current zmx terminal' })
+      -- vim.keymap.set('n', [[<C-/>]], function()
+      --   toggle_slot(vim.v.count > 0 and vim.v.count or 1)
+      -- end, { desc = 'Toggle zmx terminal (count = slot)' })
+      --
+      -- vim.keymap.set({ 't', 'i' }, [[<C-/>]], function()
+      --   toggle_slot(vim.b.toggle_number or 1)
+      -- end, { desc = 'Toggle current zmx terminal' })
 
       -- Reflow: kill the zmx client so toggleterm respawns it at the current
       -- window size. The zmx daemon persists, so reattach replays a fresh

@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-MICHAELMUX_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Resolve this script through any symlinks (e.g. ~/.local/bin/michaelmux) so
+# MICHAELMUX_ROOT points at the real repo and all lib/ files load from there.
+_mm_src="${BASH_SOURCE[0]}"
+while [[ -h "$_mm_src" ]]; do
+    _mm_dir="$(cd -P "$(dirname "$_mm_src")" && pwd)"
+    _mm_src="$(readlink "$_mm_src")"
+    [[ "$_mm_src" != /* ]] && _mm_src="$_mm_dir/$_mm_src"
+done
+MICHAELMUX_ROOT="$(cd -P "$(dirname "$_mm_src")/.." && pwd)"
+unset _mm_src _mm_dir
 # shellcheck source=../lib/common.sh
 source "$MICHAELMUX_ROOT/lib/common.sh"
 
@@ -10,22 +19,40 @@ usage() {
 Usage: michaelmux <command> [args]
 
 Commands:
+  a [--jira <key>] [--pr <num-or-url>] [--no-zmx] <name>
+                        Upsert a unit of work into ~/.local/michaelmux.json.
+                        New names get branch michael/<name>, a worktree, and
+                        a kitty tab running a zmx session named <name>;
+                        existing names just merge flags + print.
   open [-c] [-z] [--base <ref>] <branch-or-pr>
                         Create/find worktree, open or focus kitty tab.
                         -c/--create makes the branch if it doesn't exist.
                         -z/--zmx wraps the tab in a zmx session named after
                         the tab title. MICHAELMUX_USE_ZMX=1 makes it default.
+  adopt [name] [--tab <id>] [--jira <key>] [--pr <num-or-url>]
+                        Register an already-open kitty tab as a unit of work:
+                        write its state entry, set its title, export
+                        MICHAELMUX_UOW_NAME. Defaults to the current tab and
+                        its title; creates no branch/worktree/tab.
   list                  Show worktrees with tab + PR status.
   goto <name>           Focus or open the tab for a worktree.
+  devcontainer [<name>] Run \`devcontainer up\` in a worktree (foreground).
+                        <name> resolves via state; no name uses the cwd worktree.
+  rn [<name>]           Rename the current kitty tab to the michaelmux name.
+                        No name uses \$MICHAELMUX_UOW_NAME or the current branch.
   ps                    Show kitty tabs and zmx sessions with git context.
 EOF
 }
 
 cmd="${1:-}"; shift || true
 case "$cmd" in
+    a)     source "$MICHAELMUX_ROOT/lib/cmd_a.sh";     cmd_a     "$@" ;;
     open)  source "$MICHAELMUX_ROOT/lib/cmd_open.sh";  cmd_open  "$@" ;;
+    adopt) source "$MICHAELMUX_ROOT/lib/cmd_adopt.sh"; cmd_adopt "$@" ;;
     list)  source "$MICHAELMUX_ROOT/lib/cmd_list.sh";  cmd_list  "$@" ;;
     goto)  source "$MICHAELMUX_ROOT/lib/cmd_goto.sh";  cmd_goto  "$@" ;;
+    devcontainer) source "$MICHAELMUX_ROOT/lib/cmd_devcontainer.sh"; cmd_devcontainer "$@" ;;
+    rn)    source "$MICHAELMUX_ROOT/lib/cmd_rn.sh";    cmd_rn    "$@" ;;
     ps)    source "$MICHAELMUX_ROOT/lib/cmd_ps.sh";    cmd_ps    "$@" ;;
     -h|--help|help|"") usage ;;
     *) echo "unknown command: $cmd" >&2; usage >&2; exit 1 ;;

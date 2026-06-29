@@ -61,8 +61,7 @@ return {
         preset = {
           header = "            ▀" .. string.rep(" ", 7 + 6) .. "\n         █▀█▄█▀█▀█▀█" .. string.rep(" ", 6),
           keys = {
-            -- { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
-            { icon = " ", key = "f", desc = "Find File - fzf",     action = ":lua require('fzf-lua').files()" },
+            { icon = " ", key = "f", desc = "Find File",     action = ":lua Snacks.dashboard.pick('files')" },
             { icon = " ", key = "n", desc = "New File",      action = ":ene | startinsert" },
             { icon = " ", key = "g", desc = "Find Text",     action = ":lua Snacks.dashboard.pick('live_grep')" },
             { icon = " ", key = "r", desc = "Recent Files",  action = ":lua Snacks.dashboard.pick('oldfiles')" },
@@ -129,7 +128,13 @@ return {
           explorer = {
             hidden = true,
             ignored = true,
+            exclude = { ".worktrees" },
           },
+          files = { exclude = { ".worktrees" } },
+          grep = { exclude = { ".worktrees" } },
+          smart = { exclude = { ".worktrees" } },
+          grep_buffers = { exclude = { ".worktrees" } },
+          lines = { exclude = { ".worktrees" } },
         },
       },
       notifier = {
@@ -164,8 +169,7 @@ return {
       -- find
       { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-      -- { "<leader>ff", function() Snacks.picker.files() end, desc = "Find Files" },
-      { "<leader>ff", function() require('fzf-lua').files() end, desc = "Find Files" },  -- trying this out
+      { "<leader>ff", function() Snacks.picker.files({ layout = "vscode" }) end, desc = "Find Files" },
       { "<leader>f*", function() Snacks.picker.files({ pattern = vim.fn.getreg("+") }) end, desc = "Find File in Clipboard" },
       { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Find Git Files" },
       { "<leader>fh", function() Snacks.picker.help() end, desc = "Help" },

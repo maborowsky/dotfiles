@@ -1,6 +1,9 @@
 export XDG_CONFIG_HOME="$HOME/.config"
 export GITHUB_PERSONAL_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "github_pat" -w)
-export CLAUDE_CODE_EFFORT_LEVEL=high
+# Disabled: exporting CLAUDE_CODE_OAUTH_TOKEN forces Claude Code into token-auth ("Claude API")
+# on every cold start, overriding subscription login. Let Claude Code read the keychain itself.
+# export CLAUDE_CODE_OAUTH_TOKEN=$(security find-generic-password -a "$USER" -s "Claude Code-credentials" -w | jq -r '.claudeAiOauth.accessToken')
+# export CLAUDE_CODE_EFFORT_LEVEL=high
 
 # PATH
 typeset -U path
@@ -25,6 +28,25 @@ fi
 export MICHAELMUX_DEFAULT_REPO="$HOME/src/torchweb"
 alias mm_ps="michaelmux ps"
 alias mmps="michaelmux ps"
+alias mm="michaelmux"
+# function mm() {
+#     local uow_name="$2"
+#     if [[ "$1" == "a" ]]; then
+#         shift
+#         michaelmux a "$@"
+#     elif [[ "$1" == "ps" ]]; then
+#         michaelmux ps
+#     elif [[ "$1" == "cw" ]]; then
+#         if [[ -d .worktrees/"$uow_name" ]]; then
+#             : # worktree already exists, just switch into it
+#         elif git show-ref --verify --quiet refs/heads/michael/"$uow_name"; then
+#             git worktree add .worktrees/"$uow_name" michael/"$uow_name"
+#         else
+#             git worktree add -b michael/"$uow_name" .worktrees/"$uow_name"
+#         fi
+#         cd .worktrees/"$uow_name"
+#     fi
+# }
 
 # Aliases
 alias vim=nvim
@@ -121,6 +143,27 @@ compinit
 
 # fzf worktrees - WIP
 # (cds && git worktree list | fzf | awk '{print $1}')
+# from: https://www.reddit.com/r/ClaudeAI/comments/1llq3d0/quick_jump_between_worktrees_with_claude_code_fzf/
+lw() {
+  local roots=(
+    "$HOME/src/torchweb"
+  )
+
+  local all_paths=()
+  for p in "${roots[@]}"; do
+    if [ -d "$p/.git" ]; then
+      all_paths+=("$p")
+      if git -C "$p" worktree list &>/dev/null; then
+        while IFS= read -r wt; do
+          all_paths+=("$wt")
+        done < <(git -C "$p" worktree list --porcelain | grep '^worktree ' | awk '{print $2}')
+      fi
+    fi
+  done
+
+  local selected=$(printf '%s\n' "${all_paths[@]}" | sort -u | fzf)
+  [ -n "$selected" ] && cd "$selected"
+}
 
 # Abduco/Tmux/zmx
 # trying out abduco but it's annoying that <C-\> conflicts with terminal in nvim

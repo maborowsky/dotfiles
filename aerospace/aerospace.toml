@@ -233,3 +233,11 @@ run = ["layout tiling"]
 # All other windows default to floating.
 [[on-window-detected]]
 run = ["layout floating"]
+
+# Ghostty's tabs are considered separate windows right now
+# https://ghostty.org/docs/help/macos-tiling-wms
+[[on-window-detected]]
+if.app-id="com.mitchellh.ghostty"
+run= [
+  "layout tiling",
+]

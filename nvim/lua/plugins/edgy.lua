@@ -1,6 +1,7 @@
 return {
   {
     "folke/edgy.nvim",
+    enabled=false,
     event = "VeryLazy",
     opts = function(_, opts)
       for _, pos in ipairs({ "top", "bottom", "left", "right" }) do

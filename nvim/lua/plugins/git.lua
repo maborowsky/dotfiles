@@ -218,9 +218,6 @@ return {
   },
   {
     'kokusenz/deltaview.nvim',
-    dependencies = {
-      "kokusenz/delta.lua",
-    },
     opts = {},
   },
 } -- end return

@@ -26,8 +26,28 @@ config.line_height = 1.2
 -- https://wezterm.org/config/lua/config/window_decorations.html
 -- other options: INTEGRATED_BUTTONS
 -- nightly: MACOS_USE_BACKGROUND_COLOR_AS_TITLEBAR_COLOR, MACOS_FORCE_SQUARE_CORNERS
+--          MACOS_FORCE_SQUARE_CORNERS -- not compatible with TITLE or INTEGRATED_BUTTONS
 config.use_fancy_tab_bar = false
-config.window_decorations = "MACOS_FORCE_DISABLE_SHADOW|RESIZE"
+-- config.window_decorations = "MACOS_FORCE_DISABLE_SHADOW|RESIZE"
+config.window_decorations = "INTEGRATED_BUTTONS|MACOS_FORCE_DISABLE_SHADOW|RESIZE"
+config.integrated_title_button_style = "Windows"
+config.integrated_title_button_alignment = "Right"
+
+local function title_button(glyph)
+  return wezterm.format {
+    { Foreground = { Color = '#54546d' } },
+    { Text = ' ' .. glyph .. ' ' },
+  }
+end
+
+config.tab_bar_style = {
+  window_hide = title_button('‒'),
+  window_hide_hover = title_button('‒'),
+  window_maximize = title_button('□'),
+  window_maximize_hover = title_button('□'),
+  window_close = title_button('×'),
+  window_close_hover = title_button('×'),
+}
 
 
 config.leader = {

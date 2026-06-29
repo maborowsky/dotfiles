@@ -142,7 +142,7 @@ _ensure_worktree() {
 }
 
 _open_or_focus_tab() {
-    local wt="$1" title="$2" use_zmx="${3:-0}"
+    local wt="$1" title="$2" use_zmx="${3:-0}" uow="${4:-}"
     local tab_id; tab_id="$(kitty_tab_for_cwd "$wt")"
     if [[ -n "$tab_id" ]]; then
         kitty @ focus-tab --match "id:$tab_id"
@@ -150,15 +150,20 @@ _open_or_focus_tab() {
         return
     fi
 
+    local env_args=()
+    [[ -n "$uow" ]] && env_args+=(--env "MICHAELMUX_UOW_NAME=$uow")
+
     if (( use_zmx )); then
         kitty @ launch --type=tab \
             --tab-title "$title" \
             --cwd "$wt" \
+            ${env_args[@]+"${env_args[@]}"} \
             zmx attach "$title" >/dev/null
     else
         kitty @ launch --type=tab \
             --tab-title "$title" \
-            --cwd "$wt" >/dev/null
+            --cwd "$wt" \
+            ${env_args[@]+"${env_args[@]}"} >/dev/null
     fi
 }
 

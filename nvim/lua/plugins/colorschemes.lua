@@ -42,7 +42,6 @@ return {
       -- vim.cmd("colorscheme terafox")
     end,
   },
-  { "rose-pine/neovim", name = "rose-pine" },
   {
     "rjshkhr/shadow.nvim",
     priority = 1000,
@@ -59,17 +58,6 @@ return {
     -- config = function()
     --   vim.cmd.colorscheme('naysayer')
     -- end,
-  },
-  {
-    'sainnhe/everforest',
-    enabled=false,
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.g.everforest_background = 'medium'  -- soft, medium, hard
-      -- vim.api.nvim_set_hl(0, "PmenuSel", {})
-      -- vim.cmd("colorscheme everforest")
-    end
   },
   {
     -- Lua everforest. not sure if it'll be very different
@@ -142,25 +130,9 @@ return {
     end, -- end config
   },
   {
-    "webhooked/kanso.nvim",
-    enabled=false,
-    lazy = false,
-    priority = 1000,
-    -- config = function()
-    --   vim.cmd.colorscheme("kanso-mist")  -- mist is my favorite
-    -- end,
-  },
-  -- {
-  --   "mcauley-penney/phobos-anomaly.nvim",
-  --   config = function()
-  --     -- vim.cmd.colorscheme("phobos-anomaly")
-  --   end,
-  --   priority = 1000
-  -- },
-  {
     dir = "~/src/eye-see.nvim",
     enabled = function()
-      return vim.fn.isdirectory(vim.fn.expand("~/src/eye-see")) == 1
+      return vim.fn.isdirectory(vim.fn.expand("~/src/eye-see.nvim")) == 1
     end,
     config = function()
       -- vim.api.nvim_set_hl(0, "@keyword.return", { fg =  })
@@ -176,6 +148,14 @@ return {
         style = 'darker'
       }
       -- require('onedark').load()
+    end
+  },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    config = function()
+      -- vim.cmd.colorscheme("catppuccin-macchiato")
     end
   },
 }
