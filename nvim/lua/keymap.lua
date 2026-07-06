@@ -276,12 +276,50 @@ vim.keymap.set("n", "<C-L>", "<C-W><C-L>")
 vim.keymap.set("n", "<C-H>", "<C-W><C-H>")
 vim.keymap.set("n", "<C-Q>", ":q<cr>")
 
--- Resizing
--- NOTE: these only work for horizontal, as it's using winheight
--- NOTE: these are kinda dumb anyway
---vim.keymap.set("n", "<Leader>+", ":exe \"resize " .. (vim.fn.winheight(0) * 3/2) .. "<CR>", {silent = true})
---vim.keymap.set("n", "<Leader>-", ":exe \"resize " .. (vim.fn.winheight(0) * 2/3) .. "<CR>", {silent = true})
--- vim.keymap.set("n", "<Leader>=", "<C-w>=")
+-- Resize submode: <C-w>r, then tap h/j/k/l repeatedly; any other key exits
+-- (shadows the native <C-w>r window-rotate)
+vim.keymap.set("n", "<C-w>r", function()
+  vim.api.nvim_echo({ { "resize: h/j/k/l (any other key exits)" } }, false, {})
+  while true do
+    local ok, ch = pcall(vim.fn.getcharstr)
+    if not ok then break end
+    -- height resizes with no window above/below spill rows into the
+    -- cmdline area (cmdheight grows); pin it so tiny-cmdline's 0 survives
+    local cmdheight = vim.o.cmdheight
+    -- h/j/k/l drag the window's divider in that direction: grow/shrink is
+    -- inverted at the right/bottom edge, where the divider is on the other side
+    local win = vim.fn.winnr()
+    if ch == "h" or ch == "l" then
+      local grow = (ch == "l") ~= (vim.fn.winnr("l") == win)
+      vim.cmd("vertical resize " .. (grow and "+3" or "-3"))
+    elseif ch == "j" or ch == "k" then
+      local grow = (ch == "j") ~= (vim.fn.winnr("j") == win)
+      vim.cmd("resize " .. (grow and "+2" or "-2"))
+    else break end
+    if vim.o.cmdheight ~= cmdheight then vim.o.cmdheight = cmdheight end
+    vim.cmd("redraw")
+  end
+  vim.api.nvim_echo({}, false, {})
+end, { desc = "[R]esize windows" })
+
+-- Percentage resizes: :Vr 30 → window takes 30% of total width, :Hr 30 → 30% of total height
+vim.api.nvim_create_user_command("Vr", function(opts)
+  local pct = tonumber(opts.args)
+  if not pct or pct <= 0 or pct > 100 then
+    print("Usage: [VerticalResize] :Vr {number (%)}")
+    return
+  end
+  vim.cmd("vertical resize " .. math.floor(vim.o.columns * pct / 100))
+end, { nargs = 1 })
+
+vim.api.nvim_create_user_command("Hr", function(opts)
+  local pct = tonumber(opts.args)
+  if not pct or pct <= 0 or pct > 100 then
+    print("Usage: [HorizontalResize] :Hr {number (%)}")
+    return
+  end
+  vim.cmd("resize " .. math.floor((vim.o.lines - vim.o.cmdheight) * pct / 100))
+end, { nargs = 1 })
 -------------------------------------------------------------------------------
 
 

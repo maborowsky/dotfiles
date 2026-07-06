@@ -74,7 +74,6 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
-      -- TODO: add in desc for which key
       require('gitsigns').setup({
         signs_staged_enable = true,
         on_attach = function(bufnr)
@@ -89,58 +88,69 @@ return {
           -- Navigation
           map('n', ']c', function()
             if vim.wo.diff then
-              vim.cmd.normal({']c', bang = true})
+              vim.cmd.normal({ ']c', bang = true })
             else
               gitsigns.nav_hunk('next', { target = 'all' })
             end
-          end)
+          end, { desc = 'Next Git [C]hange/hunk' })
 
           map('n', '[c', function()
             if vim.wo.diff then
-              vim.cmd.normal({'[c', bang = true})
+              vim.cmd.normal({ '[c', bang = true })
             else
               gitsigns.nav_hunk('prev', { target = 'all' })
             end
-          end)
+          end, { desc = 'Prev Git [C]hange/hunk' })
 
-          -- Actions
-          map('n', '<leader>ghs', gitsigns.stage_hunk, { desc = 'Stage hunk' })
-          map('n', '<leader>ghr', gitsigns.reset_hunk, { desc = 'Reset hunk' })
-
-          map('v', '<leader>ghs', function()
-            gitsigns.stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-          end, { desc = 'Stage selection' })
-
-          map('v', '<leader>ghr', function()
-            gitsigns.reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
-          end, { desc = 'Reset selection' })
-
-          map('n', '<leader>ghS', gitsigns.stage_buffer,  { desc = 'Stage buffer' })
-          map('n', '<leader>ghR', gitsigns.reset_buffer,  { desc = 'Reset buffer' })
-
-          map('n', '<leader>ghb', function()
-            gitsigns.blame_line({ full = true })
-          end, { desc = 'Blame line' })
-
-          map('n', '<leader>ghd', gitsigns.diffthis, { desc = 'Diff against index' })
-
-          map('n', '<leader>ghD', function()
-            gitsigns.diffthis('~')
-          end, { desc = 'Diff against last commit' })
-
-          map('n', '<leader>ghQ', function() gitsigns.setqflist('all') end, { desc = 'Quickfix all hunks' })
-          map('n', '<leader>ghq', gitsigns.setqflist, { desc = 'Quickfix buffer hunks' })
+          -- Text object
+          map({ 'o', 'x' }, 'ih', gitsigns.select_hunk, { desc = 'Select hunk' })
 
           -- Toggles
           -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame)
           -- map('n', '<leader>tw', gitsigns.toggle_word_diff)
-
-          -- Text object
-          map({'o', 'x'}, 'ih', gitsigns.select_hunk)
-        end
+        end,
       })
     end,
     keys = {
+      -- Actions
+      { '<leader>ghs', function() require('gitsigns').stage_hunk() end, desc = 'Stage hunk' },
+      { '<leader>ghr', function() require('gitsigns').reset_hunk() end, desc = 'Reset hunk' },
+      {
+        '<leader>ghs',
+        function()
+          require('gitsigns').stage_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+        end,
+        mode = 'v',
+        desc = 'Stage selection',
+      },
+      {
+        '<leader>ghr',
+        function()
+          require('gitsigns').reset_hunk({ vim.fn.line('.'), vim.fn.line('v') })
+        end,
+        mode = 'v',
+        desc = 'Reset selection',
+      },
+      { '<leader>ghS', function() require('gitsigns').stage_buffer() end, desc = 'Stage buffer' },
+      { '<leader>ghR', function() require('gitsigns').reset_buffer() end, desc = 'Reset buffer' },
+      {
+        '<leader>ghb',
+        function() require('gitsigns').blame_line({ full = true }) end,
+        desc = 'Blame line',
+      },
+      { '<leader>ghd', function() require('gitsigns').diffthis() end, desc = 'Diff against index' },
+      {
+        '<leader>ghD',
+        function() require('gitsigns').diffthis('~') end,
+        desc = 'Diff against last commit',
+      },
+      {
+        '<leader>ghQ',
+        function() require('gitsigns').setqflist('all') end,
+        desc = 'Quickfix all hunks',
+      },
+      { '<leader>ghq', function() require('gitsigns').setqflist() end, desc = 'Quickfix buffer hunks' },
+
       {
         '<leader>ghp',
         function() require('gitsigns').preview_hunk() end,

@@ -1,5 +1,5 @@
 export XDG_CONFIG_HOME="$HOME/.config"
-export GITHUB_PERSONAL_ACCESS_TOKEN=$(security find-generic-password -a "$USER" -s "github_pat" -w)
+export GITHUB_PERSONAL_ACCESS_TOKEN=$(gh auth token 2>/dev/null)
 # Disabled: exporting CLAUDE_CODE_OAUTH_TOKEN forces Claude Code into token-auth ("Claude API")
 # on every cold start, overriding subscription login. Let Claude Code read the keychain itself.
 # export CLAUDE_CODE_OAUTH_TOKEN=$(security find-generic-password -a "$USER" -s "Claude Code-credentials" -w | jq -r '.claudeAiOauth.accessToken')
@@ -73,7 +73,7 @@ alias solr_reindex="docker exec webapp python manage.py search batch_sync_reinde
 alias solr_suggestions="docker exec webapp python manage.py search rebuild_suggestions"
 
 # Docker
-alias docker_login='echo $GITHUB_PERSONAL_ACCESS_TOKEN | docker login ghcr.io -u michael.borowsky@torchdental.com --password-stdin'
+alias docker_login='echo $GITHUB_PERSONAL_ACCESS_TOKEN | docker login ghcr.io -u maborowsky --password-stdin'
 
 # kubernetes
 alias kubectl_context="kubectl config current-context"

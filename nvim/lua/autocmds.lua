@@ -6,7 +6,7 @@ augroup("YankHighlight", { clear = true })
 autocmd("TextYankPost", {
   group = "YankHighlight",
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.hl_op()
   end,
 })
 
@@ -35,6 +35,16 @@ augroup("JsonNoConceal", { clear = true })
 autocmd("FileType", {
   group = "JsonNoConceal",
   pattern = { "json", "jsonc", "json5" },
+  callback = function()
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- Disable conceal for daily notes (raw markdown is easier to edit there).
+augroup("DailyNotesNoConceal", { clear = true })
+autocmd({ "BufReadPost", "BufNewFile" }, {
+  group = "DailyNotesNoConceal",
+  pattern = { "*/notes/daily/*.md" },
   callback = function()
     vim.opt_local.conceallevel = 0
   end,

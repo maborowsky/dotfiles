@@ -3,7 +3,10 @@ return {
   { 'nvim-tree/nvim-web-devicons' },
 
   -- Movement
-  { 'wellle/targets.vim' },
+  {
+    'wellle/targets.vim',
+    enabled = false,  -- I don't think we need this with mini.ai
+  },
 
   -- Interface
   -- {

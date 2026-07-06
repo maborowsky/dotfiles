@@ -5,22 +5,32 @@
 --     - :)
 -------------------------------------------------
 
+-- Leader must be set BEFORE lazy.setup() (in config.lazy), because lazy.nvim
+-- resolves plugin `keys` specs into real mappings at setup time using the
+-- current mapleader. options.lua also sets it, but that runs too late.
 vim.g.mapleader = ' '
 
-vim.g['&t_8f'] = "<Esc>[38;2;%lu;%lu;%lum"
-vim.g['&t_8b'] = "<Esc>[48;2;%lu;%lu;%lum"
+-- Lsp
+vim.lsp.enable({
+  -- Python
+  'ruff',
+  'zuban',
+  -- Other
+  'lua_ls',
+  'ts_ls',
+  'clangd',
+})
 
 require("config.lazy")
 require('keymap')
-require('lsp')
 require('autocmds')
 -- require('auto-chains')
 
 
 -- Nvim 0.12 built in undotree
 -- has to be after Lazy setup
-vim.cmd.packadd ('nvim.undotree')
--- vim.cmd.packadd ('nvim.difftool') -- git config calls -c packadd difftool
+vim.cmd.packadd('nvim.undotree')
+-- vim.cmd.packadd('nvim.difftool') -- git config calls -c packadd difftool
 
 
 -- Moving to vim.pack testing
@@ -32,7 +42,6 @@ vim.cmd.packadd ('nvim.undotree')
 
 -- TODO: move to a colors file
 -- vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { link = "DiagnosticWarn" })
-
 vim.api.nvim_set_hl(0, "WinSeparator", { bg = "NONE" })       
 
 

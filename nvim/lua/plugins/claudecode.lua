@@ -39,14 +39,14 @@ return {
         -- auto_close_on_accept = true, -- Close diff windows after accepting
         -- vertical_split = true, -- Use vertical splits for diffs
         keep_terminal_focus = true, -- Keep focus on Claude terminal
-        auto_resize_terminal = true,  -- let the plugin manage terminal
+        auto_resize_terminal = false, -- resizes garble Claude's TUI (stale scrollback); testing off
       },
     },
     keys = {
       { "<c-enter>", "<cmd>ClaudeCode<cr>", mode = {"n", "t"}, desc = "Toggle Claude" },
       -- { "<leader>a", nil, desc = "AI/Claude Code" },
       { "<leader>a", group = "Claude" },
-      { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
+      -- { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
       { "<leader>ag", "<cmd>ClaudeAgents<cr>", desc = "Background agents overview" },
       { "<leader>af", "<cmd>ClaudeCodeFocus<cr>", desc = "Focus Claude" },
       { "<leader>ar", "<cmd>ClaudeCode --resume<cr>", desc = "Resume Claude" },
@@ -62,6 +62,30 @@ return {
           vim.bo.filetype = "markdown"
         end,
         desc = "Paste /copy into scratch buffer",
+      },
+      {
+        "<leader>ac",
+        function()
+          local path = "/tmp/claude-" .. vim.uv.getuid() .. "/response.md"
+          if vim.fn.filereadable(path) == 0 then
+            vim.notify("No /copy output at " .. path, vim.log.levels.WARN)
+            return
+          end
+          local win = Snacks.win({
+            file = path,
+            width = 0.8,
+            height = 0.8,
+            border = "rounded",
+            title = " Claude /copy ",
+            title_pos = "center",
+            wo = { wrap = true },
+          })
+          -- /copy rewrites the file in place; reload if the buffer is stale
+          vim.api.nvim_buf_call(win.buf, function()
+            vim.cmd("silent! checktime")
+          end)
+        end,
+        desc = "Open /copy output in float",
       },
       { "<leader>as", "<cmd>ClaudeCodeSend<cr>", mode = "v", desc = "Send to Claude" },
       {

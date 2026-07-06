@@ -1,44 +1,76 @@
+-- Formatting copied from: https://github.com/echasnovski/nvim/blob/master/plugin/10_options.lua
 local opt = vim.opt
 
--- " Save from insert mode
--- " inoremap :w <Esc>:w
--- " inoremap :W <Esc>:w
+
+-- General ====================================================================
+vim.g.mapleader = ' '
+vim.o.mousescroll = 'ver:3,hor:6' -- Customize mouse scroll
+vim.o.switchbuf = 'usetab'      -- Use already opened buffers when switching
+vim.o.undofile = true           -- Enable persistent undo
+vim.o.updatetime = 200
 
 
--- Don't show mode
--- set noshowmode
-
+-- UI =========================================================================
+vim.o.breakindent = false       -- Indent wrapped lines to match line start
 opt.showtabline = 2
-
 opt.termguicolors = true
-
 vim.o.laststatus = 3
+vim.o.signcolumn = 'yes'
+vim.o.splitright = true
+vim.o.splitbelow = true
+vim.o.splitkeep = "screen"
+vim.o.number = true
+vim.o.relativenumber = false
+-- vim.o.winborder = 'shadow'
+vim.o.wrap = true
+vim.o.conceallevel=1  -- Required for obsidian
+
+-- Folds
+-- https://www.reddit.com/r/neovim/comments/1t3aftx/any_good_pluginssetups_for_folds/
+vim.o.foldenable = true
+vim.o.foldmethod = "expr"
+-- vim.o.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.o.foldexpr = "v:lua.vim.lsp.foldexpr()"
+vim.wo.foldtext = 'v:lua.vim.treesitter.foldtext()'
+vim.o.foldlevelstart = 99
+vim.opt.fillchars = {
+  fold = " ",
+  foldopen = "▾",
+  foldclose = "▸",
+  foldinner = " ",
+  foldsep = " ",
+}
+
+
+-- Editing ====================================================================
+vim.o.autoindent    = true       -- Use auto indent
+vim.o.expandtab     = true       -- Convert tabs to spaces
+vim.o.formatoptions = 'rqnl1j'   -- Improve comment editing
+vim.o.tabstop = 4
+vim.o.softtabstop = 4
+vim.o.shiftwidth = 4
+vim.o.smartindent = true
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.incsearch     = true       -- Show search matches while typing
+vim.o.infercase     = true       -- Infer case in built-in completion
+vim.o.virtualedit   = 'block'    -- Allow going past end of line in blockwise mode
+vim.o.iskeyword = '@,48-57,_,192-255,-' -- Treat dash as `word` textobject part
+
+-- Python
+vim.g.python_indent = {
+  closed_paren_align_last_line = false,
+  open_paren = "shiftwidth()",
+  continue = "shiftwidth()",
+  nested_paren = "shiftwidth()",
+}
+
+
+-- Other ======================================================================
+
 opt.spell = true
 
---Decrease update time
-opt.updatetime = 50
-vim.wo.signcolumn = 'yes'
-
--- Tabs
-opt.tabstop = 4
-opt.softtabstop = 4
-opt.shiftwidth = 4
-opt.expandtab = true
-opt.smartindent = true
-
-opt.wrap = true
-
-opt.nu = true
---vim.o.nu = 'rnu'
-opt.relativenumber = true
-
--- Mouse support -- default 'nvi'
--- vim.o.mouse='nvi'
-
-
 opt.scrolloff = 8
--- Always show at least one line left/right of the cursor.
--- set sidescrolloff=5
 
 -- opt.colorcolumn = "88"
 
@@ -46,37 +78,10 @@ opt.scrolloff = 8
 -- default: 'internal,filler,closeoff'
 vim.opt.diffopt = {'internal', 'filler', 'closeoff', 'indent-heuristic', 'algorithm:histogram', 'linematch:60'}
 
-
 -- tab completion
 vim.o.wildmode='longest:full,full'
 
-vim.o.splitright = true
-
-vim.o.ignorecase = true
-vim.o.smartcase = true
-
--- vim.o.previewheight=20
-
--- trying this for edgy
-vim.opt.splitkeep = "screen"
-
-
--- Highlight folds
-vim.wo.foldtext = 'v:lua.vim.treesitter.foldtext()'
-
-
--- Treesitter folding
-vim.opt.foldmethod='expr'
-vim.opt.foldexpr='nvim_treesitter#foldexpr()'
-vim.opt.foldenable = false
-
-
---  Autosave
-vim.g.auto_save = 1
-vim.g.auto_save_events = {"InsertLeave", "TextChanged"}
-
 -- Diagnostics
--- vim.diagnostic.config({ virtual_text = true })
 vim.diagnostic.config({
   virtual_text = {
     prefix = "●",
@@ -88,18 +93,10 @@ vim.diagnostic.config({
   },
   signs = true,
   severity_sort = true,
-  -- virtual_lines = true,
   -- virtual_lines = { current_line = true },
+  -- Don't update diagnostics when typing
+  update_in_insert = false,
 })
-
--- Python
-vim.g.python_indent = {
-  closed_paren_align_last_line = false,
-  open_paren = "shiftwidth()",
-  continue = "shiftwidth()",
-  nested_paren = "shiftwidth()",
-}
-
 
 -- disable netrw because we are using nvim-tree
 vim.g.loaded_netrw = 1
@@ -120,6 +117,3 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "TermLeave" }, {
   pattern = "*",
   command = "silent! checktime",
 })
-
--- Required for obsidian
-vim.o.conceallevel=1
