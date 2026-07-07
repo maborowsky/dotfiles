@@ -7,6 +7,29 @@ return {
   --   end,
   -- },
   {
+    'nvim-mini/mini.animate',
+    version = false,
+    config = function()
+      local animate = require('mini.animate')
+      require('mini.animate').setup({
+        cursor = {
+          enable = false,
+        },
+        scroll = {
+          enable = true,
+
+          -- Timing of animation (how steps will progress in time)
+          timing = animate.gen_timing.linear({ duration = 100, unit = 'total' })
+        },
+
+        -- resize = {},
+        -- open = {},
+        -- close = {},
+      })
+    end,
+  },
+
+  {
     'nvim-mini/mini.pairs',
     version = false,
     config = function()

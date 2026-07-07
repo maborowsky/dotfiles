@@ -22,8 +22,8 @@ return {
       open_in_new_tab = false,
       hide_terminal_in_new_tab = true,
       terminal = {
-        -- provider = "native",
-        provider = "snacks",
+        provider = "native",
+        -- provider = "snacks",
         split_width_percentage = 0.40,
         -- Optional: shrink (or widen) the terminal while a diff is open. Defaults to
       -- split_width_percentage when unset, preserving today's behavior.

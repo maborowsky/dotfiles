@@ -144,7 +144,14 @@ return {
       },
       quickfile = { enabled = true },
       scope = { enabled = true },
-      scroll = { enabled = false },  -- trying out neoscroll
+      scroll = {
+        enabled = true,
+        -- Fast animation; mouse wheel scrolls are never animated (built-in)
+        animate = {
+          duration = { step = 10, total = 100 },
+          easing = "linear",
+        },
+      },
       statuscolumn = { enabled = true },
       words = { enabled = true },
     },
